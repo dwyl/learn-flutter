@@ -1,5 +1,13 @@
 # learn-flutter
 https://flutter.dev/
+## What is Flutter?
+
+Flutter in an open Source SDK for creating high-performance mobile apps for IOS and Android.
+The Flutter makes it easier for you to build user interfaces, while reducing the amount of code required to create and update your app.
+
+## Dart Before Flutter?
+Before you dive into Flutter you have to learn the programming language that is used to build Flutter apps, and that is Dart.
+
 
 Flutter for Windows installation
 ==========
@@ -46,3 +54,34 @@ As you can see if you go to the windows prompt and run the command "flutter" it 
   After having everything installed just open the Android Studio that will appear "Start a new Flutter Project".
   
   ![Flutter](https://i.imgur.com/1zxPJSP.png)
+  
+  
+  
+  ## Scaffold class?
+  
+  Provides a framework which implements the basic material design visual layout structure of the Flutter app.
+  Contais various functionality from giving an appbar, a floating button, a drawer, background color, bottom navigation bar and body.
+  
+  
+  ### AppBar
+  It defines what has to be displayed at the top of the screen.
+  Has various properties like title,padding,brightness.
+   
+   ### Body
+   It's the area below the Appbar and behind the buttons.
+   Any widget in the body is positioned at the top left corner by default.
+     
+     
+   ## FloatingActionButton
+   
+   Is a button displayed floating in the bottom right corner.
+   We use this button to promote a primary action in the application.
+      
+   ## Drawer
+   
+   Is a panel displayed to the side of the body.
+   One usually has to swipe left to right of right to left to access the drawer.
+   It uses the Drawer properties which is a material design panel that slides from the edge of a Scaffold to show links in an application.
+    
+   
+  
