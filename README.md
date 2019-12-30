@@ -203,3 +203,15 @@ On your Manifest.xml add below the package name this line:
 
 Then just edit the button as you like and the Google login is fully functional.
 
+How to use SQLite in Flutter
+==========   
+
+
+![Flutter](https://i.imgur.com/27rAotE.png)
+
+Persisted data ( persitent Date ) are very important for users, since they would be inconvenient to always be writing your information or wait for the network carry the same data again. In these situations, it would be best to store your data locally.
+
+## Why SQLite?
+
+SQLite is one of the most popular methods for storing data locally. For this article, we will use the package ( package ) sqflite acceded to SQLite. Sqflite is one of the most used and updated packages to connect to SQLite databases in Flutter.
+
