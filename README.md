@@ -211,7 +211,199 @@ How to use SQLite in Flutter
 
 Persisted data ( persitent Date ) are very important for users, since they would be inconvenient to always be writing your information or wait for the network carry the same data again. In these situations, it would be best to store your data locally.
 
-## Why SQLite?
+# Why SQLite?
 
 SQLite is one of the most popular methods for storing data locally. For this article, we will use the package ( package ) sqflite acceded to SQLite. Sqflite is one of the most used and updated packages to connect to SQLite databases in Flutter.
+
+
+# How to use Sqflite on Flutter?
+
+
+## 1. Add the dependency to the project <br />
+In our project, we will open the file pubspec.yaml and search for dependencies. Under dependencies we add the latest version of sqflite and path_provider(which can be removed from pub.dev).
+
+
+```ruby
+ dependencies:
+  flutter:
+    sdk: flutter
+  sqflite: any
+  path_provider: any
+```
+
+
+## 2. Creating a DB Client<br />
+Now, in our project, we will create a new Database.dart file.<br />
+
+1- Creation of a private builder that can be used only within the class:
+
+
+```ruby
+class DBProvider {
+  DBProvider._();
+  static final DBProvider db = DBProvider._();
+}
+```
+
+2- Preparation of the database
+Next we will create the database object and provide you with a getter, which will create an instance of the database, if it has not already been created.
+
+
+```ruby
+static Database _database;
+
+  Future<Database> get database async {
+    if (_database != null)
+    return _database;
+
+    // if _database is null we instantiate it
+    _database = await initDB();
+    return _database;
+  }
+```
+
+If no objects are assigned to the database, we use the initDB function to create the database. In this function, we get the directory where we will store the database and create the tables we want:
+
+
+```ruby
+initDB() async {
+    Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    String path = join(documentsDirectory.path, "TestDB.db");
+    return await openDatabase(path, version: 1, onOpen: (db) {
+    }, onCreate: (Database db, int version) async {
+      await db.execute("CREATE TABLE Client ("
+          "id INTEGER PRIMARY KEY,"
+          "first_name TEXT,"
+          "last_name TEXT,"
+          "blocked BIT"
+          ")");
+    });
+  }
+```
+## 3. Creation of Model Class<br />
+
+The data inside our database will be converted to Dart Maps, so first we need to create the Model Classes with the 'toMap' and 'fromMap' methods.
+
+
+```ruby
+
+/// ClientModel.dart
+import 'dart:convert';
+
+Client clientFromJson(String str) {
+  final jsonData = json.decode(str);
+  return Client.fromMap(jsonData);
+}
+
+String clientToJson(Client data) {
+  final dyn = data.toMap();
+  return json.encode(dyn);
+}
+
+class Client {
+  int id;
+  String firstName;
+  String lastName;
+  bool blocked;
+
+  Client({
+    this.id,
+    this.firstName,
+    this.lastName,
+    this.blocked,
+  });
+
+  factory Client.fromMap(Map<String, dynamic> json) => new Client(
+        id: json["id"],
+        firstName: json["first_name"],
+        lastName: json["last_name"],
+        blocked: json["blocked"] == 1,
+      );
+
+  Map<String, dynamic> toMap() => {
+        "id": id,
+        "first_name": firstName,
+        "last_name": lastName,
+        "blocked": blocked,
+      };
+}
+```
+
+
+
+## 4. CRUD Operations<br />
+
+Using 'Insert':
+
+
+```ruby
+
+newClient(Client newClient) async {
+    final db = await database;
+    var res = await db.insert("Client", newClient.toMap());
+    return res;
+  }
+```
+
+Get Client via an ID:
+
+
+```ruby
+
+getClient(int id) async {
+    final db = await database;
+    var res =await  db.query("Client", where: "id = ?", whereArgs: [id]);
+    return res.isNotEmpty ? Client.fromMap(res.first) : Null ;
+  }
+```
+
+Obtain all Clients with one condition:
+In this example, we use rawQuery to map the results list to a list of Client objects:
+
+```ruby
+
+getAllClients() async {
+    final db = await database;
+    var res = await db.query("Client");
+    List<Client> list =
+        res.isNotEmpty ? res.map((c) => Client.fromMap(c)).toList() : [];
+    return list;
+  }
+```
+
+Update an existing Client:
+
+```ruby
+
+updateClient(Client newClient) async {
+    final db = await database;
+    var res = await db.update("Client", newClient.toMap(),
+        where: "id = ?", whereArgs: [newClient.id]);
+    return res;
+  }
+```
+
+Delete a Client:
+
+```ruby
+
+
+deleteClient(int id) async {
+    final db = await database;
+    db.delete("Client", where: "id = ?", whereArgs: [id]);
+  }
+```
+
+Delete All Clients:
+
+```ruby
+
+
+deleteAll() async {
+    final db = await database;
+    db.rawDelete("Delete * from Client");
+  }
+
+```
+
 
