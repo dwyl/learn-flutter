@@ -29,3 +29,39 @@ Then use the 'url' to specify which site will appear.
  ```ruby
 url: "https://github.com/dwyl",
 ```
+
+Use 'textInputAction' and 'onSubmitted' to go to any site the user wants.
+
+ ```ruby
+ textInputAction: TextInputAction.go,
+          onSubmitted: (url)=> launchUrl(),
+```
+
+Create the 'launchUrl' method.
+
+ ```ruby
+ launchUrl(){
+setState(() {
+  urlString= controller.text;
+  flutterWebviewPlugin.reloadUrl(urlString);
+});
+  }
+```
+
+And the variable urlString.
+
+ ```ruby
+  var urlString="https://google.com";
+```
+Create a button so that when the user enters a site they can go directly there.
+
+ ```ruby
+    IconButton(
+                icon: Icon(Icons.navigate_next),
+                onPressed: () => launchUrl(),
+```
+
+This will be the end result.
+
+ ![Flutter](https://i.imgur.com/nk3YDuh.png)
+ 
