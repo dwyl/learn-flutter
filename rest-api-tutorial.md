@@ -26,6 +26,9 @@ Create a new flutter project in Android Studio and name it as you like.
 
 ### Making an API Request In Flutter
 
+In this API request we make an API call to:https://jsonplaceholder.typicode.com/posts.
+If you dont know what 'jsonplaceholder' is its a Fake Online Rest API for Testing and Prototyping.
+
 First include the http package in 'pubspec.yaml' file.<br />
 Add this line under dependencies.<br />
 
