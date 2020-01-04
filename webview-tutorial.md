@@ -65,3 +65,32 @@ This will be the end result.
 
  ![Flutter](https://i.imgur.com/nk3YDuh.png)
  
+ ## Webview Inside Listview
+ 
+ It works the same way as using full screen Webview.<br />
+First we create the Scaffold method and an appBar then inside the body you create the Container and then pass the child with the ListView.
+
+
+
+```ruby
+    return Scaffold(
+      appBar: AppBar(title: Text("WebView"),
+      ),
+      body: Container(
+        child: ListView(
+       scrollDirection: Axis.vertical,
+          children: <Widget>[
+            Text("Flutter"),
+            Padding(padding: EdgeInsets.all(4.0)),
+            Text("Flutter’s widgets incorporate all critical platform differences such as scrolling, navigation, icons and fonts to provide full native performance on both iOS and Android."),
+            Padding(padding: EdgeInsets.all(4.0)),
+            Container(
+              height: MediaQuery.of(context).size.height,
+             child: WebView(
+               initialUrl:"https://flutter.dev/",
+               javascriptMode: JavascriptMode.unrestricted.
+                 gestureRecognizers: Set() ..add(Factory)<VerticalDragGestureRecognizer>(()=>VerticalDragGestureRecognizer())),
+```
+
+
+ 
