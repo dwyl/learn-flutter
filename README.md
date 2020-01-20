@@ -407,3 +407,12 @@ deleteAll() async {
 ```
 
 
+## How can you improve your learning in Flutter?
+
+- Get to know the Flutter platform vividly
+- Thoroughly acquaint with all the features of Flutter
+- Read through Flutter’s official documentation as it include easy examples that beginners would find helpful. The documents are seasoned with iOS and Android devices. The developers can easily interact with the present device
+- Including Google codelabs in the learning process
+- Adding the Flutter GitHub repository in the learning process
+- Opting for Google’s free beginner Flutter learning course. Google provides a free course for learners. 
+
