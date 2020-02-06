@@ -5,6 +5,35 @@ https://flutter.dev/
 Flutter in an open Source SDK for creating high-performance mobile apps for IOS and Android.
 The Flutter makes it easier for you to build user interfaces, while reducing the amount of code required to create and update your app.
 
+## Why use Flutter?
+
+- Develop for IOS and Android from a single codebase
+- Do more with less code, with a modern, expressive language and a declarative approach
+- Experiment by changing code and reloading as your app runs (with hot reload)
+- Fix crashes and continue debugging from where the app left off
+- Benefit from a rich set of Material Design and Cupertino (iOS-flavor) widgets built using Flutter’s own framework
+
+## Core Principles
+
+Flutter includes a 2D rendering engine, ready-made widgets, and development tools.</br>
+These components work together to help you design, build, test, and debug apps.</br>
+
+## Widgets
+
+Widgets are the basic building blocks of a Flutter app’s user interface.</br>
+Each widget is an unalterable declaration of part of the user interface.</br>
+Flutter has a consistent, unified object model: the widget.</br>
+
+A widget can define:
+- a structural element (like a button or menu)
+- a stylistic element (like a font or color scheme)
+- an aspect of layout (like padding)
+
+Widgets form a hierarchy based on composition. Each widget nests inside, and inherits properties from, its parent. There is no separate “application” object. Instead, the root widget serves this role.
+
+![Screen Shot 2020-02-06 at 19 01 17](https://user-images.githubusercontent.com/27420533/73969408-4475d280-4913-11ea-8384-99c863321155.png)
+
+
 ## Dart Before Flutter?
 Before you dive into Flutter you have to learn the programming language that is used to build Flutter apps, and that is Dart.
 
