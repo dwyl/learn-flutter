@@ -7,65 +7,65 @@ The Flutter makes it easier for you to build user interfaces, while reducing the
 
 ## Why use Flutter?
 
-- Develop for IOS and Android from a single codebase
-- Do more with less code, with a modern, expressive language and a declarative approach
-- Experiment by changing code and reloading as your app runs (with hot reload)
-- Fix crashes and continue debugging from where the app left off
-- Benefit from a rich set of Material Design and Cupertino (iOS-flavor) widgets built using Flutter’s own framework
+- Flutter can be used to build applications for Android and IOS
+- The Dart language used in Flutter is quite similar to Java
+- We can update the application in real time
+- If we close the application when we open it again we can continue from where we were
+- Flutter benefits from several objects that help us to facilitate the construction process
 
 ## Core Principles
 
-Flutter includes a 2D rendering engine, ready-made widgets, and development tools.</br>
-These components work together to help you design, build, test, and debug apps.</br>
+Flutter is designed for the creation of 2D mobile applications.</br> 
+It contains several widgets and tools that facilitate the realization of an app.</br>
 
 ## Widgets
 
-Widgets are the basic building blocks of a Flutter app’s user interface.</br>
-Each widget is an unalterable declaration of part of the user interface.</br>
-Flutter has a consistent, unified object model: the widget.</br>
+Widget is a component that can be used to simplify the process of building applications.</br>
+It usually contains windows, buttons, icons, menus, scroll bars and other features.</br>
 
 A widget can define:
-- a structural element (like a button or menu)
-- a stylistic element (like a font or color scheme)
-- an aspect of layout (like padding)
+- Physical elements of an application (buttons, menus or bars)
+- Visual elements such as colors  
+- Elements of the application aspect such as edges or the padding of the screen
 
-Widgets form a hierarchy based on composition. Each widget nests inside, and inherits properties from, its parent. There is no separate “application” object. Instead, the root widget serves this role.
+Widgets form a hierarchy whenever we use one of them we will have another that will complement it.</br>
+There are widgets that are used in all applications and some that are used in specific situations.</br>
 
 ![Screen Shot 2020-02-06 at 19 01 17](https://user-images.githubusercontent.com/27420533/73969408-4475d280-4913-11ea-8384-99c863321155.png)
 
-Widgets are themselves often composed of many small, single-purpose widgets that combine to produce powerful effects.</br>
-For example, Container, a commonly-used widget, is made up of several widgets responsible for layout, painting, positioning, and sizing.</br>
-Specifically, Container is made up of LimitedBox, ConstrainedBox, Align, Padding, DecoratedBox, and Transform widgets.</br>
+They are composed of several other small widgets that have only one function but if we add them we will have a functional application.</br>
+For example the Container contains other widgets that have functions like layout, placement and size.</br>
 
-You can also control the layout of a widget by composing it with other widgets.</br>
-For example, to center a widget, you wrap it in a Center widget. There are widgets for padding, alignment, row, columns, and grids. These layout widgets do not have a visual representation of their own. Instead, their sole purpose is to control some aspect of another widget’s layout. 
+You can control the Widget layout using these other smaller widgets.</br>
 
+There are some widgets that have no physical form within the application instead their goal and control some aspects of another Widget.</br>
+Like: padding, alignment, row, columns, and grids.</br>
 
 ## Layers
 
-The Flutter framework is organized into a series of layers, with each layer building upon the previous layer.
+The Flutter is formed by several layers that are each layer and built one on top of the other.
 
 
 ![Screen Shot 2020-02-07 at 09 06 06](https://user-images.githubusercontent.com/27420533/74015797-36629900-4989-11ea-8ec1-757aecad18ce.png)
 
-The upper layers of the framework are used more frequently than the lower layers.</br>
+The top layers are normally used more often than the bottom layers even if they have the same importance within the application.</br>
 
-The goal of this design is to help you do more with less code. For example, the Material layer is built by composing basic widgets from the widgets layer, and the widgets layer itself is built by orchestrating lower-level objects from the rendering layer.</br>
+The great goal of Flutter is to be organized in this way and reduce the code allowing us to use the different Widgets within the layers always forming a satisfactory result for the user.</br>
 
 ## Building Widgets
 
-You define the unique characteristics of a widget by implementing a build() function that returns a tree (or hierarchy) of widgets. This tree represents the widget’s part of the user interface in more concrete terms.</br>
+To be able to use the widgets we always have to use the build() function that will later allow us to use all the widgets needed to build the application.</br>
 
-For example, a toolbar widget might have a build function that returns a horizontal layout of some text and various buttons.</br>
+For example, the menu bar should have the build() function to be able to carry all the buttons or some text.</br>
 
 ## User Interaction
 
-If the unique characteristics of a widget need to change based on user interaction or other factors, that widget is stateful.</br> 
+If we need to use a widget that will change according to the user's interaction that widget will be the StatefulWidget.</br> 
 
-For example, if a widget has a counter that increments whenever the user taps a button, the value of the counter is the state for that widget.</br>
-Whenever you mutate a State object , you must call setState() to signal the framework to update the user interface by calling the State’s build method again.</br>
+If we need to use a widget that will change according to the user's interaction that widget will be the StatefulWidget.</br>
 
-Having separate state and widget objects lets other widgets treat stateless and stateful widgets in the same way, without being concerned about losing state.</br>
+When you change a State object , you must call setState() to warning the structure to update the user interface by calling the State’s build method again.</br>
+
 
 ## Dart Before Flutter?
 Before you dive into Flutter you have to learn the programming language that is used to build Flutter apps, and that is Dart.
