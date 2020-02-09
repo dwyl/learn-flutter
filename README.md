@@ -5,6 +5,84 @@ https://flutter.dev/
 Flutter in an open Source SDK for creating high-performance mobile apps for IOS and Android.
 The Flutter makes it easier for you to build user interfaces, while reducing the amount of code required to create and update your app.
 
+## Why use Flutter?
+
+- Flutter can be used to build cross platform native applications (Android, IOS, Desktop and Web) using the same codebase.
+- The Dart programming language used in Flutter is object oriented and familiar to most developers.
+- Development times are significantly faster than other cross-platform frameworks thanks to stateful hot-reloading and excellent virtual device support.
+- If we close the application when we open it again we can continue from where we were
+- Flutter has a _complete_ design system with a library of Material UI widgets included which speed up the development process.
+
+## Core Principles
+
+Flutter is designed for the creation of 2D mobile applications.</br> 
+
+## Widgets
+
+In Flutter _everything_ is a "Widget".
+A Widget is a UI building block you can use to assemble your app.
+In the following Gif the sample application contains a total of 6 widgets:
+![flutter-counter-sample](https://user-images.githubusercontent.com/194400/74101695-87fb5700-4b34-11ea-9fbd-09cc6bf3ed41.gif)
+Image attribution: https://uxplanet.org/why-you-should-use-google-flutter-42f2c6ba036c
+1. The **container** widget starting on line 17 groups all other widgets in the layout.
+2. The ***`appBar`*** widget displays the text "Flutter Demo Home Page"
+3. The ***`body`*** contains a **child** widget which in turn has **Text** and a **$_counter** placeholder. 
+4. The **`floatingActionButton`** is the button that gets clicked, it contains a **child** which is the icon.
+Examples of Widgets include dialog windows, buttons, icons, menus, scroll bars and cards.
+You can use one of the many built-in Material UI widgets or create your own from scratch.</br>
+
+A widget can be defined as:
+- Physical elements of an application (buttons, menus or bars)
+- Visual elements such as colors  
++ Layout and positioning of elements on the screen using a grid system
+
+Widgets are assembled in declarative hierarchy which allows us to easily organise the layout of our App as a series of nested widgets.</br>
+
+![Screen Shot 2020-02-06 at 19 01 17](https://user-images.githubusercontent.com/27420533/73969408-4475d280-4913-11ea-8384-99c863321155.png)
+
+Screens are composed of several small widgets that have only one job. Groups of widgets are assembled together to build a functional application.</br>
+For example a Container widget contains other widgets that have functions like layout, placement and size.</br>
+
+Screen layout is controlled by combining a container and other smaller widgets.</br>
+
+There are some widgets that have no physical form within the application instead their goal and control some aspects of another Widget.</br>
+Like: padding, alignment, row, columns, and grids.</br>
+
+## Layers
+
+A Flutter layout can have layers to create a visual effect where certain widgets "float" on top of others to give them priority.
+
+
+![Screen Shot 2020-02-07 at 09 06 06](https://user-images.githubusercontent.com/27420533/74015797-36629900-4989-11ea-8ec1-757aecad18ce.png)
+
+
+Flutter uses layers to represent visual hierarchy 
+and relative importance or priority of each widget.</br>
+
+## Building Widgets
+
+To assemble our widgets into an application we use the `build()` function. e.g:
+`Widget build(BuildContext context) { ...` 
+
+For example, the `appBar` menu 
+needs to be invoked using the **`build()`** function. 
+It can then have other nested "child" widgets 
+such as buttons or text.</br>
+
+## User Interaction
+
+A **`StatefulWidget`** widget, as its' name suggests, stores the **`state`** of the UI it represents.
+For example the **`counter`** widget stores the **_counter** variable 
+which keeps track of the number of times the user has clicked the button.
+All user interaction that requires storing some data/input uses a **`StatefulWidget`** widget.</br> 
+
+
+When the State of an object is changed, the `setState()` function 
+should be called to update the UI. 
+This in turn will invoke the `build` method 
+which re-renders the widget.
+
+
 ## Dart Before Flutter?
 Before you dive into Flutter you have to learn the programming language that is used to build Flutter apps, and that is Dart.
 
@@ -415,4 +493,3 @@ deleteAll() async {
 - Including Google codelabs in the learning process
 - Adding the Flutter GitHub repository in the learning process
 - Opting for Google’s free beginner Flutter learning course. Google provides a free course for learners. 
-
