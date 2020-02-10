@@ -489,7 +489,7 @@ deleteAll() async {
 
 The *first* time I tried to change the path of the Flutter folder so that it could be accessed by the terminal without having to use several paths, it **did not work**, every time I closed the terminal Flutter was no longer recognized.</br> 
 
-![Screen Shot 2020-02-10 at 10 35 56](https://user-images.githubusercontent.com/27420533/74142666-41b7fd80-4bf1-11ea-9916-6b16261349aa.png)
+`command not found: flutter`
 
 Whenever I used *this* command:</br>
 
