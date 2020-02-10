@@ -485,6 +485,53 @@ deleteAll() async {
 ```
 
 
+## Trouble-Shooting Section
+
+The *first* time I tried to change the path of the Flutter folder so that it could be accessed by the terminal without having to use several paths, it **did not work**, every time I closed the terminal Flutter was no longer recognized.</br> 
+
+`command not found: flutter`
+
+Whenever I used *this* command:</br>
+
+
+`export PATH="$PATH:~/development/flutter/bin`
+
+Then I started to notice that this command only worked for the current terminal, so it was not **permanent**.
+Even using the command that should change the path permanently Flutter was still **unrecognized**.</br>
+
+This would be the command that would make Flutter access through the terminal permanent:</br>
+
+`export PATH="$PATH:[PATH_TO_FLUTTER_GIT_DIRECTORY]/flutter/bin"`
+
+Changing the path to where we would have cloned Flutter's Git repository [PATH_TO_FLUTTER_GIT_DIRECTORY].
+And then using the command: 
+
+`source ~/.bash_profile`
+
+
+What will help us refresh the terminal.</br>
+But even so, every time I closed and opened the terminal again Flutter was no longer recognized.</br>
+So I thought that maybe the best option would be to go to the document and edit it with the "export PATH" command but inside the document itself other than in the terminal.</br>
+
+So I went to Finder / Macintosh HD / Users / and to my user.
+How is a hidden file or document we must type **`cmd` + `shift` + `.`**
+
+![finder-view-showing-flutter-directory](https://user-images.githubusercontent.com/27420533/74145756-83e43d80-4bf7-11ea-94ca-f6be3cfac21b.png)
+
+Then I opened my **`.zhs_profile`** file and typed the command:
+
+`export PATH=/Users/m/Documents/flutter/bin:$PATH`
+
+This instructs my terminal environment to export an updated version of the `PATH` environment variable with `flutter/bin` path _prepended_ to the current `PATH` variable. (_i.e. add `flutter/bin` to the `PATH` so that my terminal knows where to find the `flutter` CLI_)
+
+Then I saved the file and now going to the terminal Flutter is already recognized and can be accessed without having to run any commands.
+
+
+![flutter-command-output-truncated](https://user-images.githubusercontent.com/27420533/74146245-9a3ec900-4bf8-11ea-8dca-63b549552ff4.png)
+
+
+
+
 ## How can you improve your learning in Flutter?
 
 - Get to know the Flutter platform vividly
