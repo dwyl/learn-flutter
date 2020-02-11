@@ -82,6 +82,17 @@ should be called to update the UI.
 This in turn will invoke the `build` method 
 which re-renders the widget.
 
+## Flutter application test
+
+As in all languages or platforms the secret to a successful application is to test it.
+Several tests should be done like the functionality test, the user experience test, which can help us correct any bug.</br>
+
+An application must have tested any function, any class or task needed to run correctly without errors.</br>
+
+In general, an application that wants to succeed must have performed several unit tests, these being the main ones since they test functions, classes alone.</br>
+Widget tests, as in Flutter there are several widgets also necessary to perform tests on each widget in order to understand if all of them are performing the intended function and if they are in the place where they should be.</br>
+And the integration tests, serve to test the application in general so we can see the final version of our application. 
+
 
 ## Dart Before Flutter?
 Before you dive into Flutter you have to learn the programming language that is used to build Flutter apps, and that is Dart.
