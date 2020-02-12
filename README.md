@@ -84,14 +84,15 @@ which re-renders the widget.
 
 ## Flutter application test
 
-As in all languages or platforms the secret to a successful application is to test it.
-Several tests should be done like the functionality test, the user experience test, which can help us correct any bug.</br>
+As in all programming languages, frameworks or platforms the secret to a successful Flutter application is to test it _extensively_.
+Several tests should created included functional tests and UX tests 
+which can help us discover and fix any bugs before users see them!</br>
 
-An application must have tested any function, any class or task needed to run correctly without errors.</br>
+An application must have tested all functions, classes or tasks needed to run correctly without errors.</br>
 
-In general, an application that wants to succeed must have performed several unit tests, these being the main ones since they test functions, classes alone.</br>
-Widget tests, as in Flutter there are several widgets also necessary to perform tests on each widget in order to understand if all of them are performing the intended function and if they are in the place where they should be.</br>
-And the integration tests, serve to test the application in general so we can see the final version of our application. 
+Widget tests are necessary to confirm that they are performing their intended function 
+and correctly positioned in the layout.</br>
+Integration tests serve to test the application as a whole so that we can test the app in a real-world scenario. 
 
 
 ## Dart Before Flutter?
