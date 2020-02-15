@@ -180,3 +180,90 @@ The code that appears will serve to pass everything in the `test` file so there 
 And so the **first** test will pass!
 
 ![First_Test_Pass](https://user-images.githubusercontent.com/27420533/74528160-6d9fef80-4f1f-11ea-9198-64d1aaefb3c4.png)
+
+
+#### 3. Domain Layer Refactoring
+> Video:https://www.youtube.com/watch?v=Mmq72a0h4jk
+
+In the `third` tutorial we are explained how **callable** classes work.
+First we should replace the `execute` with `call`.
+
+````
+Future<Either<Failure, NumberTrivia>> call
+````
+
+Then we add a class to receive **random** numbers.
+
+![Random_number](https://user-images.githubusercontent.com/27420533/74589630-be3a4a00-4ffe-11ea-9212-292f0fc73567.png)
+
+Add two `Params` to `Usecase Class`.
+
+````
+abstract class UseCase<Type, Params> {
+  Future<Either<Failure, Type>> call(Params params);
+````
+Then add these two parameters to the **get_concrete** classes.
+
+````
+final result = await usecase(Params(number: tNumber));
+````
+
+This will be the code for the `get_random_number_trivia_test.dart` class.
+
+````
+import 'package:clean_architecture_tdd_prep/core/usecase/usecase.dart';
+import 'package:clean_architecture_tdd_prep/features/number_trivia/domain/entities/number_trivia.dart';
+import 'package:clean_architecture_tdd_prep/features/number_trivia/domain/repositories/number_trivia_repository.dart';
+import 'package:clean_architecture_tdd_prep/features/number_trivia/domain/usecases/get_random_number_trivia.dart';
+import 'package:dartz/dartz.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+
+class MockNumberTriviaRepository extends Mock
+    implements NumberTriviaRepository {}
+
+void main() {
+  GetRandomNumberTrivia usecase;
+  MockNumberTriviaRepository mockNumberTriviaRepository;
+
+  setUp(() {
+    mockNumberTriviaRepository = MockNumberTriviaRepository();
+    usecase = GetRandomNumberTrivia(mockNumberTriviaRepository);
+  });
+
+  final tNumberTrivia = NumberTrivia(number: 1, text: 'test');
+
+  test(
+    'should get trivia from the repository',
+    () async {
+      
+      when(mockNumberTriviaRepository.getRandomNumberTrivia())
+          .thenAnswer((_) async => Right(tNumberTrivia));
+      
+      final result = await usecase(NoParams());
+     
+      expect(result, Right(tNumberTrivia));
+      verify(mockNumberTriviaRepository.getRandomNumberTrivia());
+      verifyNoMoreInteractions(mockNumberTriviaRepository);
+    },
+  );
+}
+````
+
+The test will then fail and the `get_random_number.dart` class code must be changed to the following.
+
+
+````
+class GetRandomNumberTrivia extends UseCase<NumberTrivia, NoParams> {
+  final NumberTriviaRepository repository;
+
+  GetRandomNumberTrivia(this.repository);
+
+  @override
+  Future<Either<Failure, NumberTrivia>> call(NoParams params) async {
+    return await repository.getRandomNumberTrivia();
+  }
+}
+````
+
+And now the **second** test will pass.
