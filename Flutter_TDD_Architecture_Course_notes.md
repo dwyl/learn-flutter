@@ -267,3 +267,5 @@ class GetRandomNumberTrivia extends UseCase<NumberTrivia, NoParams> {
 ````
 
 And now the **second** test will pass.
+
+![Second_test_pass](https://user-images.githubusercontent.com/27420533/74590474-aa92e180-5006-11ea-8a88-ef8a9a6311e7.png)
