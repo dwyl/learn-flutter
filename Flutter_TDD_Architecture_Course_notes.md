@@ -8,6 +8,7 @@ This course aims to create a Number Trivia App, and will show us how we can impl
 
 In the `first tutorial` an explanation is given of the importance of having all functions tested in our application.  
 It also explains the **clean architecture**.
+
 All the features of the application will be divided into three folders, **domain**, **data** and **presentation**.
 It is also explained how each of these folders works and what they will contain.
 
@@ -50,9 +51,12 @@ dev_dependencies:
   ````
   
   It is explained how the **entity** will work in this application.
-  The following explains the function of the **use cases** that will collect data from the repositories.
-  The use cases function in this application will collect the entities and show them in the presentation folder where all the elements that we will use physically in our application are located.
-  
+  **Entity** is related to the type of data we are going to use,
+is an object about which information must be kept. In this case the information we need to keep is the NumberTrivia.  
+ 
+The following explains what `Use Cases` will be used for.
+Use cases will store all kinds of application **logic**.
+In this case Use cases will simply collect data from a repository,`GetConcreteNumberTrivia` and `GetRandomNumberTrivia`.
   
   #### The either Type
   
