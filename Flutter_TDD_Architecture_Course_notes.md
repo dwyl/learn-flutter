@@ -19,7 +19,7 @@ It is also explained how each of these folders works and what they will contain.
 
 In the `second tutorial` we start by adding the packages of the dependencies to the `pubspec.yaml` file, that will be needed to build the application.
 
-````
+```dart
 dependencies:
   flutter:
     sdk: flutter
@@ -48,7 +48,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   mockito: ^4.1.0
-  ````
+  ```
   
   It is explained how the **entity** will work in this application.
   **Entity** is related to the type of data we are going to use,
@@ -63,7 +63,8 @@ In this case Use cases will simply collect data from a repository,`GetConcreteNu
   The **either** type is shown and explained with the function of being able to represent two types at the same time in this case serves for the errors and for the numbers that we will show.
 In which **L** are the **errors** and **R** the **numbers**.
 
-``Future<Either<Failure, NumberTrivia>>``
+```dart
+Future<Either<Failure, NumberTrivia>>```
  
 
 Then it is defined the **failures** that will have an own file.
@@ -72,19 +73,19 @@ Then it is defined the **failures** that will have an own file.
 
 > Failures.dart
 
-````
+```dart
 import 'package:equatable/equatable.dart';
 
 abstract class Failure extends Equatable{
   Failure([List properties = const<dynamic>[]]): super (properties);
 }
 
-````
+```
 
 Next, define content for the `number_trivia_repository.dart` file.
 
 
-````
+```dart
 import 'package:clean_architeture_tdd/core/error/failures.dart';
 import 'package:clean_architeture_tdd/features/number_trivia/domain/entities/number_trivia.dart';
 import 'package:dartz/dartz.dart';
@@ -94,7 +95,7 @@ abstract class NumberTriviaRepository{
   Future<Either<Failure, NumberTrivia>> getRandomNumberTrivia();
 }
 
-````
+```
 
 Add the file `get_concrete_number_trivia.dart` to the `usecases` folder.
 
@@ -112,7 +113,7 @@ Inside the `test` folder and create another file with the name `get_concrete_num
 This will be the code for the **first** test.
 
 
-````
+```dart
 import 'package:clean_architecture_tdd_prep/features/number_trivia/domain/entities/number_trivia.dart';
 import 'package:clean_architecture_tdd_prep/features/number_trivia/domain/repositories/number_trivia_repository.dart';
 import 'package:clean_architecture_tdd_prep/features/number_trivia/domain/usecases/get_concrete_number_trivia.dart';
@@ -155,13 +156,13 @@ void main() {
   );
 }
 
-````
+```
 
 All this code will be used for the repository to be `called` and the `date` passed to the `Use Case`.
 The code will give errors because the file `get_concrete_number.dart` has not been created yet. 
 Then and the next step is to create that file with the following code.
 
-````
+```dart
 import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
 
@@ -180,7 +181,7 @@ class GetConcreteNumberTrivia {
     return await repository.getConcreteNumberTrivia(number);
   }
 }
-````
+```
 
 The code that appears will serve to pass everything in the `test` file so there will be no more errors.
 And so the **first** test will pass!
@@ -194,7 +195,7 @@ And so the **first** test will pass!
 In the `third` tutorial we are explained how **callable** classes work.
 First we should replace the `execute` with `call`.
 
-````
+```dart
 Future<Either<Failure, NumberTrivia>> call
 ````
 
@@ -204,19 +205,19 @@ Then we add a class to receive **random** numbers.
 
 Add two `Params` to `Usecase Class`.
 
-````
+```dart
 abstract class UseCase<Type, Params> {
   Future<Either<Failure, Type>> call(Params params);
-````
+```
 Then add these two parameters to the **get_concrete** classes.
 
-````
+```dart
 final result = await usecase(Params(number: tNumber));
-````
+```
 
 This will be the code for the `get_random_number_trivia_test.dart` class.
 
-````
+```dart
 import 'package:clean_architecture_tdd_prep/core/usecase/usecase.dart';
 import 'package:clean_architecture_tdd_prep/features/number_trivia/domain/entities/number_trivia.dart';
 import 'package:clean_architecture_tdd_prep/features/number_trivia/domain/repositories/number_trivia_repository.dart';
@@ -254,12 +255,12 @@ void main() {
     },
   );
 }
-````
+```
 
 The test will then fail and the `get_random_number.dart` class code must be changed to the following.
 
 
-````
+```dart
 class GetRandomNumberTrivia extends UseCase<NumberTrivia, NoParams> {
   final NumberTriviaRepository repository;
 
@@ -270,7 +271,7 @@ class GetRandomNumberTrivia extends UseCase<NumberTrivia, NoParams> {
     return await repository.getRandomNumberTrivia();
   }
 }
-````
+```dart
 
 And now the **second** test will pass.
 
