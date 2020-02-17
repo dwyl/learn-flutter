@@ -1,6 +1,8 @@
 
 ## Notes for Flutter TDD Clean Architecture Course Videos
 
+This course aims to create a Number Trivia App, and will show us how we can implement test driven development to all the applications we want to do.
+
 #### 1. Explanation & Project Structure
 > Video:https://www.youtube.com/watch?v=KjE2IDphA_U&list=PLB6lc7nQ1n4iYGE_khpXRdJkJEp9WOech
 
@@ -14,7 +16,7 @@ It is also explained how each of these folders works and what they will contain.
 #### 2. Entities & Use Cases 
 > Video:https://www.youtube.com/watch?v=lPkWX8xFthE&list=PLB6lc7nQ1n4iYGE_khpXRdJkJEp9WOech&index=2
 
-In the `second tutorial` we start by adding the packages of the dependencies that will be needed to build the application.
+In the `second tutorial` we start by adding the packages of the dependencies to the `pubspec.yaml` file, that will be needed to build the application.
 
 ````
 dependencies:
