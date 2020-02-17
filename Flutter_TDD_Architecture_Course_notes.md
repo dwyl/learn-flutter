@@ -4,7 +4,7 @@
 This course aims to create a Number Trivia App, and will show us how we can implement test driven development to all the applications we want to do.
 
 #### 1. Explanation & Project Structure
-> Video:https://www.youtube.com/watch?v=KjE2IDphA_U&list=PLB6lc7nQ1n4iYGE_khpXRdJkJEp9WOech
+> Video playlist: https://www.youtube.com/watch?v=KjE2IDphA_U&list=PLB6lc7nQ1n4iYGE_khpXRdJkJEp9WOech
 
 In the `first tutorial` an explanation is given of the importance of having all functions tested in our application.  
 It also explains the **clean architecture**.
@@ -15,7 +15,7 @@ It is also explained how each of these folders works and what they will contain.
 <br />
 
 #### 2. Entities & Use Cases 
-> Video:https://www.youtube.com/watch?v=lPkWX8xFthE&list=PLB6lc7nQ1n4iYGE_khpXRdJkJEp9WOech&index=2
+> Video 2: https://www.youtube.com/watch?v=lPkWX8xFthE&list=PLB6lc7nQ1n4iYGE_khpXRdJkJEp9WOech&index=2
 
 In the `second tutorial` we start by adding the packages of the dependencies to the `pubspec.yaml` file, that will be needed to build the application.
 
@@ -58,20 +58,20 @@ The following explains what `Use Cases` will be used for.
 Use cases will store all kinds of application **logic**.
 In this case Use cases will simply collect data from a repository,`GetConcreteNumberTrivia` and `GetRandomNumberTrivia`.
   
-  #### The either Type
+  #### The `either` Type
   
-  The **either** type is shown and explained with the function of being able to represent two types at the same time in this case serves for the errors and for the numbers that we will show.
-In which **L** are the **errors** and **R** the **numbers**.
+  The **`either`** type means the function can represent two types. In this case it can be _either_ an **error** or a **number**.
+In which **Left** are the **errors** and **Right** the **numbers**.
 
 ```dart
 Future<Either<Failure, NumberTrivia>>```
  
 
-Then it is defined the **failures** that will have an own file.
+Create a new file for the **failures**:
 
 
 
-> Failures.dart
+> `Failures.dart`
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -102,15 +102,15 @@ Add the file `get_concrete_number_trivia.dart` to the `usecases` folder.
 ![get_concrete_number_trivia_file](https://user-images.githubusercontent.com/27420533/74527004-92469800-4f1c-11ea-8f14-d02355c219fe.png)
 
 
-Then the **first** test will be created.
+Now create the _first_ test.
 
-Inside the `test` folder and create another file with the name `get_concrete_number_trivia_test.dart`.
+Create a new file in the`/test` folder called `get_concrete_number_trivia_test.dart`.
 
 
 ![get_concrete_number_trivia_test](https://user-images.githubusercontent.com/27420533/74527183-f5382f00-4f1c-11ea-9f4f-05d501a20bab.png)
 
 
-This will be the code for the **first** test.
+The code for the **first** test is:
 
 
 ```dart
@@ -158,7 +158,7 @@ void main() {
 
 ```
 
-All this code will be used for the repository to be `called` and the `date` passed to the `Use Case`.
+This code calls the repository passing the `date` to the `Use Case`.
 The code will give errors because the file `get_concrete_number.dart` has not been created yet. 
 Then and the next step is to create that file with the following code.
 
@@ -183,14 +183,13 @@ class GetConcreteNumberTrivia {
 }
 ```
 
-The code that appears will serve to pass everything in the `test` file so there will be no more errors.
-And so the **first** test will pass!
+The code will make the first `test` pass so there will be no more errors.
 
 ![First_Test_Pass](https://user-images.githubusercontent.com/27420533/74528160-6d9fef80-4f1f-11ea-9198-64d1aaefb3c4.png)
 
 
 #### 3. Domain Layer Refactoring
-> Video:https://www.youtube.com/watch?v=Mmq72a0h4jk
+> Video 3: https://www.youtube.com/watch?v=Mmq72a0h4jk
 
 In the `third` tutorial we are explained how **callable** classes work.
 First we should replace the `execute` with `call`.
@@ -257,7 +256,7 @@ void main() {
 }
 ```
 
-The test will then fail and the `get_random_number.dart` class code must be changed to the following.
+The test will fail so we must update the code in `get_random_number.dart` to the following:
 
 
 ```dart
