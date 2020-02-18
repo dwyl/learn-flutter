@@ -73,7 +73,7 @@ Create a new file for the **failures**:
 
 > `Failures.dart`
 
-```dart
+
 import 'package:equatable/equatable.dart';
 
 abstract class Failure extends Equatable{
@@ -270,7 +270,7 @@ class GetRandomNumberTrivia extends UseCase<NumberTrivia, NoParams> {
     return await repository.getRandomNumberTrivia();
   }
 }
-```dart
+```
 
 And now the **second** test will pass.
 
