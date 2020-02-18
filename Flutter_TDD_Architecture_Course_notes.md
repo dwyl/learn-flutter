@@ -58,9 +58,10 @@ The following explains what `Use Cases` will be used for.
 Use cases will store all kinds of application **logic**.
 In this case Use cases will simply collect data from a repository,`GetConcreteNumberTrivia` and `GetRandomNumberTrivia`.
   
-  #### The `either` Type
+#### The `either` Type
   
-  The **`either`** type means the function can represent two types. In this case it can be _either_ an **error** or a **number**.
+The **`either`** type means the function can represent two types. 
+In this case it can be _either_ an **error** or a **number**.
 In which **Left** are the **errors** and **Right** the **numbers**.
 
 ```dart
