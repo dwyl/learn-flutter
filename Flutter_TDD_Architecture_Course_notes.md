@@ -1,7 +1,7 @@
 
 ## Notes for Flutter TDD Clean Architecture Course Videos
 
-This course aims to create a Number Trivia App, and will show us how we can implement test driven development to all the applications we want to do.
+In this course we create a Number Trivia App following test driven development (TDD). It shows us how we can use TDD in _any_ App we want to build.
 
 #### 1. Explanation & Project Structure
 > Video playlist: https://www.youtube.com/watch?v=KjE2IDphA_U&list=PLB6lc7nQ1n4iYGE_khpXRdJkJEp9WOech
