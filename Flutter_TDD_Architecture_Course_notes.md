@@ -64,7 +64,8 @@ In this case Use cases will simply collect data from a repository,`GetConcreteNu
 In which **Left** are the **errors** and **Right** the **numbers**.
 
 ```dart
-Future<Either<Failure, NumberTrivia>>```
+Future<Either<Failure, NumberTrivia>>
+```
  
 
 Create a new file for the **failures**:
@@ -73,7 +74,7 @@ Create a new file for the **failures**:
 
 > `Failures.dart`
 
-
+```dart
 import 'package:equatable/equatable.dart';
 
 abstract class Failure extends Equatable{
