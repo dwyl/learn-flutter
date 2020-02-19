@@ -496,6 +496,14 @@ deleteAll() async {
 
 ```
 
+## Environment Variables
+
+Environment variables are variables like those we create in our applications. However, instead of existing within the system we are building, they live directly within the operating system.
+
+### Environment Variables in Flutter
+
+When it is necessary to use a package in the case of Flutter the `Flutter_dotenv` package.
+
 
 ## Trouble-Shooting Section
 
