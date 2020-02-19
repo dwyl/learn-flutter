@@ -498,7 +498,14 @@ deleteAll() async {
 
 ## Environment Variables
 
-Environment variables are variables like those we create in our applications. However, instead of existing within the system we are building, they live directly within the operating system.
+Environment variables are variables like those we create in our applications.
+They are dynamically named values in the operating system, which affect the behavior of the programs that consume it. They are stored in a "list" of key-values.
+
+### When should we use the environment variables?
+
+One frequent use is to store keys and passwords. 
+Instead of having several constants in your application you can store API keys, database passwords in these variables.
+This way, you can hide the keys, not having to share them with those who don't compete with this information. 
 
 ### Environment Variables in Flutter
 
