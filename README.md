@@ -503,7 +503,7 @@ They are dynamically named values in the operating system, which affect the beha
 
 ### When should we use the environment variables?
 
-One frequent use is to store keys and passwords. 
+The most frequent use of environment variables is to store API keys and passwords. 
 Instead of having several constants in your application you can store API keys, database passwords in these variables.
 This way, you can hide the keys, not having to share them with those who don't compete with this information. 
 
