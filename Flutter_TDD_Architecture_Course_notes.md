@@ -358,7 +358,7 @@ import 'dart:io';
 
 String fixture(String name) => File('test/fixtures/$name').readAsStringSync();
 ```
-Then we start the fromjson method, these methods always carry a `Map<String, dynamic>` argument.
+Then we start the `fromJson` method, these methods always carry a `Map<String, dynamic>` argument.
 That it will be like this:
 
 ```dart
