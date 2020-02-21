@@ -424,8 +424,155 @@ Now all the tests **pass**.
 #### 5. Contracts of Data Sources
 > Video 5: https://www.youtube.com/watch?v=m_lkZo6CYcs&t=1s
 
+In the `fifth` tutorial an explanation is given about the importance of `contracts`.
+The contracts will allow the files to communicate directly with the **repository**.
 
+Inside the `repositories` folder create `number_trivia_repository_impl.dart`.
+This is the code for the file.
 
+```dart
+import 'package:dartz/dartz.dart';
 
+import '../../../../core/error/failure.dart';
+import '../../domain/entities/number_trivia.dart';
+import '../../domain/repositories/number_trivia_repository.dart';
+
+class NumberTriviaRepositoryImpl implements NumberTriviaRepository {
+  @override
+  Future<Either<Failure, NumberTrivia>> getConcreteNumberTrivia(int number) {
+    // TODO: implement getConcreteNumberTrivia
+    return null;
+  }
+
+  @override
+  Future<Either<Failure, NumberTrivia>> getRandomNumberTrivia() {
+    // TODO: implement getRandomNumberTrivia
+    return null;
+  }
+}
+```
+
+Inside the `platform` folder create a file called `network_info.dart`with the following code.
+
+```dart
+abstract class NetworkInfo {
+  Future<bool> get isConnected;
+}
+```
+#### Remote Data Source
+
+In this class the value returned will be different from the others and will return only a `NumberTriviaModel` value and the errors will be treated as `Exceptions`.
+
+Then we create the file `number_trivia_remote_data_source.dart`,with the following code.
+
+```dart
+import '../models/number_trivia_model.dart';
+
+abstract class NumberTriviaRemoteDataSource {
+  /// Calls the http://numbersapi.com/{number} endpoint.
+  ///
+  /// Throws a [ServerException] for all error codes.
+  Future<NumberTriviaModel> getConcreteNumberTrivia(int number);
+
+  /// Calls the http://numbersapi.com/random endpoint.
+  ///
+  /// Throws a [ServerException] for all error codes.
+  Future<NumberTriviaModel> getRandomNumberTrivia();
+}
+
+```
+#### Exceptions And Failures
+
+Whenever we don't have a number to show it will be a `ServerException`, then we should create it to be used.
+Inside the error folder create the file `exception.dart`.
+
+Code for `Exception.dart`.
+
+```dart
+class ServerException implements Exception {}
+
+class CacheException implements Exception {}
+```
+This is the code for the `failure.dart` file that also has to be created.
+
+```dart
+import 'package:equatable/equatable.dart';
+
+abstract class Failure extends Equatable {
+  Failure([List properties = const <dynamic>[]]) : super(properties);
+}
+
+// General failures
+class ServerFailure extends Failure {}
+
+class CacheFailure extends Failure {}
+```
+Now we need to create a file for the `NumberTriviaRepositoryImpl` tests.
+This file will be named `number_trivia_repository_impl_test.dart`.
+Then we prepare the file for the test.
+
+```dart
+class MockRemoteDataSource extends Mock
+    implements NumberTriviaRemoteDataSource {}
+
+class MockLocalDataSource extends Mock implements NumberTriviaLocalDataSource {}
+
+class MockNetworkInfo extends Mock implements NetworkInfo {}
+
+void main() {
+  NumberTriviaRepositoryImpl repository;
+  MockRemoteDataSource mockRemoteDataSource;
+  MockLocalDataSource mockLocalDataSource;
+  MockNetworkInfo mockNetworkInfo;
+
+  setUp(() {
+    mockRemoteDataSource = MockRemoteDataSource();
+    mockLocalDataSource = MockLocalDataSource();
+    mockNetworkInfo = MockNetworkInfo();
+    repository = NumberTriviaRepositoryImpl(
+      remoteDataSource: mockRemoteDataSource,
+      localDataSource: mockLocalDataSource,
+      networkInfo: mockNetworkInfo,
+    );
+  });
+}
+```
+If we run the program now it will give error because we have to pass all parameters also to the file `number_trivia_repository_impl.dart`.
+
+```dart
+import 'package:dartz/dartz.dart';
+import 'package:meta/meta.dart';
+
+import '../../../../core/error/failure.dart';
+import '../../../../core/platform/network_info.dart';
+import '../../domain/entities/number_trivia.dart';
+import '../../domain/repositories/number_trivia_repository.dart';
+import '../datasources/number_trivia_local_data_source.dart';
+import '../datasources/number_trivia_remote_data_source.dart';
+
+class NumberTriviaRepositoryImpl implements NumberTriviaRepository {
+  final NumberTriviaRemoteDataSource remoteDataSource;
+  final NumberTriviaLocalDataSource localDataSource;
+  final NetworkInfo networkInfo;
+
+  NumberTriviaRepositoryImpl({
+    @required this.remoteDataSource,
+    @required this.localDataSource,
+    @required this.networkInfo,
+  });
+
+  @override
+  Future<Either<Failure, NumberTrivia>> getConcreteNumberTrivia(int number) {
+    // TODO: implement getConcreteNumberTrivia
+    return null;
+  }
+
+  @override
+  Future<Either<Failure, NumberTrivia>> getRandomNumberTrivia() {
+    // TODO: implement getRandomNumberTrivia
+    return null;
+  }
+}
+```
 #### 6. Repository Implementation
 > Video 6: https://www.youtube.com/watch?v=bfEKPKKy9dA
