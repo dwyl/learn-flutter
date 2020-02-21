@@ -277,3 +277,120 @@ class GetRandomNumberTrivia extends UseCase<NumberTrivia, NoParams> {
 And now the **second** test will pass.
 
 ![Second_test_pass](https://user-images.githubusercontent.com/27420533/74590474-aa92e180-5006-11ea-8a88-ef8a9a6311e7.png)
+
+#### 4. Data Layer Overview & Models
+> Video 4: https://www.youtube.com/watch?v=keaTZ9M_U1A&t=1516s
+
+In the `fourth` tutorial start by giving a brief explanation of how the models work.
+
+The models are like entities but with more features in the case of this specific application will deal with making the data conversation in Json to Dart.
+
+After this explanation is necessary to create a file inside the **models** folder with the name `number_trivia_model.dart`.
+And then its test version inside the **test** folder with the name `number_trivia_model_test.dart`.
+
+This will be the code that will be inside the test file.
+
+```dart
+import 'package:clean_architecture_tdd_prep/features/number_trivia/data/models/number_trivia_model.dart';
+import 'package:clean_architecture_tdd_prep/features/number_trivia/domain/entities/number_trivia.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+void main() {
+  final tNumberTriviaModel = NumberTriviaModel(number: 1, text: 'Test Text');
+
+  test(
+    'should be a subclass of NumberTrivia entity',
+    () async {
+      // assert
+      expect(tNumberTriviaModel, isA<NumberTrivia>());
+    },
+  );
+}
+```
+The test will **not pass** so we will go to the `number_trivia_model.dart` file and pass some parameters.
+
+```dart
+import 'package:meta/meta.dart';
+
+import '../../domain/entities/number_trivia.dart';
+
+class NumberTriviaModel extends NumberTrivia {
+  NumberTriviaModel({
+    @required String text,
+    @required int number,
+  }) : super(
+          text: text,
+          number: number,
+        );
+}
+```
+Then it is necessary to create inside the test folder a folder called `fixtures` that will contain two files one `trivia.json` and the other `trivia_double.json`.
+
+![fixtures](https://user-images.githubusercontent.com/27420533/75034654-94bd6a80-54a5-11ea-96a2-7c7bd2942f8a.png)
+
+This will be the code for `trivia.json`.
+
+```dart
+{
+  "text": "Test Text",
+  "number": 1,
+  "found": true,
+  "type": "trivia"
+}
+```
+And for `trivia_double.json`.
+
+```dart
+{
+  "text": "Test Text",
+  "number": 1.0,
+  "found": true,
+  "type": "trivia"
+}
+```
+Now we have to create a file that will allow us to turn the json's answers into integer or double for String.
+Then we create a file called `fixture_reader.dart`.
+
+The code for `fixture_reader.dart`.
+
+```dart
+import 'dart:io';
+
+String fixture(String name) => File('test/fixtures/$name').readAsStringSync();
+```
+Then we start the fromjson method, these methods always carry a `Map<String, dynamic>` argument.
+That it will be like this:
+
+```dart
+group('fromJson', () {
+    test(
+      'should return a valid model when the JSON number is an integer',
+      () async {
+        // arrange
+        final Map<String, dynamic> jsonMap =
+            json.decode(fixture('trivia.json'));
+        // act
+        final result = NumberTriviaModel.fromJson(jsonMap);
+        // assert
+        expect(result, tNumberTriviaModel);
+```
+The test will now fail and then we should implement the same method in the `number_trivia_model.dart` file.
+
+```dart
+class NumberTriviaModel extends NumberTrivia {
+  ...
+  factory NumberTriviaModel.fromJson(Map<String, dynamic> json) {
+    return NumberTriviaModel(
+      text: json['text'],
+      number: json['number'],
+    );
+  }
+}
+```
+
+
+#### 5. Contracts of Data Sources
+> Video 5: https://www.youtube.com/watch?v=m_lkZo6CYcs&t=1s
+
+#### 6. Repository Implementation
+> Video 6: https://www.youtube.com/watch?v=bfEKPKKy9dA
