@@ -387,10 +387,45 @@ class NumberTriviaModel extends NumberTrivia {
   }
 }
 ```
+Now we move on to the `second` conversion method.
 
+```dart 
+group('toJson', () {
+  test(
+    'should return a JSON map containing the proper data',
+    () async {
+      // act
+      final result = tNumberTriviaModel.toJson();
+      // assert
+      final expectedJsonMap = {
+        "text": "Test Text",
+        "number": 1,
+      };
+      expect(result, expectedJsonMap);
+    },
+  );
+});
+```
+Implement the method in the file `number_trivia_model.dart`.
+
+```dart
+class NumberTriviaModel extends NumberTrivia {
+  ...
+  Map<String, dynamic> toJson() {
+    return {
+      'text': text,
+      'number': number,
+    };
+  }
+}
+```
+Now all the tests **pass**.
 
 #### 5. Contracts of Data Sources
 > Video 5: https://www.youtube.com/watch?v=m_lkZo6CYcs&t=1s
+
+
+
 
 #### 6. Repository Implementation
 > Video 6: https://www.youtube.com/watch?v=bfEKPKKy9dA
