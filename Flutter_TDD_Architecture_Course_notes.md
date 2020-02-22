@@ -308,7 +308,9 @@ void main() {
   );
 }
 ```
-The test will **not pass** so we will go to the `number_trivia_model.dart` file and pass some parameters.
+The test will ***not pass***. 
+This is _expected_ because we have not yet implemented the `NumberTriviaModel` class.
+Open the `number_trivia_model.dart` file and add the following code:
 
 ```dart
 import 'package:meta/meta.dart';
