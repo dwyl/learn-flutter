@@ -346,7 +346,7 @@ This will be the code for `trivia.json`.
   "type": "trivia"
 }
 ```
-And for `trivia_double.json`.
+And for `trivia_double.json` the only difference is that the **"number"** value is a [double](https://dart.dev/articles/archive/numeric-computation) `1.0` instead of an integer `1`:
 
 ```dart
 {
