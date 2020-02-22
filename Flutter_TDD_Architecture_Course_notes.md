@@ -543,7 +543,8 @@ void main() {
   });
 }
 ```
-If we run the program now it will give error because we have to pass all parameters also to the file `number_trivia_repository_impl.dart`.
+If we run the test now it will give an error because have not yet written the implementation. 
+Open the `number_trivia_repository_impl.dart` file and add the following code:
 
 ```dart
 import 'package:dartz/dartz.dart';
