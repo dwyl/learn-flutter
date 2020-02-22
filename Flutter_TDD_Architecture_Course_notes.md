@@ -499,7 +499,7 @@ class ServerException implements Exception {}
 
 class CacheException implements Exception {}
 ```
-This is the code for the `failure.dart` file that also has to be created.
+This is the code for the `failure.dart` file that also has to be created inside the `error` folder.
 
 ```dart
 import 'package:equatable/equatable.dart';
