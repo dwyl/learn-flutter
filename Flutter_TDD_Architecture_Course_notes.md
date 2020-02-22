@@ -459,7 +459,7 @@ class NumberTriviaRepositoryImpl implements NumberTriviaRepository {
 }
 ```
 
-Inside the `platform` folder create a file called `network_info.dart`with the following code.
+Inside the `platform` folder create a file called `network_info.dart` with the following code:
 
 ```dart
 abstract class NetworkInfo {
