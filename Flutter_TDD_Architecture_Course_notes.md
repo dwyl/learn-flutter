@@ -327,7 +327,12 @@ class NumberTriviaModel extends NumberTrivia {
         );
 }
 ```
-Then it is necessary to create inside the test folder a folder called `fixtures` that will contain two files one `trivia.json` and the other `trivia_double.json`.
+Once you have added this code to the `number_trivia_model.dart` file, re-run the tests: `flutter test`
+
+Given that our Model will transform `JSON` data, we need some some test data.
+Test data is commonly referred to as [**fixtures**](https://en.wikipedia.org/wiki/Test_fixture#Software).
+In the test folder, create a new folder called **`fixtures`** that will contain two files 
+one called `trivia.json` and the other `trivia_double.json`.
 
 ![fixtures](https://user-images.githubusercontent.com/27420533/75034654-94bd6a80-54a5-11ea-96a2-7c7bd2942f8a.png)
 
