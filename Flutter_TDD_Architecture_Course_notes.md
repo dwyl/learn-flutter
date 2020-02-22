@@ -468,9 +468,9 @@ abstract class NetworkInfo {
 ```
 #### Remote Data Source
 
-In this class the value returned will be different from the others and will return only a `NumberTriviaModel` value and the errors will be treated as `Exceptions`.
+In this class the returned value will be a `NumberTriviaModel` value and errors will be treated as `Exceptions`.
 
-Then we create the file `number_trivia_remote_data_source.dart`,with the following code.
+Create the file `number_trivia_remote_data_source.dart` with the following code:
 
 ```dart
 import '../models/number_trivia_model.dart';
@@ -490,10 +490,9 @@ abstract class NumberTriviaRemoteDataSource {
 ```
 #### Exceptions And Failures
 
-Whenever we don't have a number to show it will be a `ServerException`, then we should create it to be used.
-Inside the error folder create the file `exception.dart`.
+Whenever we don't have a number to show it will be a `ServerException`. We need a class to handle these exceptions.
+In the **`/error`** folder, create the file `exception.dart` and add the following code:
 
-Code for `Exception.dart`.
 
 ```dart
 class ServerException implements Exception {}
