@@ -356,10 +356,9 @@ And for `trivia_double.json`.
   "type": "trivia"
 }
 ```
-Now we have to create a file that will allow us to turn the json's answers into integer or double for String.
-Then we create a file called `fixture_reader.dart`.
+Next we need to create a file that will turn the `JSON` answers into `integer` or `double`.
+Create a file called `fixture_reader.dart` and add the following code:
 
-The code for `fixture_reader.dart`.
 
 ```dart
 import 'dart:io';
