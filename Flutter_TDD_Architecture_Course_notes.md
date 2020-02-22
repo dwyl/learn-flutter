@@ -286,9 +286,10 @@ The `fourth` tutorial starts by giving a brief explanation of how **models** wor
 Models are like entities but with more features. In the case of this application our model will have a function to convert `JSON` data to a Dart Map.
 
 Create a file in the **models** folder named `number_trivia_model.dart`.
-And then its test version inside the **test** folder with the name `number_trivia_model_test.dart`.
+Create the corresponding test file in the **test** folder with the name `number_trivia_model_test.dart`.
+Here you can see the naming convention follows a predictable pattern which makes locating files in a project very fast.
 
-This will be the code that will be inside the test file.
+Add the following code to the `number_trivia_model_test.dart` file:
 
 ```dart
 import 'package:clean_architecture_tdd_prep/features/number_trivia/data/models/number_trivia_model.dart';
