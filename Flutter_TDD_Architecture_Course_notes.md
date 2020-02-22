@@ -281,11 +281,11 @@ And now the **second** test will pass.
 #### 4. Data Layer Overview & Models
 > Video 4: https://www.youtube.com/watch?v=keaTZ9M_U1A&t=1516s
 
-In the `fourth` tutorial start by giving a brief explanation of how the models work.
+The `fourth` tutorial starts by giving a brief explanation of how **models** work.
 
-The models are like entities but with more features in the case of this specific application will deal with making the data conversation in Json to Dart.
+Models are like entities but with more features. In the case of this application our model will have a function to convert `JSON` data to a Dart Map.
 
-After this explanation is necessary to create a file inside the **models** folder with the name `number_trivia_model.dart`.
+Create a file in the **models** folder named `number_trivia_model.dart`.
 And then its test version inside the **test** folder with the name `number_trivia_model_test.dart`.
 
 This will be the code that will be inside the test file.
