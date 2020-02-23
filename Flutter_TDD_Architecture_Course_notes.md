@@ -943,3 +943,74 @@ class NumberTriviaRepositoryImpl implements NumberTriviaRepository {
   }
 }
 ```
+#### 7. Network Info
+> Video 7: https://www.youtube.com/watch?v=xWl7GzMDiwg&t=7s
+
+In the `seventh` tutorial we start by adding a package to the `pubspec.yaml` file.
+
+```dart
+dependencies:
+  
+  data_connection_checker: ^0.3.4
+```
+Create the file `network_info_test.dart` in the same location but inside the test folder.
+
+The `network_info_test.dart` file will have the following code:
+
+```dart
+import 'package:clean_architecture_tdd_prep/core/network/network_info.dart';
+import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+
+class MockDataConnectionChecker extends Mock implements DataConnectionChecker {}
+
+void main() {
+  NetworkInfoImpl networkInfo;
+  MockDataConnectionChecker mockDataConnectionChecker;
+
+  setUp(() {
+    mockDataConnectionChecker = MockDataConnectionChecker();
+    networkInfo = NetworkInfoImpl(mockDataConnectionChecker);
+  });
+
+  group('isConnected', () {
+    test(
+      'should forward the call to DataConnectionChecker.hasConnection',
+      () async {
+        // arrange
+        final tHasConnectionFuture = Future.value(true);
+
+        when(mockDataConnectionChecker.hasConnection)
+            .thenAnswer((_) => tHasConnectionFuture);
+        // act
+        // NOTICE: We're NOT awaiting the result
+        final result = networkInfo.isConnected;
+        // assert
+        verify(mockDataConnectionChecker.hasConnection);
+        // Utilizing Dart's default referential equality.
+        // Only references to the same object are equal.
+        expect(result, tHasConnectionFuture);
+      },
+    );
+  });
+}
+```
+Then it is necessary to implement it in the corresponding file.
+
+```dart
+import 'package:data_connection_checker/data_connection_checker.dart';
+
+abstract class NetworkInfo {
+  Future<bool> get isConnected;
+}
+
+class NetworkInfoImpl implements NetworkInfo {
+  final DataConnectionChecker connectionChecker;
+
+  NetworkInfoImpl(this.connectionChecker);
+
+  @override
+  Future<bool> get isConnected => connectionChecker.hasConnection;
+}
+```
