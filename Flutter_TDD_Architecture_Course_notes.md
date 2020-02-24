@@ -1013,3 +1013,9 @@ class NetworkInfoImpl implements NetworkInfo {
   Future<bool> get isConnected => connectionChecker.hasConnection;
 }
 ```
+#### 8.  Local Data Source
+> Video 8: https://www.youtube.com/watch?v=fCguzcvLka8
+
+
+#### 9.  Remote Data Source
+> Video 9: https://www.youtube.com/watch?v=msGsYPtZnhU
