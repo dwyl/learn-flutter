@@ -651,8 +651,6 @@ test(
 ```
 
 ```dart
-impl.dart
-
 @override
 Future<Either<Failure, NumberTrivia>> getConcreteNumberTrivia(
   int number,
@@ -996,7 +994,7 @@ void main() {
   });
 }
 ```
-Then it is necessary to implement it in the corresponding file.
+Then it is necessary to implement it in the `network_info.dart` file.
 
 ```dart
 import 'package:data_connection_checker/data_connection_checker.dart';
