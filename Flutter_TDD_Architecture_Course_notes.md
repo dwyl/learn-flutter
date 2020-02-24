@@ -277,3 +277,739 @@ class GetRandomNumberTrivia extends UseCase<NumberTrivia, NoParams> {
 And now the **second** test will pass.
 
 ![Second_test_pass](https://user-images.githubusercontent.com/27420533/74590474-aa92e180-5006-11ea-8a88-ef8a9a6311e7.png)
+
+#### 4. Data Layer Overview & Models
+> Video 4: https://www.youtube.com/watch?v=keaTZ9M_U1A&t=1516s
+
+The `fourth` tutorial starts by giving a brief explanation of how **models** work.
+
+Models are like entities but with more features. In the case of this application our model will have a function to convert `JSON` data to a Dart Map.
+
+Create a file in the **models** folder named `number_trivia_model.dart`.
+Create the corresponding test file in the **test** folder with the name `number_trivia_model_test.dart`.
+Here you can see the naming convention follows a predictable pattern which makes locating files in a project very fast.
+
+Add the following code to the `number_trivia_model_test.dart` file:
+
+```dart
+import 'package:clean_architecture_tdd_prep/features/number_trivia/data/models/number_trivia_model.dart';
+import 'package:clean_architecture_tdd_prep/features/number_trivia/domain/entities/number_trivia.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+void main() {
+  final tNumberTriviaModel = NumberTriviaModel(number: 1, text: 'Test Text');
+
+  test(
+    'should be a subclass of NumberTrivia entity',
+    () async {
+      // assert
+      expect(tNumberTriviaModel, isA<NumberTrivia>());
+    },
+  );
+}
+```
+The test will ***not pass***. 
+This is _expected_ because we have not yet implemented the `NumberTriviaModel` class.
+Open the `number_trivia_model.dart` file and add the following code:
+
+```dart
+import 'package:meta/meta.dart';
+
+import '../../domain/entities/number_trivia.dart';
+
+class NumberTriviaModel extends NumberTrivia {
+  NumberTriviaModel({
+    @required String text,
+    @required int number,
+  }) : super(
+          text: text,
+          number: number,
+        );
+}
+```
+Once you have added this code to the `number_trivia_model.dart` file, re-run the tests: `flutter test`
+
+Given that our Model will transform `JSON` data, we need some some test data.
+Test data is commonly referred to as [**fixtures**](https://en.wikipedia.org/wiki/Test_fixture#Software).
+In the test folder, create a new folder called **`fixtures`** that will contain two files 
+one called `trivia.json` and the other `trivia_double.json`.
+
+![fixtures](https://user-images.githubusercontent.com/27420533/75034654-94bd6a80-54a5-11ea-96a2-7c7bd2942f8a.png)
+
+This will be the code for `trivia.json`.
+
+```dart
+{
+  "text": "Test Text",
+  "number": 1,
+  "found": true,
+  "type": "trivia"
+}
+```
+And for `trivia_double.json` the only difference is that the **"number"** value is a [double](https://dart.dev/articles/archive/numeric-computation) `1.0` instead of an integer `1`:
+
+```dart
+{
+  "text": "Test Text",
+  "number": 1.0,
+  "found": true,
+  "type": "trivia"
+}
+```
+Next we need to create a file that will turn the `JSON` answers into `integer` or `double`.
+Create a file called `fixture_reader.dart` and add the following code:
+
+
+```dart
+import 'dart:io';
+
+String fixture(String name) => File('test/fixtures/$name').readAsStringSync();
+```
+Then we start the `fromJson` method, these methods always carry a `Map<String, dynamic>` argument.
+That it will be like this:
+
+```dart
+group('fromJson', () {
+    test(
+      'should return a valid model when the JSON number is an integer',
+      () async {
+        // arrange
+        final Map<String, dynamic> jsonMap =
+            json.decode(fixture('trivia.json'));
+        // act
+        final result = NumberTriviaModel.fromJson(jsonMap);
+        // assert
+        expect(result, tNumberTriviaModel);
+```
+The test will now fail and then we should implement the same method in the `number_trivia_model.dart` file.
+
+```dart
+class NumberTriviaModel extends NumberTrivia {
+  ...
+  factory NumberTriviaModel.fromJson(Map<String, dynamic> json) {
+    return NumberTriviaModel(
+      text: json['text'],
+      number: json['number'],
+    );
+  }
+}
+```
+Now we move on to the `second` conversion method.
+
+```dart 
+group('toJson', () {
+  test(
+    'should return a JSON map containing the proper data',
+    () async {
+      // act
+      final result = tNumberTriviaModel.toJson();
+      // assert
+      final expectedJsonMap = {
+        "text": "Test Text",
+        "number": 1,
+      };
+      expect(result, expectedJsonMap);
+    },
+  );
+});
+```
+Implement the method in the file `number_trivia_model.dart`.
+
+```dart
+class NumberTriviaModel extends NumberTrivia {
+  ...
+  Map<String, dynamic> toJson() {
+    return {
+      'text': text,
+      'number': number,
+    };
+  }
+}
+```
+Now all the tests **pass**.
+
+#### 5. Contracts of Data Sources
+> Video 5: https://www.youtube.com/watch?v=m_lkZo6CYcs&t=1s
+
+In the `fifth` tutorial an explanation is given about the importance of `contracts`.
+The contracts will allow the files to communicate directly with the **repository**.
+
+Inside the `repositories` folder create `number_trivia_repository_impl.dart`.
+This is the code for the file.
+
+```dart
+import 'package:dartz/dartz.dart';
+
+import '../../../../core/error/failure.dart';
+import '../../domain/entities/number_trivia.dart';
+import '../../domain/repositories/number_trivia_repository.dart';
+
+class NumberTriviaRepositoryImpl implements NumberTriviaRepository {
+  @override
+  Future<Either<Failure, NumberTrivia>> getConcreteNumberTrivia(int number) {
+    // TODO: implement getConcreteNumberTrivia
+    return null;
+  }
+
+  @override
+  Future<Either<Failure, NumberTrivia>> getRandomNumberTrivia() {
+    // TODO: implement getRandomNumberTrivia
+    return null;
+  }
+}
+```
+
+Inside the `platform` folder create a file called `network_info.dart` with the following code:
+
+```dart
+abstract class NetworkInfo {
+  Future<bool> get isConnected;
+}
+```
+#### Remote Data Source
+
+In this class the returned value will be a `NumberTriviaModel` value and errors will be treated as `Exceptions`.
+
+Create the file `number_trivia_remote_data_source.dart` with the following code:
+
+```dart
+import '../models/number_trivia_model.dart';
+
+abstract class NumberTriviaRemoteDataSource {
+  /// Calls the http://numbersapi.com/{number} endpoint.
+  ///
+  /// Throws a [ServerException] for all error codes.
+  Future<NumberTriviaModel> getConcreteNumberTrivia(int number);
+
+  /// Calls the http://numbersapi.com/random endpoint.
+  ///
+  /// Throws a [ServerException] for all error codes.
+  Future<NumberTriviaModel> getRandomNumberTrivia();
+}
+
+```
+#### Exceptions And Failures
+
+Whenever we don't have a number to show it will be a `ServerException`. We need a class to handle these exceptions.
+In the **`/error`** folder, create the file `exception.dart` and add the following code:
+
+
+```dart
+class ServerException implements Exception {}
+
+class CacheException implements Exception {}
+```
+This is the code for the `failure.dart` file that also has to be created inside the `error` folder.
+
+```dart
+import 'package:equatable/equatable.dart';
+
+abstract class Failure extends Equatable {
+  Failure([List properties = const <dynamic>[]]) : super(properties);
+}
+
+// General failures
+class ServerFailure extends Failure {}
+
+class CacheFailure extends Failure {}
+```
+Now we need to create a file for the `NumberTriviaRepositoryImpl` tests.
+This file will be named `number_trivia_repository_impl_test.dart`.
+Then we prepare the file for the test.
+
+```dart
+class MockRemoteDataSource extends Mock
+    implements NumberTriviaRemoteDataSource {}
+
+class MockLocalDataSource extends Mock implements NumberTriviaLocalDataSource {}
+
+class MockNetworkInfo extends Mock implements NetworkInfo {}
+
+void main() {
+  NumberTriviaRepositoryImpl repository;
+  MockRemoteDataSource mockRemoteDataSource;
+  MockLocalDataSource mockLocalDataSource;
+  MockNetworkInfo mockNetworkInfo;
+
+  setUp(() {
+    mockRemoteDataSource = MockRemoteDataSource();
+    mockLocalDataSource = MockLocalDataSource();
+    mockNetworkInfo = MockNetworkInfo();
+    repository = NumberTriviaRepositoryImpl(
+      remoteDataSource: mockRemoteDataSource,
+      localDataSource: mockLocalDataSource,
+      networkInfo: mockNetworkInfo,
+    );
+  });
+}
+```
+If we run the test now it will give an error because have not yet written the implementation. 
+Open the `number_trivia_repository_impl.dart` file and add the following code:
+
+```dart
+import 'package:dartz/dartz.dart';
+import 'package:meta/meta.dart';
+
+import '../../../../core/error/failure.dart';
+import '../../../../core/platform/network_info.dart';
+import '../../domain/entities/number_trivia.dart';
+import '../../domain/repositories/number_trivia_repository.dart';
+import '../datasources/number_trivia_local_data_source.dart';
+import '../datasources/number_trivia_remote_data_source.dart';
+
+class NumberTriviaRepositoryImpl implements NumberTriviaRepository {
+  final NumberTriviaRemoteDataSource remoteDataSource;
+  final NumberTriviaLocalDataSource localDataSource;
+  final NetworkInfo networkInfo;
+
+  NumberTriviaRepositoryImpl({
+    @required this.remoteDataSource,
+    @required this.localDataSource,
+    @required this.networkInfo,
+  });
+
+  @override
+  Future<Either<Failure, NumberTrivia>> getConcreteNumberTrivia(int number) {
+    // TODO: implement getConcreteNumberTrivia
+    return null;
+  }
+
+  @override
+  Future<Either<Failure, NumberTrivia>> getRandomNumberTrivia() {
+    // TODO: implement getRandomNumberTrivia
+    return null;
+  }
+}
+```
+#### 6. Repository Implementation
+> Video 6: https://www.youtube.com/watch?v=bfEKPKKy9dA
+
+The `sixth` video starts by stating a new requirement: check if the user has an internet connection.
+
+#### Device Is Online
+
+```dart
+group('getConcreteNumberTrivia', () {
+  // DATA FOR THE MOCKS AND ASSERTIONS
+  // We'll use these three variables throughout all the tests
+  final tNumber = 1;
+  final tNumberTriviaModel =
+      NumberTriviaModel(number: tNumber, text: 'test trivia');
+  final NumberTrivia tNumberTrivia = tNumberTriviaModel;
+
+  test('should check if the device is online', () {
+    //arrange
+    when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+    // act
+    repository.getConcreteNumberTrivia(tNumber);
+    // assert
+    verify(mockNetworkInfo.isConnected);
+  });
+});
+```
+The test will `fail` because we have to add features.
+Add the code to the `number_trivia_repository_impl_test.dart` file:
+
+```dart
+group('device is online', () {
+  // This setUp applies only to the 'device is online' group
+  setUp(() {
+    when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+  });
+
+  test(
+    'should return remote data when the call to remote data source is successful',
+    () async {
+      // arrange
+      when(mockRemoteDataSource.getConcreteNumberTrivia(tNumber))
+          .thenAnswer((_) async => tNumberTriviaModel);
+      // act
+      final result = await repository.getConcreteNumberTrivia(tNumber);
+      // assert
+      verify(mockRemoteDataSource.getConcreteNumberTrivia(tNumber));
+      expect(result, equals(Right(tNumberTrivia)));
+    },
+  );
+});
+```
+Now we need to do some tests and add some features.
+
+```dart
+test(
+  'should cache the data locally when the call to remote data source is successful',
+  () async {
+    // arrange
+    when(mockRemoteDataSource.getConcreteNumberTrivia(tNumber))
+        .thenAnswer((_) async => tNumberTriviaModel);
+    // act
+    await repository.getConcreteNumberTrivia(tNumber);
+    // assert
+    verify(mockRemoteDataSource.getConcreteNumberTrivia(tNumber));
+    verify(mockLocalDataSource.cacheNumberTrivia(tNumberTrivia));
+  },
+);
+```
+we also need to add the code to the `number_trivia_repository_impl.dart` file.
+
+```dart
+@override
+Future<Either<Failure, NumberTrivia>> getConcreteNumberTrivia(
+  int number,
+) async {
+  networkInfo.isConnected;
+  final remoteTrivia = await remoteDataSource.getConcreteNumberTrivia(number);
+  localDataSource.cacheNumberTrivia(remoteTrivia);
+  return Right(remoteTrivia);
+}
+```
+
+Test to convert `failures` to `ServerFailure`. 
+
+```dart
+test(
+  'should return server failure when the call to remote data source is unsuccessful',
+  () async {
+    // arrange
+    when(mockRemoteDataSource.getConcreteNumberTrivia(tNumber))
+        .thenThrow(ServerException());
+    // act
+    final result = await repository.getConcreteNumberTrivia(tNumber);
+    // assert
+    verify(mockRemoteDataSource.getConcreteNumberTrivia(tNumber));
+    verifyZeroInteractions(mockLocalDataSource);
+    expect(result, equals(Left(ServerFailure())));
+  },
+);
+```
+
+Implement it in the corresponding file.
+
+```dart
+@override
+Future<Either<Failure, NumberTrivia>> getConcreteNumberTrivia(
+  int number,
+) async {
+  networkInfo.isConnected;
+  try {
+    final remoteTrivia =
+        await remoteDataSource.getConcreteNumberTrivia(number);
+    localDataSource.cacheNumberTrivia(remoteTrivia);
+    return Right(remoteTrivia);
+  } on ServerException {
+    return Left(ServerFailure());
+  }
+}
+```
+
+#### Device Is Offline
+
+```dart
+group('device is offline', () {
+  setUp(() {
+    when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+  });
+
+  test(
+    'should return last locally cached data when the cached data is present',
+    () async {
+      // arrange
+      when(mockLocalDataSource.getLastNumberTrivia())
+          .thenAnswer((_) async => tNumberTriviaModel);
+      // act
+      final result = await repository.getConcreteNumberTrivia(tNumber);
+      // assert
+      verifyZeroInteractions(mockRemoteDataSource);
+      verify(mockLocalDataSource.getLastNumberTrivia());
+      expect(result, equals(Right(tNumberTrivia)));
+    },
+  );
+});
+```
+
+Test to show `CacheException` when there is nothing present inside the cache.
+
+```dart
+test(
+  'should return CacheFailure when there is no cached data present',
+  () async {
+    // arrange
+    when(mockLocalDataSource.getLastNumberTrivia())
+        .thenThrow(CacheException());
+    // act
+    final result = await repository.getConcreteNumberTrivia(tNumber);
+    // assert
+    verifyZeroInteractions(mockRemoteDataSource);
+    verify(mockLocalDataSource.getLastNumberTrivia());
+    expect(result, equals(Left(CacheFailure())));
+  },
+);
+```
+
+```dart
+@override
+Future<Either<Failure, NumberTrivia>> getConcreteNumberTrivia(
+  int number,
+) async {
+  if (await networkInfo.isConnected) {
+    try {
+      final remoteTrivia =
+          await remoteDataSource.getConcreteNumberTrivia(number);
+      localDataSource.cacheNumberTrivia(remoteTrivia);
+      return Right(remoteTrivia);
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  } else {
+    try {
+      final localTrivia = await localDataSource.getLastNumberTrivia();
+      return Right(localTrivia);
+    } on CacheException {
+      return Left(CacheFailure());
+    }
+  }
+}
+```
+Copy all tests done for `Concrete` and use them again for `Random`.
+
+```dart
+group('getRandomNumberTrivia', () {
+  final tNumberTriviaModel =
+      NumberTriviaModel(number: 123, text: 'test trivia');
+  final NumberTrivia tNumberTrivia = tNumberTriviaModel;
+
+  test('should check if the device is online', () {
+    //arrange
+    when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+    // act
+    repository.getRandomNumberTrivia();
+    // assert
+    verify(mockNetworkInfo.isConnected);
+  });
+
+  runTestsOnline(() {
+    test(
+      'should return remote data when the call to remote data source is successful',
+      () async {
+        // arrange
+        when(mockRemoteDataSource.getRandomNumberTrivia())
+            .thenAnswer((_) async => tNumberTriviaModel);
+        // act
+        final result = await repository.getRandomNumberTrivia();
+        // assert
+        verify(mockRemoteDataSource.getRandomNumberTrivia());
+        expect(result, equals(Right(tNumberTrivia)));
+      },
+    );
+
+    test(
+      'should cache the data locally when the call to remote data source is successful',
+      () async {
+        // arrange
+        when(mockRemoteDataSource.getRandomNumberTrivia())
+            .thenAnswer((_) async => tNumberTriviaModel);
+        // act
+        await repository.getRandomNumberTrivia();
+        // assert
+        verify(mockRemoteDataSource.getRandomNumberTrivia());
+        verify(mockLocalDataSource.cacheNumberTrivia(tNumberTrivia));
+      },
+    );
+
+    test(
+      'should return server failure when the call to remote data source is unsuccessful',
+      () async {
+        // arrange
+        when(mockRemoteDataSource.getRandomNumberTrivia())
+            .thenThrow(ServerException());
+        // act
+        final result = await repository.getRandomNumberTrivia();
+        // assert
+        verify(mockRemoteDataSource.getRandomNumberTrivia());
+        verifyZeroInteractions(mockLocalDataSource);
+        expect(result, equals(Left(ServerFailure())));
+      },
+    );
+  });
+
+  runTestsOffline(() {
+    test(
+      'should return last locally cached data when the cached data is present',
+      () async {
+        // arrange
+        when(mockLocalDataSource.getLastNumberTrivia())
+            .thenAnswer((_) async => tNumberTriviaModel);
+        // act
+        final result = await repository.getRandomNumberTrivia();
+        // assert
+        verifyZeroInteractions(mockRemoteDataSource);
+        verify(mockLocalDataSource.getLastNumberTrivia());
+        expect(result, equals(Right(tNumberTrivia)));
+      },
+    );
+
+    test(
+      'should return CacheFailure when there is no cached data present',
+      () async {
+        // arrange
+        when(mockLocalDataSource.getLastNumberTrivia())
+            .thenThrow(CacheException());
+        // act
+        final result = await repository.getRandomNumberTrivia();
+        // assert
+        verifyZeroInteractions(mockRemoteDataSource);
+        verify(mockLocalDataSource.getLastNumberTrivia());
+        expect(result, equals(Left(CacheFailure())));
+      },
+    );
+  });
+});
+```
+Do the same for the `corresponding` file.
+
+```dart
+@override
+Future<Either<Failure, NumberTrivia>> getRandomNumberTrivia() async {
+  if (await networkInfo.isConnected) {
+    try {
+      final remoteTrivia = await remoteDataSource.getRandomNumberTrivia();
+      localDataSource.cacheNumberTrivia(remoteTrivia);
+      return Right(remoteTrivia);
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  } else {
+    try {
+      final localTrivia = await localDataSource.getLastNumberTrivia();
+      return Right(localTrivia);
+    } on CacheException {
+      return Left(CacheFailure());
+    }
+  }
+}
+```
+
+The last version of the `NumberTriviaRepositoryImpl` file will contain the following code:
+
+```dart
+typedef Future<NumberTrivia> _ConcreteOrRandomChooser();
+
+class NumberTriviaRepositoryImpl implements NumberTriviaRepository {
+  final NumberTriviaRemoteDataSource remoteDataSource;
+  final NumberTriviaLocalDataSource localDataSource;
+  final NetworkInfo networkInfo;
+
+  NumberTriviaRepositoryImpl({
+    @required this.remoteDataSource,
+    @required this.localDataSource,
+    @required this.networkInfo,
+  });
+
+  @override
+  Future<Either<Failure, NumberTrivia>> getConcreteNumberTrivia(
+    int number,
+  ) async {
+    return await _getTrivia(() {
+      return remoteDataSource.getConcreteNumberTrivia(number);
+    });
+  }
+
+  @override
+  Future<Either<Failure, NumberTrivia>> getRandomNumberTrivia() async {
+    return await _getTrivia(() {
+      return remoteDataSource.getRandomNumberTrivia();
+    });
+  }
+
+  Future<Either<Failure, NumberTrivia>> _getTrivia(
+    _ConcreteOrRandomChooser getConcreteOrRandom,
+  ) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final remoteTrivia = await getConcreteOrRandom();
+        localDataSource.cacheNumberTrivia(remoteTrivia);
+        return Right(remoteTrivia);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      try {
+        final localTrivia = await localDataSource.getLastNumberTrivia();
+        return Right(localTrivia);
+      } on CacheException {
+        return Left(CacheFailure());
+      }
+    }
+  }
+}
+```
+#### 7. Network Info
+> Video 7: https://www.youtube.com/watch?v=xWl7GzMDiwg&t=7s
+
+In the `seventh` tutorial we start by adding a package to the `pubspec.yaml` file.
+
+```dart
+dependencies:
+  
+  data_connection_checker: ^0.3.4
+```
+Create the file `network_info_test.dart` in the same location but inside the test folder.
+
+The `network_info_test.dart` file will have the following code:
+
+```dart
+import 'package:clean_architecture_tdd_prep/core/network/network_info.dart';
+import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+
+class MockDataConnectionChecker extends Mock implements DataConnectionChecker {}
+
+void main() {
+  NetworkInfoImpl networkInfo;
+  MockDataConnectionChecker mockDataConnectionChecker;
+
+  setUp(() {
+    mockDataConnectionChecker = MockDataConnectionChecker();
+    networkInfo = NetworkInfoImpl(mockDataConnectionChecker);
+  });
+
+  group('isConnected', () {
+    test(
+      'should forward the call to DataConnectionChecker.hasConnection',
+      () async {
+        // arrange
+        final tHasConnectionFuture = Future.value(true);
+
+        when(mockDataConnectionChecker.hasConnection)
+            .thenAnswer((_) => tHasConnectionFuture);
+        // act
+        // NOTICE: We're NOT awaiting the result
+        final result = networkInfo.isConnected;
+        // assert
+        verify(mockDataConnectionChecker.hasConnection);
+        // Utilizing Dart's default referential equality.
+        // Only references to the same object are equal.
+        expect(result, tHasConnectionFuture);
+      },
+    );
+  });
+}
+```
+Then it is necessary to implement it in the `network_info.dart` file.
+
+```dart
+import 'package:data_connection_checker/data_connection_checker.dart';
+
+abstract class NetworkInfo {
+  Future<bool> get isConnected;
+}
+
+class NetworkInfoImpl implements NetworkInfo {
+  final DataConnectionChecker connectionChecker;
+
+  NetworkInfoImpl(this.connectionChecker);
+
+  @override
+  Future<bool> get isConnected => connectionChecker.hasConnection;
+}
+```
