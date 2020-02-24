@@ -584,7 +584,7 @@ class NumberTriviaRepositoryImpl implements NumberTriviaRepository {
 #### 6. Repository Implementation
 > Video 6: https://www.youtube.com/watch?v=bfEKPKKy9dA
 
-In the `sixth` tutorial start by explaining that we will have to know if the user has an internet connection and for that a test will be done.
+The `sixth` video starts by stating a new requirement: check if the user has an internet connection.
 
 #### Device Is Online
 
@@ -608,7 +608,7 @@ group('getConcreteNumberTrivia', () {
 });
 ```
 The test will `fail` because we have to add features.
-Add the code to the `number_trivia_repository_impl_test.`dart.
+Add the code to the `number_trivia_repository_impl_test.dart` file:
 
 ```dart
 group('device is online', () {
@@ -889,7 +889,7 @@ Future<Either<Failure, NumberTrivia>> getRandomNumberTrivia() async {
 }
 ```
 
-The last version of the `NumberTriviaRepositoryImpl`file will contain the following code.
+The last version of the `NumberTriviaRepositoryImpl` file will contain the following code:
 
 ```dart
 typedef Future<NumberTrivia> _ConcreteOrRandomChooser();
