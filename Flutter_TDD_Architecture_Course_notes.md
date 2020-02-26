@@ -1168,3 +1168,247 @@ Future<void> cacheNumberTrivia(NumberTriviaModel triviaToCache) {
 
 #### 9.  Remote Data Source
 > Video 9: https://www.youtube.com/watch?v=msGsYPtZnhU
+
+Tutorial number `nine` will handle all communication with the numbers API.
+
+The first thing to do is create a file corresponding to the `number_trivia_remote_data_source.dart`.
+
+The file must be created inside the `test` folder.
+
+We start by setting up the `test` file.
+
+
+```dart
+import 'package:http/http.dart' as http;
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:matcher/matcher.dart';
+
+import '../../../../fixtures/fixture_reader.dart';
+
+class MockHttpClient extends Mock implements http.Client {}
+
+void main() {
+  NumberTriviaRemoteDataSourceImpl dataSource;
+  MockHttpClient mockHttpClient;
+
+  setUp(() {
+    mockHttpClient = MockHttpClient();
+    dataSource = NumberTriviaRemoteDataSourceImpl(client: mockHttpClient);
+  });
+}
+```
+
+Then we implement in the file corresponding to the test file, the `number_trivia_remote_data_source.dart`.
+
+```dart
+class NumberTriviaRemoteDataSourceImpl implements NumberTriviaRemoteDataSource {
+  final http.Client client;
+
+  NumberTriviaRemoteDataSourceImpl({@required this.client});
+
+  @override
+  Future<NumberTriviaModel> getConcreteNumberTrivia(int number) {
+    // TODO: implement getConcreteNumberTrivia
+    return null;
+  }
+
+  @override
+  Future<NumberTriviaModel> getRandomNumberTrivia() {
+    // TODO: implement getRandomNumberTrivia
+    return null;
+  }
+}
+```
+
+Now we do a test for `GET request on a URL with number` being the endpoint.
+
+```dart
+group('getConcreteNumberTrivia', () {
+  final tNumber = 1;
+
+  test(
+    'should preform a GET request on a URL with number being the endpoint and with application/json header',
+    () {
+      //arrange
+      when(mockHttpClient.get(any, headers: anyNamed('headers'))).thenAnswer(
+        (_) async => http.Response(fixture('trivia.json'), 200),
+      );
+      // act
+      dataSource.getConcreteNumberTrivia(tNumber);
+      // assert
+      verify(mockHttpClient.get(
+        'http://numbersapi.com/$tNumber',
+        headers: {'Content-Type': 'application/json'},
+      ));
+    },
+  );
+}
+```
+
+As always, it is necessary to `implement` the file corresponding to the test file.
+
+```dart
+@override
+Future<NumberTriviaModel> getConcreteNumberTrivia(int number) {
+  client.get(
+    'http://numbersapi.com/$number',
+    headers: {'Content-Type': 'application/json'},
+  );
+}
+```
+The next `test` is for when we get a number of the application without errors.
+
+```dart
+final tNumberTriviaModel =
+    NumberTriviaModel.fromJson(json.decode(fixture('trivia.json')));
+...
+test(
+  'should return NumberTrivia when the response code is 200 (success)',
+  () async {
+    // arrange
+    when(mockHttpClient.get(any, headers: anyNamed('headers'))).thenAnswer(
+      (_) async => http.Response(fixture('trivia.json'), 200),
+    );
+    // act
+    final result = await dataSource.getConcreteNumberTrivia(tNumber);
+    // assert
+    expect(result, equals(tNumberTriviaModel));
+  },
+);
+```
+Then we do the `implementation`.
+
+```dart
+@override
+Future<NumberTriviaModel> getConcreteNumberTrivia(int number) async {
+  final response = await client.get(
+    'http://numbersapi.com/$number',
+    headers: {'Content-Type': 'application/json'},
+  );
+
+  return NumberTriviaModel.fromJson(json.decode(response.body));
+}
+```
+
+Now we need to run a `test` for when there is some kind of error.
+
+```dart
+test(
+  'should throw a ServerException when the response code is 404 or other',
+  () async {
+    // arrange
+    when(mockHttpClient.get(any, headers: anyNamed('headers'))).thenAnswer(
+      (_) async => http.Response('Something went wrong', 404),
+    );
+    // act
+    final call = dataSource.getConcreteNumberTrivia;
+    // assert
+    expect(() => call(tNumber), throwsA(TypeMatcher<ServerException>()));
+  },
+);
+```
+
+We `implement` in the corresponding file using a if .
+
+```dart
+@override
+Future<NumberTriviaModel> getConcreteNumberTrivia(int number) async {
+  final response = await client.get(
+    'http://numbersapi.com/$number',
+    headers: {'Content-Type': 'application/json'},
+  );
+
+  if (response.statusCode == 200) {
+    return NumberTriviaModel.fromJson(json.decode(response.body));
+  } else {
+    throw ServerException();
+  }
+}
+```
+
+Now let's create two methods, one for `success` and one for `error`.
+
+```dart
+ void setUpMockHttpClientSuccess200() {
+    when(mockHttpClient.get(any, headers: anyNamed('headers'))).thenAnswer(
+      (_) async => http.Response(fixture('trivia.json'), 200),
+    );
+  }
+
+  void setUpMockHttpClientFailure404() {
+    when(mockHttpClient.get(any, headers: anyNamed('headers'))).thenAnswer(
+      (_) async => http.Response('Something went wrong', 404),
+    );
+  }
+}
+```
+
+We'll have to do the same tests but this time for a `random number`.
+
+```dart
+group('getRandomNumberTrivia', () {
+  final tNumberTriviaModel =
+      NumberTriviaModel.fromJson(json.decode(fixture('trivia.json')));
+
+  test(
+    'should preform a GET request on a URL with *random* endpoint with application/json header',
+    () {
+      //arrange
+      setUpMockHttpClientSuccess200();
+      // act
+      dataSource.getRandomNumberTrivia();
+      // assert
+      verify(mockHttpClient.get(
+        'http://numbersapi.com/random',
+        headers: {'Content-Type': 'application/json'},
+      ));
+    },
+  );
+
+  test(
+    'should return NumberTrivia when the response code is 200 (success)',
+    () async {
+      // arrange
+      setUpMockHttpClientSuccess200();
+      // act
+      final result = await dataSource.getRandomNumberTrivia();
+      // assert
+      expect(result, equals(tNumberTriviaModel));
+    },
+  );
+
+  test(
+    'should throw a ServerException when the response code is 404 or other',
+    () async {
+      // arrange
+      setUpMockHttpClientFailure404();
+      // act
+      final call = dataSource.getRandomNumberTrivia;
+      // assert
+      expect(() => call(), throwsA(TypeMatcher<ServerException>()));
+    },
+  );
+});
+```
+
+Now we implement the random function in the `number_trivia_remote_data_source.dart` file.
+
+
+```dart
+@override
+Future<NumberTriviaModel> getRandomNumberTrivia() async {
+  final response = await client.get(
+    'http://numbersapi.com/random',
+    headers: {'Content-Type': 'application/json'},
+  );
+
+  if (response.statusCode == 200) {
+    return NumberTriviaModel.fromJson(json.decode(response.body));
+  } else {
+    throw ServerException();
+  }
+}
+```
+
+Now the tests will `pass` on both sides.
