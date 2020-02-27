@@ -1016,7 +1016,7 @@ class NetworkInfoImpl implements NetworkInfo {
 #### 8.  Local Data Source
 > Video 8: https://www.youtube.com/watch?v=fCguzcvLka8
 
-In the `eighth` tutorial is implemented the shared_preferences function.
+In the `eighth` tutorial the shared_preferences function is implemented.
 
 It uses the `shared_preferences` function because we only need to save one given NumberTrivia.
 
