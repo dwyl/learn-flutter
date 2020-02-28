@@ -1047,7 +1047,6 @@ void main() {
 Now the file corresponding to the `number_trivia_local_data_source.dart`.
 
 ```dart
-...
 class NumberTriviaLocalDataSourceImpl implements NumberTriviaLocalDataSource {
   final SharedPreferences sharedPreferences;
 
@@ -1066,7 +1065,7 @@ class NumberTriviaLocalDataSourceImpl implements NumberTriviaLocalDataSource {
   }
 }
 ```
-Then we created another `fixture` with the name `trivia_cached.json`. With the code.
+Create another file called `fixtures/trivia_cached.json` and paste the following code in it:
 
 ```dart
 {
@@ -1076,8 +1075,8 @@ Then we created another `fixture` with the name `trivia_cached.json`. With the c
 ```
 #### getLastNumberTrivia
 
-We now make the first test, with the first feature that will show a number stored in the cache.
- So let's go to the test file `number_trivia_local_data_source_test.dart`.
+Create the first test for the first feature that will show a number stored in the cache.
+Open the `number_trivia_local_data_source_test.dart` file and add the following test:
 
 ```dart
 group('getLastNumberTrivia', () {
@@ -1124,7 +1123,8 @@ test('should throw a CacheException when there is not a cached value', () {
   expect(() => call(), throwsA(TypeMatcher<CacheException>()));
 });
 ```
-Then just implement the function to the file `number_trivia_local_data_source.dart`.
+This test will fail as the `dataSource.getLastNumberTrivia` method is not yet implemented. <br />
+Let's implement the function in the `number_trivia_local_data_source.dart` file:
 
 ```dart
 @override
@@ -1171,11 +1171,9 @@ Future<void> cacheNumberTrivia(NumberTriviaModel triviaToCache) {
 
 Tutorial number `nine` will handle all communication with the numbers API.
 
-The first thing to do is create a file corresponding to the `number_trivia_remote_data_source.dart`.
+Create a file called `number_trivia_remote_data_source_test.dart` in the `/test` folder and add the following test:
 
-The file must be created inside the `test` folder.
 
-We start by setting up the `test` file.
 
 
 ```dart
@@ -1199,7 +1197,7 @@ void main() {
 }
 ```
 
-Then we implement in the file corresponding to the test file, the `number_trivia_remote_data_source.dart`.
+Implement `NumberTriviaRemoteDataSourceImpl` in the `number_trivia_remote_data_source.dart` file:
 
 ```dart
 class NumberTriviaRemoteDataSourceImpl implements NumberTriviaRemoteDataSource {
@@ -1221,7 +1219,7 @@ class NumberTriviaRemoteDataSourceImpl implements NumberTriviaRemoteDataSource {
 }
 ```
 
-Now we do a test for `GET request on a URL with number` being the endpoint.
+Now create a test for the `GET request on a URL with number` being the endpoint.
 
 ```dart
 group('getConcreteNumberTrivia', () {
@@ -1257,7 +1255,7 @@ Future<NumberTriviaModel> getConcreteNumberTrivia(int number) {
   );
 }
 ```
-The next `test` is for when we get a number of the application without errors.
+The next `test` is for getting a number without errors.
 
 ```dart
 final tNumberTriviaModel =
@@ -1277,7 +1275,7 @@ test(
   },
 );
 ```
-Then we do the `implementation`.
+Then create the `implementation`.
 
 ```dart
 @override
@@ -1309,7 +1307,7 @@ test(
 );
 ```
 
-We `implement` in the corresponding file using a if .
+Implement the code to make the test pass in the corresponding file using an `if`:
 
 ```dart
 @override
