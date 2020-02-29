@@ -1410,3 +1410,5 @@ Future<NumberTriviaModel> getRandomNumberTrivia() async {
 ```
 
 Now the tests will `pass` on both sides.
+
+![Tests_passing](https://user-images.githubusercontent.com/27420533/75614498-3b061180-5b31-11ea-8eb6-3751c68efd7c.png)
