@@ -1,7 +1,7 @@
-import 'package:clean_architeture_tdd/core/platform/network_info.dart';
-import 'package:data_connection_checker/data_connection_checker.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:clean_architeture_tdd/core/network/network_info.dart';
 import 'package:mockito/mockito.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:data_connection_checker/data_connection_checker.dart';
 
 class MockDataConnectionChecker extends Mock implements DataConnectionChecker {}
 
@@ -24,12 +24,9 @@ void main() {
         when(mockDataConnectionChecker.hasConnection)
             .thenAnswer((_) => tHasConnectionFuture);
         // act
-        // NOTICE: We're NOT awaiting the result
         final result = networkInfo.isConnected;
         // assert
         verify(mockDataConnectionChecker.hasConnection);
-        // Utilizing Dart's default referential equality.
-        // Only references to the same object are equal.
         expect(result, tHasConnectionFuture);
       },
     );

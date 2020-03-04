@@ -9,11 +9,11 @@ import 'package:flutter_test/flutter_test.dart';
 class MockNumberTriviaRepository extends Mock implements NumberTriviaRepository {}
 
 void main(){
-  getConcreteNumberTrivia usecase;
+  GetConcreteNumberTrivia usecase;
   MockNumberTriviaRepository mockNumberTriviaRepository;
   setUp((){
   mockNumberTriviaRepository = MockNumberTriviaRepository();
-  usecase = getConcreteNumberTrivia(mockNumberTriviaRepository);
+  usecase = GetConcreteNumberTrivia(mockNumberTriviaRepository);
   });
 
 final tNumber = 1;

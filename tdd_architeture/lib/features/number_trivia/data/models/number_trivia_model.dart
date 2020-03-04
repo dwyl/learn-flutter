@@ -1,21 +1,23 @@
+import 'package:clean_architeture_tdd/features/number_trivia/domain/entities/number_trivia.dart';
 import 'package:meta/meta.dart';
 
-import '../../domain/entities/number_trivia.dart';
-
- class NumberTriviaModel extends NumberTrivia {
+class NumberTriviaModel extends NumberTrivia {
   NumberTriviaModel({
     @required String text,
     @required int number,
-  }) : super( text: text,number: number,);
+  }) : super(text: text, number: number);
 
   factory NumberTriviaModel.fromJson(Map<String, dynamic> json) {
-  return NumberTriviaModel(
-    text: json['text'],
-    // The 'num' type can be both a 'double' and an 'int'
-    number: (json['number'] as num).toInt(),
-  );
-
+    return NumberTriviaModel(
+      text: json['text'],
+      number: (json['number'] as num).toInt(),
+    );
   }
 
-  Object toJson() {}
+  Map<String, dynamic> toJson() {
+    return {
+      'text': text,
+      'number': number,
+    };
+  }
 }
