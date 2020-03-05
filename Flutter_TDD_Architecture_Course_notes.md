@@ -1412,3 +1412,271 @@ Future<NumberTriviaModel> getRandomNumberTrivia() async {
 Now the tests will `pass` on both sides.
 
 ![Tests_passing](https://user-images.githubusercontent.com/27420533/75614498-3b061180-5b31-11ea-8eb6-3751c68efd7c.png)
+
+
+#### 10.  Bloc Scaffolding & Input Conversion
+> Video 10: https://www.youtube.com/watch?v=Ulk9qUErIa4
+
+In tutorial `number 10` begins by explaining how the `Bloc` works.
+In general, Bloc is a reactive pattern that makes the data flow only to one side.
+
+#### Creating Bloc Files
+
+First of all we have to `install` the extension of the Bloc.
+
+![Bloc_Enable](https://user-images.githubusercontent.com/27420533/75963778-ffb36c00-5ebd-11ea-9504-20c4baa1330f.png)
+
+Then we have to right click on the mouse and go to `bloc:new bloc`.
+
+We put the file name as `number_trivia` and press yes to use the `Equatable` package.
+
+Then the extension will generate three files, **block, event and state**.
+
+#### Events
+
+The `number_trivia_event.dart` file will handle all events that happen within the application, in this case we only have two events that are when one of the buttons is pressed.
+
+We need to add the following code to the `number_trivia_event.dart` file.
+
+```dart
+import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
+
+@immutable
+abstract class NumberTriviaEvent extends Equatable {
+  NumberTriviaEvent([List props = const <dynamic>[]]) : super(props);
+}
+
+class GetTriviaForConcreteNumber extends NumberTriviaEvent {
+  final String numberString;
+
+  GetTriviaForConcreteNumber(this.numberString) : super([numberString]);
+}
+
+class GetTriviaForRandomNumber extends NumberTriviaEvent {}
+```
+
+#### Input Converter
+
+Create a new folder inside the core folder with the `util` name.
+Inside the `util` folder we have to create a file called `input_converter.dart`.
+
+This will be the code.
+
+```dart
+import 'package:dartz/dartz.dart';
+
+import '../error/failure.dart';
+
+class InputConverter {
+  Either<Failure, int> stringToUnsignedInteger(String str) {
+    // TODO: Implement
+  }
+}
+
+class InvalidInputFailure extends Failure {}
+```
+Now inside the `test folder` we have to create the same file inside the util folder.
+The file name will be `input_converter_test.dart`.
+With the code.
+
+```dart
+import 'package:clean_architecture_tdd_prep/core/util/input_converter.dart';
+import 'package:dartz/dartz.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+void main() {
+  InputConverter inputConverter;
+
+  setUp(() {
+    inputConverter = InputConverter();
+  });
+
+  group('stringToUnsignedInt', () {
+    test(
+      'should return an integer when the string represents an unsigned integer',
+      () async {
+        // arrange
+        final str = '123';
+        // act
+        final result = inputConverter.stringToUnsignedInteger(str);
+        // assert
+        expect(result, Right(123));
+      },
+    );
+  });
+}
+```
+We have to write the minimum code for the test to pass then in the `input_converter.dart` file we write the code.
+
+
+```dart
+Either<Failure, int> stringToUnsignedInteger(String str) {
+  return Right(int.parse(str));
+}
+```
+
+We go to the `second` test, in the `test file` we add the following code.
+
+```dart
+test(
+  'should return a failure when the string is not an integer',
+  () async {
+    // arrange
+    final str = 'abc';
+    // act
+    final result = inputConverter.stringToUnsignedInteger(str);
+    // assert
+    expect(result, Left(InvalidInputFailure()));
+  },
+);
+```
+Then we have to add it to the `input_converter.dart` file.
+
+```dart
+Either<Failure, int> stringToUnsignedInteger(String str) {
+  try {
+    return Right(int.parse(str));
+  } on FormatException {
+    return Left(InvalidInputFailure());
+  }
+}
+```
+
+Now we move on to the `third` test.
+
+
+```dart
+test(
+  'should return a failure when the string is a negative integer',
+  () async {
+    // arrange
+    final str = '-123';
+    // act
+    final result = inputConverter.stringToUnsignedInteger(str);
+    // assert
+    expect(result, Left(InvalidInputFailure()));
+  },
+);
+```
+
+We return to the `input_converter.dart` file.
+
+```dart
+Either<Failure, int> stringToUnsignedInteger(String str) {
+  try {
+    final integer = int.parse(str);
+    if (integer < 0) throw FormatException();
+    return Right(integer);
+  } on FormatException {
+    return Left(InvalidInputFailure());
+  }
+}
+```
+
+#### States 
+
+The function of the state is to show the state of the application. In the case of this application we will have four states **Empty, Loading, Loaded and Error**.
+
+Inside the `number_trivia_state.dart` file we will write the following code.
+
+```dart
+import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
+
+import '../../domain/entities/number_trivia.dart';
+
+@immutable
+abstract class NumberTriviaState extends Equatable {
+  NumberTriviaState([List props = const <dynamic>[]]) : super(props);
+}
+
+class Empty extends NumberTriviaState {}
+
+class Loading extends NumberTriviaState {}
+
+class Loaded extends NumberTriviaState {
+  final NumberTrivia trivia;
+
+  Loaded({@required this.trivia}) : super([trivia]);
+}
+
+class Error extends NumberTriviaState {
+  final String message;
+
+  Error({@required this.message}) : super([message]);
+}
+```
+
+Here is the complete code of the `input_converter_test.dart` file.
+
+
+```dart
+import 'package:clean_architeture_tdd/core/util/input_converter.dart';
+import 'package:dartz/dartz.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+void main() {
+  InputConverter inputConverter;
+
+  setUp(() {
+    inputConverter = InputConverter();
+  });
+
+  group('stringToUnsignedInt', () {
+    test(
+      'should return an integer when the string represents an unsigned integer',
+      () async {
+        // arrange
+        final str = '123';
+        // act
+        final result = inputConverter.stringToUnsignedInteger(str);
+        // assert
+        expect(result, Right(123));
+      },
+    );
+
+    test(
+      'should return a Failure when the string is not an integer',
+      () async {
+        // arrange
+        final str = 'abc';
+        // act
+        final result = inputConverter.stringToUnsignedInteger(str);
+        // assert
+        expect(result, Left(InvalidInputFailure()));
+      },
+    );
+
+    test(
+      'should return a Failure when the string is a negative integer',
+      () async {
+        // arrange
+        final str = '-123';
+        // act
+        final result = inputConverter.stringToUnsignedInteger(str);
+        // assert
+        expect(result, Left(InvalidInputFailure()));
+      },
+    );
+  });
+}
+```
+
+All **three tests will pass**.
+
+![tests_passing_input_converter](https://user-images.githubusercontent.com/27420533/75976854-1b753d00-5ed3-11ea-9330-b3460c33ac7b.png)
+
+
+
+#### 11.  Bloc Implementation 1/2
+> Video 11: https://www.youtube.com/watch?v=a8f_qpVHa3w
+
+#### 12.  Bloc Implementation 2/2 
+> Video 12: https://www.youtube.com/watch?v=YSNeS5S5Nqw
+
+#### 13.  Dependency Injection
+> Video 13: https://www.youtube.com/watch?v=gfLb4rqzio4
+
+#### 14.  User Interface
+> Video 14: https://www.youtube.com/watch?v=G-R-1rzR3zw&t=604s
