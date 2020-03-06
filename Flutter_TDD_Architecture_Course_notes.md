@@ -2081,6 +2081,319 @@ The tests will all **pass** now.
 #### 12.  Bloc Implementation 2/2 
 > Video 12: https://www.youtube.com/watch?v=YSNeS5S5Nqw
 
+In the `twelfth` tutorial we will finish the tests done in the previous tutorial.
+We start by going to `number_trivia_bloc_test.dart` and add a new test.
+
+```dart
+test(
+  'should get data from the concrete use case',
+  () async {
+    // arrange
+    when(mockInputConverter.stringToUnsignedInteger(any))
+        .thenReturn(Right(tNumberParsed));
+    when(mockGetConcreteNumberTrivia(any))
+        .thenAnswer((_) async => Right(tNumberTrivia));
+    // act
+    bloc.dispatch(GetTriviaForConcreteNumber(tNumberString));
+    await untilCalled(mockGetConcreteNumberTrivia(any));
+    // assert
+    verify(mockGetConcreteNumberTrivia(Params(number: tNumberParsed)));
+  },
+);
+```
+
+Then we add in the file `number_trivia_bloc.dart`.
+
+```dart
+@override
+Stream<NumberTriviaState> mapEventToState(
+  NumberTriviaEvent event,
+) async* {
+  if (event is GetTriviaForConcreteNumber) {
+    final inputEither =
+        inputConverter.stringToUnsignedInteger(event.numberString);
+
+    yield* inputEither.fold(
+      (failure) async* {
+        yield Error(message: INVALID_INPUT_FAILURE_MESSAGE);
+      },
+      (integer) {
+        getConcreteNumberTrivia(Params(number: integer));
+      },
+    );
+  }
+}
+```
+We need to add a `MockInputConverterSuccess` to the test file.
+
+
+```dart
+group('GetTriviaForConcreteNumber', () {
+  ...
+
+  void setUpMockInputConverterSuccess() =>
+      when(mockInputConverter.stringToUnsignedInteger(any))
+          .thenReturn(Right(tNumberParsed));
+  // Use in tests below
+  ...
+}
+```
+We will have `three` tests that will show the application status.
+So let's take the first test.
+
+```dart
+test(
+  'should emit [Loading, Loaded] when data is gotten successfully',
+  () async {
+    // arrange
+    setUpMockInputConverterSuccess();
+    when(mockGetConcreteNumberTrivia(any))
+        .thenAnswer((_) async => Right(tNumberTrivia));
+    // assert later
+    final expected = [
+      Empty(),
+      Loading(),
+      Loaded(trivia: tNumberTrivia),
+    ];
+    expectLater(bloc.state, emitsInOrder(expected));
+    // act
+    bloc.dispatch(GetTriviaForConcreteNumber(tNumberString));
+  },
+);
+```
+
+We add it back to the `number_trivia_bloc.dart` file.
+
+```dart
+@override
+Stream<NumberTriviaState> mapEventToState(
+  NumberTriviaEvent event,
+) async* {
+  if (event is GetTriviaForConcreteNumber) {
+    final inputEither =
+        inputConverter.stringToUnsignedInteger(event.numberString);
+
+    yield* inputEither.fold(
+      (failure) async* {
+        yield Error(message: INVALID_INPUT_FAILURE_MESSAGE);
+      },
+      (integer) async* {
+        yield Loading();
+        final failureOrTrivia = await getConcreteNumberTrivia(
+          Params(number: integer),
+        );
+        yield failureOrTrivia.fold(
+          (failure) => throw UnimplementedError(),
+          (trivia) => Loaded(trivia: trivia),
+        );
+      },
+    );
+  }
+}
+```
+We now proceed to the `second` test.
+
+```dart
+test(
+  'should emit [Loading, Error] when getting data fails',
+  () async {
+    // arrange
+    setUpMockInputConverterSuccess();
+    when(mockGetConcreteNumberTrivia(any))
+        .thenAnswer((_) async => Left(ServerFailure()));
+    // assert later
+    final expected = [
+      Empty(),
+      Loading(),
+      Error(message: SERVER_FAILURE_MESSAGE),
+    ];
+    expectLater(bloc.state, emitsInOrder(expected));
+    // act
+    bloc.dispatch(GetTriviaForConcreteNumber(tNumberString));
+  },
+);
+```
+This test will show if any mistakes were made. Then it is necessary to implement it in the corresponding file.
+
+```dart
+(integer) async* {
+  yield Loading();
+  final failureOrTrivia = await getConcreteNumberTrivia(
+    Params(number: integer),
+  );
+  yield failureOrTrivia.fold(
+    (failure) => Error(message: SERVER_FAILURE_MESSAGE),
+    (trivia) => Loaded(trivia: trivia),
+  );
+},
+```
+Now the `third` test.
+
+```dart
+test(
+  'should emit [Loading, Error] with a proper message for the error when getting data fails',
+  () async {
+    // arrange
+    setUpMockInputConverterSuccess();
+    when(mockGetConcreteNumberTrivia(any))
+        .thenAnswer((_) async => Left(CacheFailure()));
+    // assert later
+    final expected = [
+      Empty(),
+      Loading(),
+      Error(message: CACHE_FAILURE_MESSAGE),
+    ];
+    expectLater(bloc.state, emitsInOrder(expected));
+    // act
+    bloc.dispatch(GetTriviaForConcreteNumber(tNumberString));
+  },
+);
+```
+Inside the file `number_trivia_bloc.dart` we have to add the `mapEventToState` method.
+
+```dart
+@override
+Stream<NumberTriviaState> mapEventToState(
+  NumberTriviaEvent event,
+) async* {
+  if (event is GetTriviaForConcreteNumber) {
+    final inputEither =
+        inputConverter.stringToUnsignedInteger(event.numberString);
+
+    yield* inputEither.fold(
+      (failure) async* {
+        yield Error(message: INVALID_INPUT_FAILURE_MESSAGE);
+      },
+      (integer) async* {
+        yield Loading();
+        final failureOrTrivia = await getConcreteNumberTrivia(
+          Params(number: integer),
+        );
+        yield failureOrTrivia.fold(
+          (failure) => Error(message: _mapFailureToMessage(failure)),
+          (trivia) => Loaded(trivia: trivia),
+        );
+      },
+    );
+  }
+}
+
+String _mapFailureToMessage(Failure failure) {
+  // Instead of a regular 'if (failure is ServerFailure)...'
+  switch (failure.runtimeType) {
+    case ServerFailure:
+      return SERVER_FAILURE_MESSAGE;
+    case CacheFailure:
+      return CACHE_FAILURE_MESSAGE;
+    default:
+      return 'Unexpected Error';
+  }
+}
+```
+
+Complete code for the test file.
+
+
+```dart
+group('GetTriviaForRandomNumber', () {
+  final tNumberTrivia = NumberTrivia(number: 1, text: 'test trivia');
+
+  test(
+    'should get data from the random use case',
+    () async {
+      // arrange
+      when(mockGetRandomNumberTrivia(any))
+          .thenAnswer((_) async => Right(tNumberTrivia));
+      // act
+      bloc.dispatch(GetTriviaForRandomNumber());
+      await untilCalled(mockGetRandomNumberTrivia(any));
+      // assert
+      verify(mockGetRandomNumberTrivia(NoParams()));
+    },
+  );
+
+  test(
+    'should emit [Loading, Loaded] when data is gotten successfully',
+    () async {
+      // arrange
+      when(mockGetRandomNumberTrivia(any))
+          .thenAnswer((_) async => Right(tNumberTrivia));
+      // assert later
+      final expected = [
+        Empty(),
+        Loading(),
+        Loaded(trivia: tNumberTrivia),
+      ];
+      expectLater(bloc.state, emitsInOrder(expected));
+      // act
+      bloc.dispatch(GetTriviaForRandomNumber());
+    },
+  );
+
+  test(
+    'should emit [Loading, Error] when getting data fails',
+    () async {
+      // arrange
+      when(mockGetRandomNumberTrivia(any))
+          .thenAnswer((_) async => Left(ServerFailure()));
+      // assert later
+      final expected = [
+        Empty(),
+        Loading(),
+        Error(message: SERVER_FAILURE_MESSAGE),
+      ];
+      expectLater(bloc.state, emitsInOrder(expected));
+      // act
+      bloc.dispatch(GetTriviaForRandomNumber());
+    },
+  );
+
+  test(
+    'should emit [Loading, Error] with a proper message for the error when getting data fails',
+    () async {
+      // arrange
+      when(mockGetRandomNumberTrivia(any))
+          .thenAnswer((_) async => Left(CacheFailure()));
+      // assert later
+      final expected = [
+        Empty(),
+        Loading(),
+        Error(message: CACHE_FAILURE_MESSAGE),
+      ];
+      expectLater(bloc.state, emitsInOrder(expected));
+      // act
+      bloc.dispatch(GetTriviaForRandomNumber());
+    },
+  );
+});
+```
+
+In our `number_trivia_bloc.dart` file we have to call `GetRandomNumberTrivia` and pass `NoParams( )`.
+
+```dart
+@override
+Stream<NumberTriviaState> mapEventToState(
+  NumberTriviaEvent event,
+) async* {
+  if (event is GetTriviaForConcreteNumber) {
+    ...
+  } else if (event is GetTriviaForRandomNumber) {
+    yield Loading();
+    final failureOrTrivia = await getRandomNumberTrivia(
+      NoParams(),
+    );
+    yield failureOrTrivia.fold(
+      (failure) => Error(message: _mapFailureToMessage(failure)),
+      (trivia) => Loaded(trivia: trivia),
+    );
+  }
+}
+```
+
+The `tests` will all pass.
+
+!Tests_passing_Random_number_trivia_bloc](https://user-images.githubusercontent.com/27420533/76038500-9e34e100-5f41-11ea-9494-28df5a74af01.png)
+
 #### 13.  Dependency Injection
 > Video 13: https://www.youtube.com/watch?v=gfLb4rqzio4
 
