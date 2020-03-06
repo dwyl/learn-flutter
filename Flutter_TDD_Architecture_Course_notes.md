@@ -189,6 +189,48 @@ The code will make the first `test` pass so there will be no more errors.
 
 ![First_Test_Pass](https://user-images.githubusercontent.com/27420533/74528160-6d9fef80-4f1f-11ea-9198-64d1aaefb3c4.png)
 
+Full code of `get_concrete_number_trivia_test.dart` file.
+
+```dart
+import 'package:clean_architeture_tdd/features/number_trivia/domain/entities/number_trivia.dart';
+import 'package:clean_architeture_tdd/features/number_trivia/domain/usecases/get_concrete_number_trivia.dart';
+import 'package:clean_architeture_tdd/features/number_trivia/domain/number_trivia_repository.dart';
+import 'package:dartz/dartz.dart';
+import 'package:mockito/mockito.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+
+class MockNumberTriviaRepository extends Mock implements NumberTriviaRepository {}
+
+void main(){
+  GetConcreteNumberTrivia usecase;
+  MockNumberTriviaRepository mockNumberTriviaRepository;
+  setUp((){
+  mockNumberTriviaRepository = MockNumberTriviaRepository();
+  usecase = GetConcreteNumberTrivia(mockNumberTriviaRepository);
+  });
+
+final tNumber = 1;
+final tNumberTrivia = NumberTrivia(number: 1, text: 'test');
+
+  test(
+    'should get trivia for the number for the repository',
+  () async{
+when (mockNumberTriviaRepository.getConcreteNumberTrivia(any))
+.thenAnswer((_) async  => Right(tNumberTrivia));
+
+  final result = await usecase(Params(number: tNumber));
+
+      expect(result, Right(tNumberTrivia));
+
+      verify(mockNumberTriviaRepository.getConcreteNumberTrivia(tNumber));
+
+      verifyNoMoreInteractions(mockNumberTriviaRepository);  
+  
+  },
+  );
+}
+```
 
 #### 3. Domain Layer Refactoring
 > Video 3: https://www.youtube.com/watch?v=Mmq72a0h4jk
@@ -277,6 +319,49 @@ class GetRandomNumberTrivia extends UseCase<NumberTrivia, NoParams> {
 And now the **second** test will pass.
 
 ![Second_test_pass](https://user-images.githubusercontent.com/27420533/74590474-aa92e180-5006-11ea-8a88-ef8a9a6311e7.png)
+
+Full code of `get_random_number_trivia_test.dart` file.
+
+```dart
+import 'package:clean_architeture_tdd/core/usecases/usecase.dart';
+import 'package:clean_architeture_tdd/features/number_trivia/domain/entities/number_trivia.dart';
+import 'package:clean_architeture_tdd/features/number_trivia/domain/number_trivia_repository.dart';
+
+import 'package:clean_architeture_tdd/features/number_trivia/domain/usecases/get_random_number_trivia.dart';
+import 'package:dartz/dartz.dart';
+import 'package:mockito/mockito.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+class MockNumberTriviaRepository extends Mock
+    implements NumberTriviaRepository {}
+
+void main() {
+  GetRandomNumberTrivia usecase;
+  MockNumberTriviaRepository mockNumberTriviaRepository;
+
+  setUp(() {
+    mockNumberTriviaRepository = MockNumberTriviaRepository();
+    usecase = GetRandomNumberTrivia(mockNumberTriviaRepository);
+  });
+
+  final tNumberTrivia = NumberTrivia(number: 1, text: 'test');
+
+  test(
+    'should get trivia from the repository',
+    () async {
+      // arrange
+      when(mockNumberTriviaRepository.getRandomNumberTrivia())
+          .thenAnswer((_) async => Right(tNumberTrivia));
+      // act
+      final result = await usecase(NoParams());
+      // assert
+      expect(result, Right(tNumberTrivia));
+      verify(mockNumberTriviaRepository.getRandomNumberTrivia());
+      verifyNoMoreInteractions(mockNumberTriviaRepository);
+    },
+  );
+}
+```
 
 #### 4. Data Layer Overview & Models
 > Video 4: https://www.youtube.com/watch?v=keaTZ9M_U1A&t=1516s
@@ -427,6 +512,48 @@ class NumberTriviaModel extends NumberTrivia {
 }
 ```
 Now all the tests **pass**.
+
+Complete code of the file `number_trivia_model_test.dart`.
+
+```dart
+import 'dart:convert';
+import 'package:clean_architeture_tdd/features/number_trivia/data/models/number_trivia_model.dart';
+import 'package:clean_architeture_tdd/features/number_trivia/domain/entities/number_trivia.dart';
+import 'package:flutter_test/flutter_test.dart';
+import '../../../../fixtures/Fixture_reader.dart';
+
+
+void main() {
+  final tNumberTriviaModel = NumberTriviaModel(number: 1, text: 'Test Text');
+
+    test(
+      'should be a subclass of NumberTrivia Entity',
+      () async {
+
+        expect(tNumberTriviaModel, isA<NumberTrivia>());
+
+
+      },
+    );
+
+    group('fromJson', () {
+ 
+       test(
+    'should return a valid model when the JSON number is regarded as a double',
+    () async {
+      // arrange
+      final Map<String, dynamic> jsonMap =
+          json.decode(fixture('trivia_double.json'));
+      // act
+      final result = NumberTriviaModel.fromJson(jsonMap);
+      // assert
+      expect(result, tNumberTriviaModel);
+    },
+  );
+});
+}
+```
+
 
 #### 5. Contracts of Data Sources
 > Video 5: https://www.youtube.com/watch?v=m_lkZo6CYcs&t=1s
@@ -581,6 +708,258 @@ class NumberTriviaRepositoryImpl implements NumberTriviaRepository {
   }
 }
 ```
+The complete code of the file `number_trivia_repository_impl_test.dart`.
+
+```dart
+import 'package:clean_architeture_tdd/core/error/exceptions.dart';
+import 'package:clean_architeture_tdd/core/error/failures.dart';
+import 'package:clean_architeture_tdd/core/network/network_info.dart';
+import 'package:clean_architeture_tdd/features/number_trivia/data/datasources/number_trivia_local_data_source.dart';
+import 'package:clean_architeture_tdd/features/number_trivia/data/datasources/number_trivia_remote_data_source.dart';
+import 'package:clean_architeture_tdd/features/number_trivia/data/models/number_trivia_model.dart';
+import 'package:clean_architeture_tdd/features/number_trivia/data/repositories/number_trivia_repository_impl.dart';
+import 'package:clean_architeture_tdd/features/number_trivia/domain/entities/number_trivia.dart';
+import 'package:dartz/dartz.dart';
+import 'package:mockito/mockito.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+class MockRemoteDataSource extends Mock
+    implements NumberTriviaRemoteDataSource {}
+
+class MockLocalDataSource extends Mock implements NumberTriviaLocalDataSource {}
+
+class MockNetworkInfo extends Mock implements NetworkInfo {}
+
+void main() {
+  NumberTriviaRepositoryImpl repository;
+  MockRemoteDataSource mockRemoteDataSource;
+  MockLocalDataSource mockLocalDataSource;
+  MockNetworkInfo mockNetworkInfo;
+
+  setUp(() {
+    mockRemoteDataSource = MockRemoteDataSource();
+    mockLocalDataSource = MockLocalDataSource();
+    mockNetworkInfo = MockNetworkInfo();
+    repository = NumberTriviaRepositoryImpl(
+      remoteDataSource: mockRemoteDataSource,
+      localDataSource: mockLocalDataSource,
+      networkInfo: mockNetworkInfo,
+    );
+  });
+
+  void runTestsOnline(Function body) {
+    group('device is online', () {
+      setUp(() {
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+      });
+
+      body();
+    });
+  }
+
+  void runTestsOffline(Function body) {
+    group('device is offline', () {
+      setUp(() {
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+      });
+
+      body();
+    });
+  }
+
+  group('getConcreteNumberTrivia', () {
+    final tNumber = 1;
+    final tNumberTriviaModel =
+        NumberTriviaModel(number: tNumber, text: 'test trivia');
+    final NumberTrivia tNumberTrivia = tNumberTriviaModel;
+
+    test(
+      'should check if the device is online',
+      () async {
+        // arrange
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        // act
+        repository.getConcreteNumberTrivia(tNumber);
+        // assert
+        verify(mockNetworkInfo.isConnected);
+      },
+    );
+
+    runTestsOnline(() {
+      test(
+        'should return remote data when the call to remote data source is successful',
+        () async {
+          // arrange
+          when(mockRemoteDataSource.getConcreteNumberTrivia(any))
+              .thenAnswer((_) async => tNumberTriviaModel);
+          // act
+          final result = await repository.getConcreteNumberTrivia(tNumber);
+          // assert
+          verify(mockRemoteDataSource.getConcreteNumberTrivia(tNumber));
+          expect(result, equals(Right(tNumberTrivia)));
+        },
+      );
+
+      test(
+        'should cache the data locally when the call to remote data source is successful',
+        () async {
+          // arrange
+          when(mockRemoteDataSource.getConcreteNumberTrivia(any))
+              .thenAnswer((_) async => tNumberTriviaModel);
+          // act
+          await repository.getConcreteNumberTrivia(tNumber);
+          // assert
+          verify(mockRemoteDataSource.getConcreteNumberTrivia(tNumber));
+          verify(mockLocalDataSource.cacheNumberTrivia(tNumberTriviaModel));
+        },
+      );
+
+      test(
+        'should return server failure when the call to remote data source is unsuccessful',
+        () async {
+          // arrange
+          when(mockRemoteDataSource.getConcreteNumberTrivia(any))
+              .thenThrow(ServerException());
+          // act
+          final result = await repository.getConcreteNumberTrivia(tNumber);
+          // assert
+          verify(mockRemoteDataSource.getConcreteNumberTrivia(tNumber));
+          verifyZeroInteractions(mockLocalDataSource);
+          expect(result, equals(Left(ServerFailure())));
+        },
+      );
+    });
+
+    runTestsOffline(() {
+      test(
+        'should return last locally cached data when the cached data is present',
+        () async {
+          // arrange
+          when(mockLocalDataSource.getLastNumberTrivia())
+              .thenAnswer((_) async => tNumberTriviaModel);
+          // act
+          final result = await repository.getConcreteNumberTrivia(tNumber);
+          // assert
+          verifyZeroInteractions(mockRemoteDataSource);
+          verify(mockLocalDataSource.getLastNumberTrivia());
+          expect(result, equals(Right(tNumberTrivia)));
+        },
+      );
+
+      test(
+        'should return CacheFailure when there is no cached data present',
+        () async {
+          // arrange
+          when(mockLocalDataSource.getLastNumberTrivia())
+              .thenThrow(CacheException());
+          // act
+          final result = await repository.getConcreteNumberTrivia(tNumber);
+          // assert
+          verifyZeroInteractions(mockRemoteDataSource);
+          verify(mockLocalDataSource.getLastNumberTrivia());
+          expect(result, equals(Left(CacheFailure())));
+        },
+      );
+    });
+  });
+
+  group('getRandomNumberTrivia', () {
+    final tNumberTriviaModel =
+        NumberTriviaModel(number: 123, text: 'test trivia');
+    final NumberTrivia tNumberTrivia = tNumberTriviaModel;
+
+    test(
+      'should check if the device is online',
+      () async {
+        // arrange
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        // act
+        repository.getRandomNumberTrivia();
+        // assert
+        verify(mockNetworkInfo.isConnected);
+      },
+    );
+
+    runTestsOnline(() {
+      test(
+        'should return remote data when the call to remote data source is successful',
+        () async {
+          // arrange
+          when(mockRemoteDataSource.getRandomNumberTrivia())
+              .thenAnswer((_) async => tNumberTriviaModel);
+          // act
+          final result = await repository.getRandomNumberTrivia();
+          // assert
+          verify(mockRemoteDataSource.getRandomNumberTrivia());
+          expect(result, equals(Right(tNumberTrivia)));
+        },
+      );
+
+      test(
+        'should cache the data locally when the call to remote data source is successful',
+        () async {
+          // arrange
+          when(mockRemoteDataSource.getRandomNumberTrivia())
+              .thenAnswer((_) async => tNumberTriviaModel);
+          // act
+          await repository.getRandomNumberTrivia();
+          // assert
+          verify(mockRemoteDataSource.getRandomNumberTrivia());
+          verify(mockLocalDataSource.cacheNumberTrivia(tNumberTriviaModel));
+        },
+      );
+
+      test(
+        'should return server failure when the call to remote data source is unsuccessful',
+        () async {
+          // arrange
+          when(mockRemoteDataSource.getRandomNumberTrivia())
+              .thenThrow(ServerException());
+          // act
+          final result = await repository.getRandomNumberTrivia();
+          // assert
+          verify(mockRemoteDataSource.getRandomNumberTrivia());
+          verifyZeroInteractions(mockLocalDataSource);
+          expect(result, equals(Left(ServerFailure())));
+        },
+      );
+    });
+
+    runTestsOffline(() {
+      test(
+        'should return last locally cached data when the cached data is present',
+        () async {
+          // arrange
+          when(mockLocalDataSource.getLastNumberTrivia())
+              .thenAnswer((_) async => tNumberTriviaModel);
+          // act
+          final result = await repository.getRandomNumberTrivia();
+          // assert
+          verifyZeroInteractions(mockRemoteDataSource);
+          verify(mockLocalDataSource.getLastNumberTrivia());
+          expect(result, equals(Right(tNumberTrivia)));
+        },
+      );
+
+      test(
+        'should return CacheFailure when there is no cached data present',
+        () async {
+          // arrange
+          when(mockLocalDataSource.getLastNumberTrivia())
+              .thenThrow(CacheException());
+          // act
+          final result = await repository.getRandomNumberTrivia();
+          // assert
+          verifyZeroInteractions(mockRemoteDataSource);
+          verify(mockLocalDataSource.getLastNumberTrivia());
+          expect(result, equals(Left(CacheFailure())));
+        },
+      );
+    });
+  });
+}
+```
+
 #### 6. Repository Implementation
 > Video 6: https://www.youtube.com/watch?v=bfEKPKKy9dA
 
@@ -1013,6 +1392,46 @@ class NetworkInfoImpl implements NetworkInfo {
   Future<bool> get isConnected => connectionChecker.hasConnection;
 }
 ```
+
+Full code of the file `network_info_test.dart`.
+
+```dart
+import 'package:clean_architeture_tdd/core/network/network_info.dart';
+import 'package:mockito/mockito.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:data_connection_checker/data_connection_checker.dart';
+
+class MockDataConnectionChecker extends Mock implements DataConnectionChecker {}
+
+void main() {
+  NetworkInfoImpl networkInfo;
+  MockDataConnectionChecker mockDataConnectionChecker;
+
+  setUp(() {
+    mockDataConnectionChecker = MockDataConnectionChecker();
+    networkInfo = NetworkInfoImpl(mockDataConnectionChecker);
+  });
+
+  group('isConnected', () {
+    test(
+      'should forward the call to DataConnectionChecker.hasConnection',
+      () async {
+        // arrange
+        final tHasConnectionFuture = Future.value(true);
+
+        when(mockDataConnectionChecker.hasConnection)
+            .thenAnswer((_) => tHasConnectionFuture);
+        // act
+        final result = networkInfo.isConnected;
+        // assert
+        verify(mockDataConnectionChecker.hasConnection);
+        expect(result, tHasConnectionFuture);
+      },
+    );
+  });
+}
+```
+
 #### 8.  Local Data Source
 > Video 8: https://www.youtube.com/watch?v=fCguzcvLka8
 
@@ -1165,6 +1584,79 @@ Future<void> cacheNumberTrivia(NumberTriviaModel triviaToCache) {
   );
 }
 ```
+Full code of the file `number_trivia_local_data_source_test.dart`.
+
+
+```dart
+import 'dart:convert';
+
+import 'package:clean_architeture_tdd/core/error/exceptions.dart';
+import 'package:clean_architeture_tdd/features/number_trivia/data/datasources/number_trivia_local_data_source.dart';
+import 'package:clean_architeture_tdd/features/number_trivia/data/models/number_trivia_model.dart';
+import 'package:matcher/matcher.dart';
+
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../fixtures/Fixture_reader.dart';
+
+class MockSharedPreferences extends Mock implements SharedPreferences {}
+
+void main() {
+  NumberTriviaLocalDataSourceImpl dataSource;
+  MockSharedPreferences mockSharedPreferences;
+
+  setUp(() {
+    mockSharedPreferences = MockSharedPreferences();
+    dataSource = NumberTriviaLocalDataSourceImpl(
+      sharedPreferences: mockSharedPreferences,
+    );
+  });
+  group('getLastNumberTrivia', () {
+  final tNumberTriviaModel =
+      NumberTriviaModel.fromJson(json.decode(fixture('trivia_cached.json')));
+
+  test(
+    'should return NumberTrivia from SharedPreferences when there is one in the cache',
+    () async {
+      // arrange
+      when(mockSharedPreferences.getString(any))
+          .thenReturn(fixture('trivia_cached.json'));
+      // act
+      final result = await dataSource.getLastNumberTrivia();
+      // assert
+      verify(mockSharedPreferences.getString('CACHED_NUMBER_TRIVIA'));
+      expect(result, equals(tNumberTriviaModel));
+    },
+  );
+});
+test('should throw a CacheException when there is not a cached value', () {
+  // arrange
+  when(mockSharedPreferences.getString(any)).thenReturn(null);
+  // act
+  // Not calling the method here, just storing it inside a call variable
+  final call = dataSource.getLastNumberTrivia;
+  // assert
+  // Calling the method happens from a higher-order function passed.
+  // This is needed to test if calling a method throws an exception.
+  expect(() => call(), throwsA(TypeMatcher<CacheException>()));
+});
+group('cacheNumberTrivia', () {
+  final tNumberTriviaModel =
+      NumberTriviaModel(number: 1, text: 'test trivia');
+
+  test('should call SharedPreferences to cache the data', () {
+    // act
+    dataSource.cacheNumberTrivia(tNumberTriviaModel);
+    // assert
+    final expectedJsonString = json.encode(tNumberTriviaModel.toJson());
+    verify(mockSharedPreferences.setString(CACHED_NUMBER_TRIVIA,expectedJsonString,));
+  });
+});
+}
+```
+
 
 #### 9.  Remote Data Source
 > Video 9: https://www.youtube.com/watch?v=msGsYPtZnhU
@@ -1412,6 +1904,140 @@ Future<NumberTriviaModel> getRandomNumberTrivia() async {
 Now the tests will `pass` on both sides.
 
 ![Tests_passing](https://user-images.githubusercontent.com/27420533/75614498-3b061180-5b31-11ea-8eb6-3751c68efd7c.png)
+
+
+Full code of the file `number_trivia_remote_data_source_test.dart`.
+
+```dart
+import 'dart:convert';
+
+import 'package:clean_architeture_tdd/core/error/exceptions.dart';
+import 'package:clean_architeture_tdd/features/number_trivia/data/datasources/number_trivia_remote_data_source.dart';
+import 'package:clean_architeture_tdd/features/number_trivia/data/models/number_trivia_model.dart';
+import 'package:mockito/mockito.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:matcher/matcher.dart';
+import 'package:http/http.dart' as http;
+
+import '../../../../fixtures/fixture_reader.dart';
+
+class MockHttpClient extends Mock implements http.Client {}
+
+void main() {
+  NumberTriviaRemoteDataSourceImpl dataSource;
+  MockHttpClient mockHttpClient;
+
+  setUp(() {
+    mockHttpClient = MockHttpClient();
+    dataSource = NumberTriviaRemoteDataSourceImpl(client: mockHttpClient);
+  });
+
+  void setUpMockHttpClientSuccess200() {
+    when(mockHttpClient.get(any, headers: anyNamed('headers')))
+        .thenAnswer((_) async => http.Response(fixture('trivia.json'), 200));
+  }
+
+  void setUpMockHttpClientFailure404() {
+    when(mockHttpClient.get(any, headers: anyNamed('headers')))
+        .thenAnswer((_) async => http.Response('Something went wrong', 404));
+  }
+
+  group('getConcreteNumberTrivia', () {
+    final tNumber = 1;
+    final tNumberTriviaModel =
+        NumberTriviaModel.fromJson(json.decode(fixture('trivia.json')));
+
+    test(
+      '''should perform a GET request on a URL with number
+       being the endpoint and with application/json header''',
+      () async {
+        // arrange
+        setUpMockHttpClientSuccess200();
+        // act
+        dataSource.getConcreteNumberTrivia(tNumber);
+        // assert
+        verify(mockHttpClient.get(
+          'http://numbersapi.com/$tNumber',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        ));
+      },
+    );
+
+    test(
+      'should return NumberTrivia when the response code is 200 (success)',
+      () async {
+        // arrange
+        setUpMockHttpClientSuccess200();
+        // act
+        final result = await dataSource.getConcreteNumberTrivia(tNumber);
+        // assert
+        expect(result, equals(tNumberTriviaModel));
+      },
+    );
+
+    test(
+      'should throw a ServerException when the response code is 404 or other',
+      () async {
+        // arrange
+        setUpMockHttpClientFailure404();
+        // act
+        final call = dataSource.getConcreteNumberTrivia;
+        // assert
+        expect(() => call(tNumber), throwsA(TypeMatcher<ServerException>()));
+      },
+    );
+  });
+
+  group('getRandomNumberTrivia', () {
+    final tNumberTriviaModel =
+        NumberTriviaModel.fromJson(json.decode(fixture('trivia.json')));
+
+    test(
+      '''should perform a GET request on a URL with number
+       being the endpoint and with application/json header''',
+      () async {
+        // arrange
+        setUpMockHttpClientSuccess200();
+        // act
+        dataSource.getRandomNumberTrivia();
+        // assert
+        verify(mockHttpClient.get(
+          'http://numbersapi.com/random',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        ));
+      },
+    );
+
+    test(
+      'should return NumberTrivia when the response code is 200 (success)',
+      () async {
+        // arrange
+        setUpMockHttpClientSuccess200();
+        // act
+        final result = await dataSource.getRandomNumberTrivia();
+        // assert
+        expect(result, equals(tNumberTriviaModel));
+      },
+    );
+
+    test(
+      'should throw a ServerException when the response code is 404 or other',
+      () async {
+        // arrange
+        setUpMockHttpClientFailure404();
+        // act
+        final call = dataSource.getRandomNumberTrivia;
+        // assert
+        expect(() => call(), throwsA(TypeMatcher<ServerException>()));
+      },
+    );
+  });
+}
+```
 
 
 #### 10.  Bloc Scaffolding & Input Conversion
@@ -3063,3 +3689,7 @@ class NumberTriviaPage extends StatelessWidget {
   }
 }
 ```
+
+This is the `final` aspect of the application.
+
+![Final_App](https://user-images.githubusercontent.com/27420533/76111584-72186f00-5fd8-11ea-9e35-a4dc8faf0a6e.png)
