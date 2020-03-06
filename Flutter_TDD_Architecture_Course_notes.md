@@ -2572,4 +2572,494 @@ Future<void> init() async {
 #### 14.  User Interface
 > Video 14: https://www.youtube.com/watch?v=G-R-1rzR3zw&t=604s
 
+In tutorial number `fourteen` we start by creating a file inside the pages folder with the name `number_trivia_page.dart`.
+With the following code.
 
+```dart
+class NumberTriviaPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Number Trivia'),
+      ),
+    );
+  }
+}
+```
+
+Now inside the `main.dart` we add this code.
+
+```dart
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Number Trivia',
+      theme: ThemeData(
+        primaryColor: Colors.green.shade800,
+        accentColor: Colors.green.shade600,
+      ),
+      home: NumberTriviaPage(),
+    );
+  }
+}
+```
+
+Inside the `number_trivia_page.dart` file we have to add the `NumberTriviaBloc`.
+
+```dart
+import '../../../../injection_container.dart';
+import '../bloc/bloc.dart';
+
+class NumberTriviaPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Number Trivia'),
+      ),
+      body: BlocProvider(
+        builder: (_) => sl<NumberTriviaBloc>(),
+        child: Container(),
+      ),
+    );
+  }
+}
+```
+Next we start by dealing with the visual part of the application. Inside the file `number_trivia_page.dart`.
+
+```dart
+class NumberTriviaPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Number Trivia'),
+      ),
+      body: buildBody(context),
+    );
+  }
+
+  BlocProvider<NumberTriviaBloc> buildBody(BuildContext context) {
+    return BlocProvider(
+      builder: (_) => sl<NumberTriviaBloc>(),
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            children: <Widget>[
+              SizedBox(height: 10),
+              // Top half
+              Container(
+                // Third of the size of the screen
+                height: MediaQuery.of(context).size.height / 3,
+                // Message Text widgets / CircularLoadingIndicator
+                child: Placeholder(),
+              ),
+              SizedBox(height: 20),
+              // Bottom half
+              Column(
+                children: <Widget>[
+                  // TextField
+                  Placeholder(fallbackHeight: 40),
+                  SizedBox(height: 10),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        // Search concrete button
+                        child: Placeholder(fallbackHeight: 30),
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        // Random button
+                        child: Placeholder(fallbackHeight: 30),
+                      )
+                    ],
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+We continue in the visual part of the application.
+
+
+```dart
+// Top half
+BlocBuilder<NumberTriviaBloc, NumberTriviaState>(
+  builder: (context, state) {
+    if (state is Empty) {
+      return Container(
+        // Third of the size of the screen
+        height: MediaQuery.of(context).size.height / 3,
+        child: Center(
+          child: Text('Start searching!'),
+        ),
+      );
+    }
+    // We're going to also check for the other states
+  },
+),
+
+```
+
+Below we added a little styling and a class to show messages depending on the application status.
+
+```dart
+BlocBuilder<NumberTriviaBloc, NumberTriviaState>(
+  builder: (context, state) {
+    if (state is Empty) {
+      return MessageDisplay(
+        message: 'Start searching!',
+      );
+    }
+  },
+),
+
+...
+
+class MessageDisplay extends StatelessWidget {
+  final String message;
+
+  const MessageDisplay({
+    Key key,
+    @required this.message,
+  })  : assert(message != null),
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // Third of the size of the screen
+      height: MediaQuery.of(context).size.height / 3,
+      child: Center(
+        child: SingleChildScrollView(
+          child: Text(
+            message,
+            style: TextStyle(fontSize: 25),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+Now we expand the Bloc Builder.
+
+```dart
+BlocBuilder<NumberTriviaBloc, NumberTriviaState>(
+  builder: (context, state) {
+    if (state is Empty) {
+      return MessageDisplay(
+        message: 'Start searching!',
+      );
+    } else if (state is Error) {
+      return MessageDisplay(
+        message: state.message,
+      );
+    }
+  },
+),
+```
+
+It is necessary to extract the `container` for a `LoadingWidget`.
+
+```dart
+BlocBuilder<NumberTriviaBloc, NumberTriviaState>(
+  builder: (context, state) {
+    if (state is Empty) {
+      return MessageDisplay(
+        message: 'Start searching!',
+      );
+    } else if (state is Loading) {
+      return LoadingWidget();
+    } else if (state is Error) {
+      return MessageDisplay(
+        message: state.message,
+      );
+    }
+  },
+),
+
+...
+
+class LoadingWidget extends StatelessWidget {
+  const LoadingWidget({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height / 3,
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+}
+```
+
+
+We added a display to show the numbers.
+
+
+```dart
+BlocBuilder<NumberTriviaBloc, NumberTriviaState>(
+  builder: (context, state) {
+    if (state is Empty) {
+      return MessageDisplay(
+        message: 'Start searching!',
+      );
+    } else if (state is Loading) {
+      return LoadingWidget();
+    } else if (state is Loaded) {
+      return TriviaDisplay(
+        numberTrivia: state.trivia,
+      );
+    } else if (state is Error) {
+      return MessageDisplay(
+        message: state.message,
+      );
+    }
+  },
+),
+
+...
+
+class TriviaDisplay extends StatelessWidget {
+  final NumberTrivia numberTrivia;
+
+  const TriviaDisplay({
+    Key key,
+    this.numberTrivia,
+  })  : assert(numberTrivia != null),
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height / 3,
+      child: Column(
+        children: <Widget>[
+          // Fixed size, doesn't scroll
+          Text(
+            numberTrivia.number.toString(),
+            style: TextStyle(
+              fontSize: 50,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          // Expanded makes it fill in all the remaining space
+          Expanded(
+            child: Center(
+              // Only the trivia "message" part will be scrollable
+              child: SingleChildScrollView(
+                child: Text(
+                  numberTrivia.text,
+                  style: TextStyle(fontSize: 25),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+```
+
+#### Minor Refactoring
+
+At this moment all our widgets are next to the file `number_trivia_page.dart` so we need to move them into the `Widgets` folder.
+
+Inside the `Widgets.dart` file you need to export the files we add now.
+
+```dart
+export 'loading_widget.dart';
+export 'message_display.dart';
+export 'trivia_display.dart';
+```
+
+Then inside `number_trivia_page.dart` just import the `widgets.dart` file.
+
+```dart
+import '../widgets/widgets.dart';
+```
+In the `number_trivia_page.dart` file it is necessary to create a stateful widget.
+
+```dart
+class TriviaControls extends StatefulWidget {
+  const TriviaControls({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  _TriviaControlsState createState() => _TriviaControlsState();
+}
+
+class _TriviaControlsState extends State<TriviaControls> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        // Placeholders here...
+      ],
+    );
+  }
+}
+```
+Then we create the function for when is pressed a button.
+
+```dart
+class _TriviaControlsState extends State<TriviaControls> {
+  final controller = TextEditingController();
+  String inputStr;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        TextField(
+          controller: controller,
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Input a number',
+          ),
+          onChanged: (value) {
+            inputStr = value;
+          },
+          onSubmitted: (_) {
+            dispatchConcrete();
+          },
+        ),
+        SizedBox(height: 10),
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: RaisedButton(
+                child: Text('Search'),
+                color: Theme.of(context).accentColor,
+                textTheme: ButtonTextTheme.primary,
+                onPressed: dispatchConcrete,
+              ),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              child: RaisedButton(
+                child: Text('Get random trivia'),
+                onPressed: dispatchRandom,
+              ),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+
+  void dispatchConcrete() {
+    // Clearing the TextField to prepare it for the next inputted number
+    controller.clear();
+    BlocProvider.of<NumberTriviaBloc>(context)
+        .dispatch(GetTriviaForConcreteNumber(inputStr));
+  }
+
+  void dispatchRandom() {
+    controller.clear();
+    BlocProvider.of<NumberTriviaBloc>(context)
+        .dispatch(GetTriviaForRandomNumber());
+  }
+}
+```
+
+Finally we added a `SingleChildScrollView` inside the body so that the application can become Scrollable and non-static.
+
+```dart
+class NumberTriviaPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Number Trivia'),
+      ),
+      body: SingleChildScrollView(
+        child: buildBody(context),
+      ),
+    );
+  }
+}
+```
+
+The complete code for the file `number_trivia_page.dart`.
+
+
+```dart
+import 'package:clean_architeture_tdd/features/number_trivia/presentation/bloc/bloc.dart';
+import 'package:clean_architeture_tdd/features/number_trivia/presentation/bloc/number_trivia_bloc.dart';
+import 'package:clean_architeture_tdd/features/number_trivia/presentation/widgets/widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../injection_container.dart';
+
+class NumberTriviaPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Number Trivia'),
+      ),
+      body: SingleChildScrollView(
+        child: buildBody(context),
+      ),
+    );
+  }
+
+  BlocProvider<NumberTriviaBloc> buildBody(BuildContext context) {
+    return BlocProvider(
+      create: (_) => sl<NumberTriviaBloc>(),
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            children: <Widget>[
+              SizedBox(height: 10),
+              // Top half
+              BlocBuilder<NumberTriviaBloc, NumberTriviaState>(
+                builder: (context, state) {
+                  if (state is Empty) {
+                    return MessageDisplay(
+                      message: 'Start searching!',
+                    );
+                  } else if (state is Loading) {
+                    return LoadingWidget();
+                  } else if (state is Loaded) {
+                    return TriviaDisplay(numberTrivia: state.trivia);
+                  } else if (state is Error) {
+                    return MessageDisplay(
+                      message: state.message,
+                    );
+                  }
+                },
+              ),
+              SizedBox(height: 20),
+              // Bottom half
+              TriviaControls()
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
