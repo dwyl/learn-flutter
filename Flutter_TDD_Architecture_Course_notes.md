@@ -2397,5 +2397,179 @@ The `tests` will all pass.
 #### 13.  Dependency Injection
 > Video 13: https://www.youtube.com/watch?v=gfLb4rqzio4
 
+
+In tutorial number `thirteen` we start by creating a file that will be used to configure the dependencies.
+This file must be created inside the `lib` folder with the name `injector_container.dart`.
+
+This is the file structure.
+
+
+```dart
+final sl = GetIt.instance;
+
+void init() {
+  //! Features - Number Trivia
+
+  //! Core
+
+  //! External
+
+}
+```
+
+First thing to do inside the file is register a factory.
+
+```dart
+//! Features - Number Trivia
+//Bloc
+sl.registerFactory(
+  () => NumberTriviaBloc(
+    concrete: sl(),
+    random: sl(),
+    inputConverter: sl(),
+  ),
+);
+```
+
+Then we use the `registerLazySingleton` function to create the Bloc dependencies.
+
+```dart
+//! Features - Number Trivia
+...
+// Use cases
+sl.registerLazySingleton(() => GetConcreteNumberTrivia(sl()));
+sl.registerLazySingleton(() => GetRandomNumberTrivia(sl()));
+
+//! Core
+sl.registerLazySingleton(() => InputConverter());
+```
+
+Next we must instantiate the `implementation` of a repository.
+
+
+```dart
+//! Features - Number Trivia
+...
+// Repository
+sl.registerLazySingleton<NumberTriviaRepository>(
+  () => NumberTriviaRepositoryImpl(
+    remoteDataSource: sl(),
+    localDataSource: sl(),
+    networkInfo: sl(),
+  ),
+);
+```
+
+Then it is necessary to specify a type of parameter.
+
+
+```dart
+//! Features - Number Trivia
+...
+// Data sources
+sl.registerLazySingleton<NumberTriviaRemoteDataSource>(
+  () => NumberTriviaRemoteDataSourceImpl(client: sl()),
+);
+
+sl.registerLazySingleton<NumberTriviaLocalDataSource>(
+  () => NumberTriviaLocalDataSourceImpl(sharedPreferences: sl()),
+);
+
+//! Core
+...
+sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
+```
+
+Change the `init` method.
+
+```dart
+Future<void> init() async {
+  ...
+  //! External
+  final sharedPreferences = await SharedPreferences.getInstance();
+  sl.registerLazySingleton(() => sharedPreferences);
+  sl.registerLazySingleton(() => http.Client());
+  sl.registerLazySingleton(() => DataConnectionChecker());
+}
+```
+
+Inside our `main.dart` file we have to call the `injection_container.dart` function.
+
+```dart
+import 'injection_container.dart' as di;
+
+void main() async {
+  await di.init();
+  runApp(MyApp());
+}
+```
+
+This is the full code of the `injection_container.dart` file.
+
+```dart
+import 'package:clean_architeture_tdd/features/number_trivia/domain/number_trivia_repository.dart';
+import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:get_it/get_it.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'core/network/network_info.dart';
+import 'core/util/input_converter.dart';
+import 'features/number_trivia/data/datasources/number_trivia_local_data_source.dart';
+import 'features/number_trivia/data/datasources/number_trivia_remote_data_source.dart';
+import 'features/number_trivia/data/repositories/number_trivia_repository_impl.dart';
+import 'features/number_trivia/domain/usecases/get_concrete_number_trivia.dart';
+import 'features/number_trivia/domain/usecases/get_random_number_trivia.dart';
+import 'features/number_trivia/presentation/bloc/number_trivia_bloc.dart';
+
+final sl = GetIt.instance;
+
+Future<void> init() async {
+  //! Features - Number Trivia
+  // Bloc
+  sl.registerFactory(
+    () => NumberTriviaBloc(
+      concrete: sl(),
+      inputConverter: sl(),
+      random: sl(),
+    ),
+  );
+
+  // Use cases
+  sl.registerLazySingleton(() => GetConcreteNumberTrivia(sl()));
+  sl.registerLazySingleton(() => GetRandomNumberTrivia(sl()));
+
+  // Repository
+  sl.registerLazySingleton<NumberTriviaRepository>(
+    () => NumberTriviaRepositoryImpl(
+      localDataSource: sl(),
+      networkInfo: sl(),
+      remoteDataSource: sl(),
+    ),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<NumberTriviaRemoteDataSource>(
+    () => NumberTriviaRemoteDataSourceImpl(client: sl()),
+  );
+
+  sl.registerLazySingleton<NumberTriviaLocalDataSource>(
+    () => NumberTriviaLocalDataSourceImpl(sharedPreferences: sl()),
+  );
+
+  //! Core
+  sl.registerLazySingleton(() => InputConverter());
+  sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
+
+  //! External
+  final sharedPreferences = await SharedPreferences.getInstance();
+  sl.registerLazySingleton(() => sharedPreferences);
+  sl.registerLazySingleton(() => http.Client());
+  sl.registerLazySingleton(() => DataConnectionChecker());
+}
+```
+
 #### 14.  User Interface
 > Video 14: https://www.youtube.com/watch?v=G-R-1rzR3zw&t=604s
+
+
