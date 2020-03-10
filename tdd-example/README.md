@@ -28,6 +28,9 @@ The result of this _tutorial_ is much **simpler**
 to understand and has beyond the **step by step** has
 the **complete code** of the application.
 
+
+>To learn more about how TDD works and how it can be used, this repository has all the essential information: https://github.com/dwyl/learn-tdd
+
 # _Who_? 👥
 
 This tutorial is intended for all people who are _learning_
