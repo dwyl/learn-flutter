@@ -37,3 +37,13 @@ This tutorial is intended for all people who are _learning_
 more about **_Flutter_** and who are looking 
 to learn how to use the **_TDD correctly_**.
 It was made for all **beginners** without previous _experience/knowledge_.
+
+
+
+
+
+### Relevant Reading
+- https://dart.dev/guides/testing
+- https://flutter.dev/docs/testing
+- https://medium.com/learnfazz/common-mistakes-in-tdd-and-tdd-in-flutter-2bf682071036
+- https://resocoder.com/2019/08/27/flutter-tdd-clean-architecture-course-1-explanation-project-structure/
