@@ -186,6 +186,9 @@ either be it React Native or native, you will find the learning curve
 quite manageable, as Flutter's foundation is built upon a few principles
 that are present in both. Let's take a look at these :smile:.
 
+If you want an in-depth guide and learn every aspect of Flutter,
+check the official documentation -> https://flutter.dev/learn
+
 ## Widgets
 
 In Flutter _everything_ is a **Widget**.
@@ -320,7 +323,98 @@ like so:
 Simple enough, right?
 
 ### Stateful widgets
-While stateless widgets are static (never change)
+While stateless widgets are static (never change),
+**stateful widgets** are dynamic. For example,
+they change its appearance or behaviour according
+to events triggered by user interaction or when 
+it receives data.
+
+For example `Checkbox`, `Slider`, `Textfield` are examples 
+of stateful widgets - subclass of 
+[`StatefulWidget`](https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html).
+A widget's state is stored in a `State` object. 
+Therefore, we *separate* the widget's state from its appearance. 
+Whenever the state changes, the `State` object calls `setState()`,
+thus rerendering the widget.
+
+Let's see some code!
+
+```dart
+import 'package:flutter/material.dart';
+
+class Counter extends StatefulWidget {
+  // This is the state object, different from the appearance.
+  // It holds the state configuration and
+  // the values provided by the parent and used by the build method
+  // of the State (no values are provided in this instance)
+  // Fields in a Widget subclass are always marked
+
+  const Counter({super.key});
+
+  @override
+  State<Counter> createState() => _CounterState();
+}
+
+class _CounterState extends State<Counter> {
+  int _counter = 0;
+
+  void _increment() {
+    setState(() {
+      // This call to setState tells the Flutter framework
+      // that something has changed in this State, which
+      // causes it to rerun the build method below so that
+      // the display can reflect the updated values. If you
+      // change _counter without calling setState(), then
+      // the build method won't be called again, and so
+      // nothing would appear to happen.
+      _counter++;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // This method is rerun every time setState is called,
+    // for instance, as done by the _increment method above.
+    // The Flutter framework has been optimized to make
+    // rerunning build methods fast, so that you can just
+    // rebuild anything that needs updating rather than
+    // having to individually changes instances of widgets.
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        ElevatedButton(
+          onPressed: _increment,
+          child: const Text('Increment'),
+        ),
+        const SizedBox(width: 16),
+        Text('Count: $_counter'),
+      ],
+    );
+  }
+}
+
+void main() {
+  runApp(
+    const MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Counter(),
+        ),
+      ),
+    ),
+  );
+}
+```
+
+Let's unpack the code above. The `StatefulWidget` and `State` are separate objects.
+The former (being the first one) declares its state by using the State object.
+The State object is declared right after, initializing a `_counter` at 0.
+It declares an `_increment()` function that calls `setState()` 
+(indicating the state is going to be changed) and increments the `_counter` variable.
+
+As with any widget, the `build()` method makes use of the `_counter` variable
+to display the number of times the button is pressed. Everytime it is pressed,
+the `_increment()` function is called, effectively changing the state and incrementing it.
 
 ## Layers
 
