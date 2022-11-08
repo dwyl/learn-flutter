@@ -550,6 +550,102 @@ String data = await DefaultAssetBundle.of(context).loadString("assets/data.json"
 final jsonResult = jsonDecode(data); //latest Dart
 ```
 
+## Navigation and routing
+Most web and mobile apps aren't just a single page.
+The user needs to navigate between screens to do whatever
+action needs to be done, be it checking the details of a
+product or just wanting to see the shopping cart. 
+
+Flutter provides a `Navigator` widget to display screns as a stack,
+using the native transition animations of the target device. 
+Navigating between screens necessitates the route's 
+`BuildContext` (which can be accessed through the widget) and 
+is made by calling methods like `push()` and `pop()`.
+
+Here's a code showcasing navigating between two routes.
+
+```dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MaterialApp(
+    title: 'Navigation Basics',
+    home: FirstRoute(),
+  ));
+}
+
+class FirstRoute extends StatelessWidget {
+  const FirstRoute({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('First Route'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          child: const Text('Open route'),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const SecondRoute()),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class SecondRoute extends StatelessWidget {
+  const SecondRoute({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Second Route'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('Go back!'),
+        ),
+      ),
+    );
+  }
+}
+```
+
+This basic code example shocases two routes,
+each one containing only a single button.
+Tapping the one on the first route
+will navigate to the second route. 
+Clicking on the button of the second route 
+will return the user to the first route.
+We are using the `Navigator.push()` and `Navigator.pop()`
+functions to achieve this, by passing the context of
+the widget. 
+Additionally, we are leveraging `MaterialPageRoute` to
+transition between routes using a platform-specific animation
+according to the [Material Design guidelines](https://m3.material.io/).
+
+Here's how it should look!
+
+![navigating_gif](https://user-images.githubusercontent.com/17494745/200613079-f65baeee-a822-4a58-b075-ce169d751325.gif)
+
+
+If your application necessitates advanced navigation and routing requirements
+(which is often the case with web apps that use direct links to each screen,
+or an app with multiple `Navigator` widgets), you should consider using a
+routing package like [`go_router`](https://pub.dev/packages/go_router). 
+This package allows one to parse the route path and configure the `Navigator`
+whenever an app receives, for example, a deep link.
+
+
 ## Testing
 
 As in all programming languages, frameworks or platforms the secret to a successful Flutter application is to test it _extensively_.
@@ -1021,3 +1117,9 @@ Then I saved the file and now going to the terminal Flutter is already recognize
 - Including Google codelabs in the learning process
 - Adding the Flutter GitHub repository in the learning process
 - Opting for Google’s free beginner Flutter learning course. Google provides a free course for learners. 
+
+
+
+
+
+## Fazer sample app simples
