@@ -1074,12 +1074,53 @@ query.close();
 box.remove(person.id);
 ```
 
+## State management
+We have previously mentioned state within a widget.
+In stateful widgets, the state and how/when it changes
+determines how many times the widget is rendered. 
+State that can be neatly contained in a single widget
+is referred as "local state" or **ephemeral state**. 
+Other parts of the widget tree seldom need to access this kind of state.
+
+However, there is state that is *not ephemeral* 
+and usually is needed across many widgets of the app.
+This shared state is usually called **application state**.
+Examples of these are user preferences or a shopping cart 
+in an e-commerce app.
+
+Consider the following gif, taken directly 
+from the `Flutter` docs
+-> https://docs.flutter.dev/development/data-and-backend/state-mgmt/intro
+
+![cart](https://docs.flutter.dev/assets/images/docs/development/data-and-backend/state-mgmt/state-management-explainer.gif)
 
 
+Each widget in the widget tree might have its own
+local state but there's a piece of *application state* 
+(i.e. shared state) in the form of a cart. 
+This cart is accessible from any widget of the app -
+in this case, the `MyCart` widget uses it to list what
+item was added to it.
 
+There are [many approaches to state management](https://docs.flutter.dev/development/data-and-backend/state-mgmt/options), 
+so it's up to you to decide which options are best
+suited for your use case. Many people recommend 
+[`Provider`](https://pub.dev/packages/provider) or 
+[`Riverpod`](https://riverpod.dev/). 
 
+[Bloc](https://bloclibrary.dev/#/) is also an increasingly
+popular alternative which forces the logic and the UI
+to be implemented separately. 
 
+State management and which alternative is best
+is a [big point of contention](https://www.reddit.com/r/FlutterDev/comments/w4osgi/for_you_what_is_the_best_state_management_with/)
+between developers. There is no bad option, just choose whichever
+you think it's best. 
 
+We shall not delve too much into state management as 
+shared app state is not a beginner-friendly topic
+to learn and is often very opinionated. As long 
+as you understood *what it is*, it's awesome! :tada:
 
 
 
