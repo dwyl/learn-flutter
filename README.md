@@ -489,8 +489,66 @@ As you would do in React, you can whatever Layout you wish just
 by encapsulating widgets (akin to components) and ordering
 them accordingly.
 
+## Assets
+For any application, sometimes we need images and assets to display to the user.
+Common resources are image files, static data (`JSON` files), 
+videos, icons...
 
+In Flutter, we use the `pubspec.yaml` file
+(often located at the root of the project) to
+require assets in the app.
 
+```yaml
+flutter:
+  assets:
+    - directory/
+    - assets/my_icon.png
+```
+
+> There's a nuanced behavior when loading assets.
+> If you have two files ` .../graphics/background.png` and
+> `.../graphics/dark/background.png` and the `pubspec.yaml` file 
+> contains the following:
+
+> ```yaml
+> flutter:
+>   assets:
+>     - graphics/background.png
+> ```
+
+> Both are imported and included in the asset bundle. 
+> One is considered the **main asset** and the other
+> a **variant**.
+> This behaviour is useful for images on different resolutions.
+
+There are two ways of accessing the loaded access. 
+Each Flutter app has a `RootBundle` for easy access
+to the main asset bundle. You can import directly
+using the `rootBundle` global static. 
+However, inside a widget context, it's recommended to obtain the
+asset bundle for the widget `BuildContext` using the 
+[`DefaultAssetBundle`](https://api.flutter.dev/flutter/widgets/DefaultAssetBundle-class.html).
+This approach allows the parent widget to substitute a different 
+asset bundle at runtime, which is useful for localization
+or testing purposes.
+
+Here's a code example for the `rootBundle` approach.
+
+```dart
+import 'package:flutter/services.dart' show rootBundle;
+
+Future<String> loadAsset() async {
+  return await rootBundle.loadString('assets/config.json');
+}
+```
+
+Here's a code example for the recommended approach inside
+a widget.
+
+```dart
+String data = await DefaultAssetBundle.of(context).loadString("assets/data.json");
+final jsonResult = jsonDecode(data); //latest Dart
+```
 
 ## Testing
 
