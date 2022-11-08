@@ -6,7 +6,7 @@ Learn the Flutter basics to get up-and-running **fast** and build **awesome cros
 
 </div>
 
-## What is Flutter?
+# What? 💡
 
 Flutter is an open-source framework created by Google
 for creating multi-platform, high-performance applications
@@ -18,7 +18,7 @@ general-purpose programming language created by Google.
 If you come from an object-oriented language like `Java`, `C#`,
 `Go` or `Javascript/Typescript`, you will feel right at home. 
 
-## Why use Flutter?
+# Why? 🤷
 
 - Flutter can be used to build cross platform native applications 
 (Android, iOS, Desktop and Web) using the same codebase. 
@@ -57,7 +57,16 @@ than React Native in mobile devices.
 
 ![rn](https://user-images.githubusercontent.com/17494745/198244948-29e5d3a5-1b2b-4d1f-a434-d4eee2a5799c.png)
 
-## Installing Flutter
+# Who? 👤
+This repo is useful for anyone 
+that is interested in mobile and web app development. 
+For anyone that hasn't yet touched Flutter, this 
+repo is a *great* place to start to get your computer
+ready for Flutter/Dart development, understand the
+**main concepts** and *guide* you to then create
+your very first Flutter app. 
+
+# Installing Flutter ⬇️
 Installing Flutter might seem like a daunting task.
 But do not worry, we'll help you get your local environment
 running in no time! Since we are targetting web and mobile,
@@ -68,7 +77,7 @@ be able to follow if you have a Windows device. If you're ever stuck,
 don't be shy! Reach out to us and [open an issue](https://github.com/dwyl/learn-flutter/issues),
 we'll get back to you as fast as we can!
 
-### Installing Flutter SDK
+## Installing Flutter SDK
 Head over to https://docs.flutter.dev/get-started/install,
 select your operating system and follow the instructions. 
 
@@ -99,7 +108,7 @@ install Flutter through [Homebrew](https://brew.sh/).
 After installing Homebrew, you can install Flutter by simply running 
 `brew install --cask flutter`.
 
-### Install XCode
+## Install XCode
 To install XCode, simply open your AppStore, search for 'XCode'
 and press `Install`. It's that easy.
 
@@ -145,7 +154,7 @@ Restart your terminal again and type `flutter doctor --android-licenses`.
 This will prompt you to accept the Android licenses. Just type `y` as you read
 through them to accept.
 
-### Installing Cocoapods
+## Installing Cocoapods
 If you run `flutter doctor` again, you should see we are almost done. 
 You might see a text saying `CocoaPods not installed`. Let's fix that.
 
@@ -153,7 +162,7 @@ Install [Homebrew](https://brew.sh/) and run `brew install cocoapods`.
 
 And you should be all sorted!
 
-### Adding plugins to Android Studio
+## Adding plugins to Android Studio
 If you happen to use Android Studio when developing, 
 adding the Flutter plugin will help you tremendously. 
 Just open Android Studio, click on `Plugins`, 
@@ -163,47 +172,155 @@ search for "Flutter" and click `Install`.
 
 You are asked to "Restart the IDE". Do so and ta-da :tada:, you are done!
 
-### Checking everything
+## Checking everything
 If you run `flutter doctor`, you should have everything in the green.
 
 <img width="697" alt="image" src="https://user-images.githubusercontent.com/17494745/200557242-d192557b-8354-4182-9b57-19764261ca71.png">
 
 Congratulations, give yourself a pat on the back, you are **all ready**!
 
-## Core Principles
+# Core Principles 🐣
 
-Flutter is designed for the creation of 2D mobile applications.</br> 
+If you have had experience in mobile development prior to Flutter,
+either be it React Native or native, you will find the learning curve
+quite manageable, as Flutter's foundation is built upon a few principles
+that are present in both. Let's take a look at these :smile:.
 
 ## Widgets
 
-In Flutter _everything_ is a "Widget".
-A Widget is a UI building block you can use to assemble your app.
-In the following Gif the sample application contains a total of 6 widgets:
-![flutter-counter-sample](https://user-images.githubusercontent.com/194400/74101695-87fb5700-4b34-11ea-9fbd-09cc6bf3ed41.gif)
+In Flutter _everything_ is a **Widget**.
+
+A Widget is a UI building block you can use to assemble your app. 
+If you come from `React`, you may find these akin to `components`.
+
+You will build your UI out of widgets. They essentially describe
+what *their view should look like* given their current state. 
+If their state changes, the widget rebuilds and checks the diff
+to determine the minimal changes to transition from the state `t0` to `t1`.
+
+
+In the following `.gif` the sample application contains a total of 6 widgets:
+
+![widget-gif](https://user-images.githubusercontent.com/194400/74101695-87fb5700-4b34-11ea-9fbd-09cc6bf3ed41.gif)
+
 Image attribution: https://uxplanet.org/why-you-should-use-google-flutter-42f2c6ba036c
-1. The **container** widget starting on line 17 groups all other widgets in the layout.
+
+1. The **container** widget `Scaffold` starting on line 38 groups all other widgets in the layout.
 2. The ***`appBar`*** widget displays the text "Flutter Demo Home Page"
 3. The ***`body`*** contains a **child** widget which in turn has **Text** and a **$_counter** placeholder. 
-4. The **`floatingActionButton`** is the button that gets clicked, it contains a **child** which is the icon.
-Examples of Widgets include dialog windows, buttons, icons, menus, scroll bars and cards.
-You can use one of the many built-in Material UI widgets or create your own from scratch.</br>
+4. The ***`floatingActionButton`*** is the button that gets clicked, 
+it contains a **child** which is the icon.
+Examples of Widgets include 
+dialog windows, buttons, icons, menus, scroll bars and cards.
+You can use one of the many built-in Material UI widgets
+or create your own from scratch.
 
 A widget can be defined as:
 - Physical elements of an application (buttons, menus or bars)
 - Visual elements such as colors  
-+ Layout and positioning of elements on the screen using a grid system
+- Layout and positioning of elements on the screen using a grid system
 
-Widgets are assembled in declarative hierarchy which allows us to easily organise the layout of our App as a series of nested widgets.</br>
+Widgets are assembled in declarative hierarchy 
+which allows us to easily organize 
+the layout of our App as a series of nested widgets.</br>
 
-![Screen Shot 2020-02-06 at 19 01 17](https://user-images.githubusercontent.com/27420533/73969408-4475d280-4913-11ea-8384-99c863321155.png)
+![system](https://user-images.githubusercontent.com/27420533/73969408-4475d280-4913-11ea-8384-99c863321155.png)
 
-Screens are composed of several small widgets that have only one job. Groups of widgets are assembled together to build a functional application.</br>
-For example a Container widget contains other widgets that have functions like layout, placement and size.</br>
+Screens are composed of several small widgets that have only one job. 
+Groups of widgets are assembled together to build a functional application.
 
-Screen layout is controlled by combining a container and other smaller widgets.</br>
+For example, a Container widget contains other widgets
+ that have functions like layout, placement and size.
 
-There are some widgets that have no physical form within the application instead their goal and control some aspects of another Widget.</br>
-Like: padding, alignment, row, columns, and grids.</br>
+A basic screen layout is controlled by combining
+a container and other smaller widgets as their children.
+This was seen in the gif above. The `Scaffhold` widget
+warps three widgets. 
+
+Remember, Widgets aren't necessarily visual elements within the application.
+In the gif above, the second child `body` widget also uses
+a widget named `Center` that, as the name implies, centers
+its children within the screen. It's *controlling* the 
+aspects of their child and displaying them centered.
+There are several other widgets that have a similar behaviour,
+such as padding, alignment, row, columns, and grids.
+
+### Stateless widgets 
+Widgets are not all stateless. Stateless widgets never change. 
+They receive arguments from their parent, store them in `final` member variables
+(`final` is analogous to a `const`ant variable). When a widget is asked
+to `build()`. it uses these stored values and renders. 
+Here's what a stateless widget looks like:
+
+```dart
+class MyAppBar extends StatelessWidget {
+  const MyAppBar({required this.title, super.key});
+
+  // Fields in a Widget subclass are always marked "final".
+
+  final Widget title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 56.0, // in logical pixels
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      decoration: BoxDecoration(color: Colors.blue[500]),
+      // Row is a horizontal, linear layout.
+      child: Row(
+        children: [
+          const IconButton(
+            icon: Icon(Icons.menu),
+            tooltip: 'Navigation menu',
+            onPressed: null, // null disables the button
+          ),
+          // Expanded expands its child
+          // to fill the available space.
+          Expanded(
+            child: title,
+          ),
+          const IconButton(
+            icon: Icon(Icons.search),
+            tooltip: 'Search',
+            onPressed: null,
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
+
+We notice straight away the widget is a subclass of 
+[`StatelessWidget`](https://api.flutter.dev/flutter/widgets/StatelessWidget-class.html).
+
+All widgets have a `Key key` (`super.key`) as optional parameter in their ocnstructor. 
+It is by the flutter engine at the step of recognizingg which widget 
+in a list as changed. It's more useful when you have a list of widgets 
+*of the same type* that can potentially be removed or inserted.
+
+This `MyAppBar` widget takes as argument a `title`.
+This effectively becomes the `field` of the widget,
+and is used in the `Expanded` children widget. 
+Additionally, since this is a widget (more specifically, 
+a subclass of `Stateless Widget`), we have to 
+implement the `build()` function. This is what is rendered.
+
+This widget could be used in a container and be one of its childrens
+like so: 
+
+```dart
+  MyAppBar(
+    title: Text(
+      'Example title',
+    ),
+  ),
+```
+
+Simple enough, right?
+
+### Stateful widgets
+While stateless widgets are static (never change)
 
 ## Layers
 
@@ -305,7 +422,7 @@ As you can see if you go to the windows prompt and run the command "flutter" it 
   
   
   
-  ## Scaffold class?
+## Scaffold class?
   
   Provides a framework which implements the basic material design visual layout structure of the Flutter app.
   Contais various functionality from giving an appbar, a floating button, a drawer, background color, bottom navigation bar and body.
@@ -320,12 +437,12 @@ As you can see if you go to the windows prompt and run the command "flutter" it 
    Any widget in the body is positioned at the top left corner by default.
      
      
-   ## FloatingActionButton
+   #### FloatingActionButton
    
    Is a button displayed floating in the bottom right corner.
    We use this button to promote a primary action in the application.
       
-   ## Drawer
+   #### Drawer
    
    Is a panel displayed to the side of the body.
    One usually has to swipe left to right of right to left to access the drawer.
