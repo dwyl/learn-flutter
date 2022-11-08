@@ -847,6 +847,253 @@ while we wait for the http request to fulfill.
 
 Isn't it easy? =)
 
+## Local databases
+Sometimes, when writing an app, we need to persist
+and query large amounts of data on the local device. 
+In these cases, it is beneficial considering 
+using a database instead of a local file or a key-value store. 
+
+In this walkthrough, we are going to present
+two alternatives: SQLite and ObjectBox.
+
+### SQLite 
+
+SQLite is one of the most popular methods for storing data locally.
+For this demo, we will use the package 
+[`sqflite`](https://pub.dev/packages/sqflite).
+
+Sqflite is one of the most used and updated packages
+to connect to SQLite databases in Flutter.
+
+#### 1. Add the dependencies
+To work with SQLite databases, we need
+to import two dependencies. 
+We'll use `sqflite` to interact with the SQLite database,
+and `path` to define the location for storing the database
+on disk.
+
+
+```dart
+dependencies:
+  flutter:
+    sdk: flutter
+  sqflite:
+  path:
+```
+
+And import the packages in the file you are working in.
+
+```dart
+import 'dart:async';
+
+import 'package:flutter/widgets.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+```
+
+#### 2. Define a model
+Let's take a look at the data we are going to store.
+Let's define a class  for the table we are going to create
+in SQLite.
+
+```dart
+class Item {
+  final int id;
+  final String text;
+  final bool completed;
+
+  const Item({
+    required this.id,
+    required this.text,
+    required this.completed,
+  });
+
+  // Convert an Item into a Map. The keys must correspond to the names of the
+  // columns in the database.
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'text': text,
+      'completed': completed,
+    };
+  }
+
+  // Implement toString to make it easier to see information about
+  // each item when using the print statement.
+  @override
+  String toString() {
+    return 'Item{id: $id, text: $text, completed: $completed}';
+  }
+}
+```
+
+#### 3. Open connection to the database
+To open a connection to the SQLite database,
+we are going to define the path to the database file 
+using `path`
+**and** 
+open the database with `sqflite`.
+
+```dart
+
+WidgetsFlutterBinding.ensureInitialized();
+
+// Open the database and store the reference.
+final database = openDatabase(
+  // Set the path to the database. Note: Using the `join` function from the
+  // `path` package is best practice to ensure the path is correctly
+  // constructed for each platform.
+  join(await getDatabasesPath(), 'item_database.db'),
+);
+```
+
+#### 4. Creating table
+To create the table to store our items, we must first
+verify the number of columns and type refer
+exactly to the ones we defined in the class. 
+After this, it's just a matter of running the appropriate
+`SQL` expression to create the table. 
+
+```dart
+final database = openDatabase(
+  
+  join(await getDatabasesPath(), 'item_database.db'),
+
+  // When the database is first created, create a table to store items.
+  onCreate: (db, version) {
+    // Run the CREATE TABLE statement on the database.
+    return db.execute(
+      'CREATE TABLE items(id INTEGER PRIMARY KEY, text TEXT, completed INTEGER)',
+    );
+  },
+  // Set the version. This executes the onCreate function and provides a
+  // path to perform database upgrades and downgrades.
+  version: 1,
+);
+```
+
+#### 5. CRUD operations
+
+Now that we have a database created, alongside the
+table, to create, update, list and insert Items is
+quite easy! Check the following piece of code.
+
+```dart
+Future<void> crudOperations(Item item) async {
+  // Get a reference to the database
+  final db = await database;
+
+  // Insert an Item into the table.
+  await db.insert('items', item.toMap())
+
+  // Retrieve list of items
+  // and convert the List<Map<String, dynamic> into a List<Item>.
+  final List<Map<String, dynamic>> maps = await db.query('items');
+  Item[] items = List.generate(maps.length, (i) {
+    return Item(
+      id: maps[i]['id'],
+      name: maps[i]['text'],
+      age: maps[i]['completed'],
+    );
+  });
+
+  // Update the given Item.
+  await db.update(
+    'items',
+    item.toMap(),
+    // Ensure that the Item has a matching id.
+    where: 'id = ?',
+    // Pass the Item's id as a whereArg to prevent SQL injection.
+    whereArgs: [item.id],
+  );
+
+  // Remove the Item from the database.
+  await db.delete(
+    'items',
+    // Use a `where` clause to delete a specific item.
+    where: 'id = ?',
+    // Pass the Item's id as a whereArg to prevent SQL injection.
+    whereArgs: [id],
+  );
+}
+```
+
+And there you have it! Here is a quick rundown of the 
+process of creating a database, a table and 
+applying CRUD operations on it. You can leverage
+this database to hold large amounts of data locally
+(up to a limit, of course) instead of relying 
+on common files.
+
+
+### ObjectBox
+There are alternatives to SQLite, such as Hive and `ObjectBox`.
+In this section, we are going to just reference 
+`ObjectBox` so the user knows there isn't one single
+database option.  
+
+`ObjectBox` provides a NoSQL database that uses a
+pure Dart API, so there is no need to learn
+and write SQL expressions. There are performance
+advantages to using this library. Make sure
+to read the [package docs](https://github.com/objectbox/objectbox-dart#flutter-database-for-fast-dart-object-persistence-)
+to find out if this option is best for you.
+
+Here is how basic setup and CRUD
+operations would work using `ObjectBox`.
+
+```dart
+// Annotate a Dart class to create a box
+@Entity()
+class Person {
+  @Id() 
+  int id;
+  String name;
+
+  Person({this.id = 0, required this.name});
+}
+
+// Put a new object into the box
+var person = Person(name: "Joe Green");
+final id = box.put(person);
+
+// Get the object back from the box
+person = box.get(id)!;
+
+// Update the object
+person.name = "Joe Black";
+box.put(person);
+
+// Query for objects
+final query = (box.query(Person_.name.equal("Joe Black"))
+  ..order(Person_.name)).build();
+final people = query.find();
+query.close();
+
+// Remove the object from the box
+box.remove(person.id);
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -993,208 +1240,14 @@ On your Manifest.xml add below the package name this line:
 
 Then just edit the button as you like and the Google login is fully functional.
 
-How to use SQLite in Flutter
-==========   
-
-
-![Flutter](https://i.imgur.com/27rAotE.png)
-
-Persisted data ( persitent Date ) are very important for users, since they would be inconvenient to always be writing your information or wait for the network carry the same data again. In these situations, it would be best to store your data locally.
-
-# Why SQLite?
-
-SQLite is one of the most popular methods for storing data locally. For this article, we will use the package ( package ) sqflite acceded to SQLite. Sqflite is one of the most used and updated packages to connect to SQLite databases in Flutter.
-
-
-# How to use Sqflite on Flutter?
-
-
-## 1. Add the dependency to the project <br />
-In our project, we will open the file pubspec.yaml and search for dependencies. Under dependencies we add the latest version of sqflite and path_provider(which can be removed from pub.dev).
-
-
-```ruby
- dependencies:
-  flutter:
-    sdk: flutter
-  sqflite: any
-  path_provider: any
-```
-
-
-## 2. Creating a DB Client<br />
-Now, in our project, we will create a new Database.dart file.<br />
-
-1- Creation of a private builder that can be used only within the class:
-
-
-```ruby
-class DBProvider {
-  DBProvider._();
-  static final DBProvider db = DBProvider._();
-}
-```
-
-2- Preparation of the database
-Next we will create the database object and provide you with a getter, which will create an instance of the database, if it has not already been created.
-
-
-```ruby
-static Database _database;
-
-  Future<Database> get database async {
-    if (_database != null)
-    return _database;
-
-    // if _database is null we instantiate it
-    _database = await initDB();
-    return _database;
-  }
-```
-
-If no objects are assigned to the database, we use the initDB function to create the database. In this function, we get the directory where we will store the database and create the tables we want:
-
-
-```ruby
-initDB() async {
-    Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "TestDB.db");
-    return await openDatabase(path, version: 1, onOpen: (db) {
-    }, onCreate: (Database db, int version) async {
-      await db.execute("CREATE TABLE Client ("
-          "id INTEGER PRIMARY KEY,"
-          "first_name TEXT,"
-          "last_name TEXT,"
-          "blocked BIT"
-          ")");
-    });
-  }
-```
-## 3. Creation of Model Class<br />
-
-The data inside our database will be converted to Dart Maps, so first we need to create the Model Classes with the 'toMap' and 'fromMap' methods.
-
-
-```ruby
-
-/// ClientModel.dart
-import 'dart:convert';
-
-Client clientFromJson(String str) {
-  final jsonData = json.decode(str);
-  return Client.fromMap(jsonData);
-}
-
-String clientToJson(Client data) {
-  final dyn = data.toMap();
-  return json.encode(dyn);
-}
-
-class Client {
-  int id;
-  String firstName;
-  String lastName;
-  bool blocked;
-
-  Client({
-    this.id,
-    this.firstName,
-    this.lastName,
-    this.blocked,
-  });
-
-  factory Client.fromMap(Map<String, dynamic> json) => new Client(
-        id: json["id"],
-        firstName: json["first_name"],
-        lastName: json["last_name"],
-        blocked: json["blocked"] == 1,
-      );
-
-  Map<String, dynamic> toMap() => {
-        "id": id,
-        "first_name": firstName,
-        "last_name": lastName,
-        "blocked": blocked,
-      };
-}
-```
 
 
 
-## 4. CRUD Operations<br />
-
-Using 'Insert':
 
 
-```ruby
-
-newClient(Client newClient) async {
-    final db = await database;
-    var res = await db.insert("Client", newClient.toMap());
-    return res;
-  }
-```
-
-Get Client via an ID:
 
 
-```ruby
 
-getClient(int id) async {
-    final db = await database;
-    var res =await  db.query("Client", where: "id = ?", whereArgs: [id]);
-    return res.isNotEmpty ? Client.fromMap(res.first) : Null ;
-  }
-```
-
-Obtain all Clients with one condition:
-In this example, we use rawQuery to map the results list to a list of Client objects:
-
-```ruby
-
-getAllClients() async {
-    final db = await database;
-    var res = await db.query("Client");
-    List<Client> list =
-        res.isNotEmpty ? res.map((c) => Client.fromMap(c)).toList() : [];
-    return list;
-  }
-```
-
-Update an existing Client:
-
-```ruby
-
-updateClient(Client newClient) async {
-    final db = await database;
-    var res = await db.update("Client", newClient.toMap(),
-        where: "id = ?", whereArgs: [newClient.id]);
-    return res;
-  }
-```
-
-Delete a Client:
-
-```ruby
-
-
-deleteClient(int id) async {
-    final db = await database;
-    db.delete("Client", where: "id = ?", whereArgs: [id]);
-  }
-```
-
-Delete All Clients:
-
-```ruby
-
-
-deleteAll() async {
-    final db = await database;
-    db.rawDelete("Delete * from Client");
-  }
-
-```
 
 
 ## Trouble-Shooting Section
