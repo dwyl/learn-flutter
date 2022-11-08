@@ -48,14 +48,120 @@ development process.
 - It's growing at a fast-pace and being increasingly used
 in production worldwide. 
 
-https://user-images.githubusercontent.com/194400/84572723-e3b04800-ad93-11ea-85e2-19e9693e5a26.png
+![fast-pace](https://user-images.githubusercontent.com/194400/84572723-e3b04800-ad93-11ea-85e2-19e9693e5a26.png)
 
 - Flutter has overtaken React Native in searchs, 
 further showcasing the growing trend of Flutter. 
 Also, Flutter is [probably more performant](https://www.orientsoftware.com/blog/flutter-vs-react-native-performance/)
 than React Native in mobile devices.
 
-https://user-images.githubusercontent.com/17494745/198244948-29e5d3a5-1b2b-4d1f-a434-d4eee2a5799c.png
+![rn](https://user-images.githubusercontent.com/17494745/198244948-29e5d3a5-1b2b-4d1f-a434-d4eee2a5799c.png)
+
+## Installing Flutter
+Installing Flutter might seem like a daunting task.
+But do not worry, we'll help you get your local environment
+running in no time! Since we are targetting web and mobile,
+there are a few tools and SDKs we ought to install first. 
+
+These steps will be oriented to Mac/Unix devices but you should 
+be able to follow if you have a Windows device. If you're ever stuck,
+don't be shy! Reach out to us and [open an issue](https://github.com/dwyl/learn-flutter/issues),
+we'll get back to you as fast as we can!
+
+### Installing Flutter SDK
+Head over to https://docs.flutter.dev/get-started/install,
+select your operating system and follow the instructions. 
+
+In our case, we're going to download the SDK for
+our Mac. After downloading the SDK, you should extract
+the `.zip` contents to a wanted location
+(in our case, we extracted the folder to our `Home` - `cd ~`).
+
+Now, we ought to update our `PATH` variable so we can access
+the binary we just downloaded to our command line. Open your terminal and:
+
+```sh
+cd $HOME
+nano .zshrc
+```
+
+And add `export PATH="$PATH:`pwd`/flutter/bin"` pointing
+to the location where you extracted the folder. 
+Now, if you restart the terminal and type `flutter doctor`,
+you should be able to run the command with no problems.
+
+`flutter doctor` checks your environment and displays a report to the
+terminal window. It checks it all the necessary tools for development
+for all devices are correctly installed. Let's do just that.
+
+> If you found this procedure convoluted, you can alternatively
+install Flutter through [Homebrew](https://brew.sh/).
+After installing Homebrew, you can install Flutter by simply running 
+`brew install --cask flutter`.
+
+### Install XCode
+To install XCode, simply open your AppStore, search for 'XCode'
+and press `Install`. It's that easy.
+
+<img width="1292" alt="image" src="https://user-images.githubusercontent.com/17494745/200554456-ff9dc9cb-7a2a-4eb8-aff4-90dfd00a0427.png">
+
+### Install Android Studio
+Now targetting for Android devices, we need to install Android SDK and toolkits.
+For this, we are going to install Android Studio and work from there.
+Head over to https://developer.android.com/studio and download.
+
+After downloading, run the installer and select `Default settings` and let
+the installer do its magic. After this, you should be prompted with the following window.
+
+<img width="798" alt="image" src="https://user-images.githubusercontent.com/17494745/200555036-2f7916aa-7171-409f-8f44-70f13ca3a8ec.png">
+
+Click on the `More actions` dropdown and click on `SDK Manager`. 
+You should be prompted with this window.
+
+<img width="1094" alt="Screenshot 2022-11-08 at 11 41 29" src="https://user-images.githubusercontent.com/17494745/200555203-7108472b-62b7-4df7-9709-a6797901094f.png">
+
+After installing with default settings, you probably already have 
+an Android SDK installed. If that's the case, follow through
+to `SDK Tools` and check on `Android SDK Command-line Tools`.
+
+<img width="1094" alt="image" src="https://user-images.githubusercontent.com/17494745/200555496-34fa04f2-cb95-4066-8c37-a29b6cdab9fb.png">
+
+And then click `Finish`. This will install the command line tools.
+
+After installing, copy the `Android SDK Location` in the window.
+Open a terminal window and type the following to add the SDK path
+to the `Path` env variable.
+
+```sh
+cd $HOME
+nano .zshrc
+```
+
+and then add the SDK path you just copied, and save the file
+
+`export ANDROID_HOME=PATH_YOU_JUST_COPIED`
+
+Restart your terminal again and type `flutter doctor --android-licenses`.
+This will prompt you to accept the Android licenses. Just type `y` as you read
+through them to accept.
+
+### Installing Cocoapods
+If you run `flutter doctor` again, you should see we are almost done. 
+You might see a text saying `CocoaPods not installed`. Let's fix that.
+
+Install [Homebrew](https://brew.sh/) and run `brew install cocoapods`.
+
+And you should be all sorted!
+
+### Adding plugins to Android Studio
+If you happen to use Android Studio when developing, 
+adding the Flutter plugin will help you tremendously. 
+Just open Android Studio, click on `Plugins`, 
+search for "Flutter" and click `Install`.
+
+<img width="912" alt="image" src="https://user-images.githubusercontent.com/17494745/200556642-728e0f0a-8af8-43ab-b8e9-1c5a8bcbd6c3.png">
+
+You are asked to "Restart the IDE". Do so and ta-da :tada:, you are done!
 
 ## Core Principles
 
