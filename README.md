@@ -163,6 +163,13 @@ search for "Flutter" and click `Install`.
 
 You are asked to "Restart the IDE". Do so and ta-da :tada:, you are done!
 
+### Checking everything
+If you run `flutter doctor`, you should have everything in the green.
+
+<img width="697" alt="image" src="https://user-images.githubusercontent.com/17494745/200557242-d192557b-8354-4182-9b57-19764261ca71.png">
+
+Congratulations, give yourself a pat on the back, you are **all ready**!
+
 ## Core Principles
 
 Flutter is designed for the creation of 2D mobile applications.</br> 
