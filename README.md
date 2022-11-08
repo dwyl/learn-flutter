@@ -646,6 +646,150 @@ This package allows one to parse the route path and configure the `Navigator`
 whenever an app receives, for example, a deep link.
 
 
+## Networking
+For most apps, fetching data from the internet is a must. 
+Luckily, fetching data from the internet is a breeze. Let's do it!
+
+Firstly, we need to add the [`http`](https://pub.dev/packages/http)
+package to the dependencies section in the `pubspec.yaml` file. 
+This file can be found at the route of your project.
+
+Let's add the package to the dependency list and import it.
+
+```yaml
+dependencies:
+  http: 0.13.5
+```
+
+```dart
+import 'package:http/http.dart' as http;
+```
+
+We also need to change the `AndroidManifest.xml` file to 
+add Internet permission on Android devices. This file can be found in the 
+`android/app/src/main` on newly created projects. Add the following line.
+
+```xml
+<!-- Required to fetch data from the internet. -->
+<uses-permission android:name="android.permission.INTERNET" />
+```
+
+
+Now, to make a network request is as easy
+as apple pie. Check the following code.
+
+```dart
+Future<http.Response> fetchAlbum() {
+  return http.get(Uri.parse('https://jsonplaceholder.typicode.com/todos/1'));
+}
+```
+
+By calling `http.get()`, it returns a [`Future`](https://github.com/dwyl/learn-dart#asynchronous-events)
+that contains a `Response`. `Future` is a class to work with async operations.
+It represents a potential value that will occur in the future.
+
+While `http.Response` has our data, it's much more useful to translate it
+to a logical class. We can convert `http.Response` to a `Todo` class, 
+representing a "todo item". Let's create that class!
+
+```dart
+class Todo {
+  final int id;
+  final String title;
+  final bool completed
+
+  const Todo({
+    required this.id,
+    required this.title,
+    required this.completed
+  });
+
+  factory Todo.fromJson(Map<String, dynamic> json) {
+    return Todo(
+      id: json['id'],
+      title: json['title'],
+      completed: json['completed'],
+    );
+  }
+}
+```
+
+We can create a function that makes the http request and,
+if it is successful, tries to parse the data and create a
+`Todo` object or raise an an error if the http request is 
+unsuccessful.
+
+```dart
+Future<Todo> fetchTodos() async {
+  final response = await http
+      .get(Uri.parse('https://jsonplaceholder.typicode.com/todos/1'));
+
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    return Todo.fromJson(jsonDecode(response.body));
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load todos');
+  }
+}
+```
+
+How would we call this inside a widget? 
+We could do this inside `initState()`! 
+It is called exactly one time and never again!
+Do **not** put an API call in the `build()` method
+(unless you know what you are doing). 
+This method is called every time a render occurs,
+which is quite often!
+
+```dart
+class _MyAppState extends State<MyApp> {
+  late Future<Todo> futureTodo;
+
+  @override
+  void initState() {
+    super.initState();
+    futureTodo = fetchTodo();
+  }
+  // ···
+}
+```
+
+Finally, to display the data, we would want to use the
+`FutureBuilder` widget. As the name implies, it's a 
+widget made to handle async data operations. 
+
+```dart
+FutureBuilder<Todo>(
+  future: futureTodo,
+  builder: (context, snapshot) {
+    if (snapshot.hasData) {
+      return Text(snapshot.data!.title);
+    } else if (snapshot.hasError) {
+      return Text('${snapshot.error}');
+    }
+
+    // By default, show a loading spinner.
+    return const CircularProgressIndicator();
+  },
+)
+```
+
+The `future` paramter relates to object we want to work with.
+In this case, it is a parsed `Todo` object. 
+
+The `builder` function tells Flutter what needs to be rendered, 
+depending on the current state of `Future`, which can 
+be *loading*, *success* or *error*. 
+Depending on the result of the operation, we
+either show the error, the data or a loading animation
+while we wait for the http request to fulfill.
+
+Isn't it easy? =)
+
+
 ## Testing
 
 As in all programming languages, frameworks or platforms the secret to a successful Flutter application is to test it _extensively_.
