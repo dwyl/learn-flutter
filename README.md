@@ -416,39 +416,81 @@ As with any widget, the `build()` method makes use of the `_counter` variable
 to display the number of times the button is pressed. Everytime it is pressed,
 the `_increment()` function is called, effectively changing the state and incrementing it.
 
-## Layers
+## Layout
 
-A Flutter layout can have layers to create a visual effect where certain widgets "float" on top of others to give them priority.
+As we've already stated, the core of Flutter are widgets. 
+In fact, almost everything is a widget - even layout models.
+The things you see are widgets.
 
+![image](https://user-images.githubusercontent.com/17494745/200579851-de25d19d-5c80-4033-8491-c2ff452f7137.png)
 
-![Screen Shot 2020-02-07 at 09 06 06](https://user-images.githubusercontent.com/27420533/74015797-36629900-4989-11ea-8ec1-757aecad18ce.png)
+But things that you *don't see* are also widgets. 
+We mentioned this before but we'll understand it better now. 
+For any web or mobile app development, 
+we need to create layouts to organize our components in and
+make it look *shiny* :shiny: and *good-looking* :art:.
 
+This example is taken from the official docs 
+-> https://docs.flutter.dev/development/ui/layout#lay-out-a-widget
 
-Flutter uses layers to represent visual hierarchy 
-and relative importance or priority of each widget.</br>
-
-## Building Widgets
-
-To assemble our widgets into an application we use the `build()` function. e.g:
-`Widget build(BuildContext context) { ...` 
-
-For example, the `appBar` menu 
-needs to be invoked using the **`build()`** function. 
-It can then have other nested "child" widgets 
-such as buttons or text.</br>
-
-## User Interaction
-
-A **`StatefulWidget`** widget, as its' name suggests, stores the **`state`** of the UI it represents.
-For example the **`counter`** widget stores the **_counter** variable 
-which keeps track of the number of times the user has clicked the button.
-All user interaction that requires storing some data/input uses a **`StatefulWidget`** widget.</br> 
+Layout           |  Layout with padding and delimited borders
+:-------------------------:|:-------------------------:
+![](https://docs.flutter.dev/assets/images/docs/ui/layout/lakes-icons.png)  |  ![](https://docs.flutter.dev/assets/images/docs/ui/layout/lakes-icons-visual.png)
 
 
-When the State of an object is changed, the `setState()` function 
-should be called to update the UI. 
-This in turn will invoke the `build` method 
-which re-renders the widget.
+So, you may ask, **how many widgets are there in this menu**?
+Great question! There are visible widgets but also widgets that
+*help us* lay out the items correctly, center them and space
+them evenly to make it look good. 
+Here's how the widget tree looks like for this menu.
+
+![widget_tree](https://docs.flutter.dev/assets/images/docs/ui/layout/sample-flutter-layout.png)
+
+The nodes in *pink* are containters. They are *not visible* 
+but help us customize its child widget by adding
+`padding`, `margin`, `border`, `background color`, etc...
+
+Let's see a code example of an invisible widget that will
+center a text in the middle of the screen.
+
+```dart
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(color: Colors.white),
+      child: const Center(
+        child: Text(
+          'Hello World',
+          textDirection: TextDirection.ltr,
+          style: TextStyle(
+            fontSize: 32,
+            color: Colors.black87,
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+The `Center` widget centers all its children inside of it.
+`Center` is *invisible* but is a widget nonetheless.
+This yields the following result.
+
+![invisible_result](https://docs.flutter.dev/assets/images/docs/ui/layout/hello-world.png)
+
+
+See? Isn't it so simple? :tada:
+
+As you would do in React, you can whatever Layout you wish just
+by encapsulating widgets (akin to components) and ordering
+them accordingly.
+
+
+
 
 ## Testing
 
