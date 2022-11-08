@@ -1,17 +1,61 @@
-# learn-flutter
-https://flutter.dev/
+<div align="center">
+
+![Learn](https://user-images.githubusercontent.com/17494745/200544789-0b024c77-0d49-4702-8866-b69f61521033.png)
+
+Learn the Flutter basics to get up-and-running **fast** and build **awesome cross-platform applications**!
+
+</div>
+
 ## What is Flutter?
 
-Flutter in an open Source SDK for creating high-performance mobile apps for IOS and Android.
-The Flutter makes it easier for you to build user interfaces, while reducing the amount of code required to create and update your app.
+Flutter is an open-source framework created by Google
+for creating multi-platform, high-performance applications
+from a single codebase. It makes it easier for you to build
+user interfaces that works both on web and mobile devices.
+
+Flutter uses [Dart](https://github.com/dwyl/learn-dart), a
+general-purpose programming language created by Google.
+If you come from an object-oriented language like `Java`, `C#`,
+`Go` or `Javascript/Typescript`, you will feel right at home. 
 
 ## Why use Flutter?
 
-- Flutter can be used to build cross platform native applications (Android, IOS, Desktop and Web) using the same codebase.
-- The Dart programming language used in Flutter is object oriented and familiar to most developers.
-- Development times are significantly faster than other cross-platform frameworks thanks to stateful hot-reloading and excellent virtual device support.
-- If we close the application when we open it again we can continue from where we were
-- Flutter has a _complete_ design system with a library of Material UI widgets included which speed up the development process.
+- Flutter can be used to build cross platform native applications 
+(Android, iOS, Desktop and Web) using the same codebase. 
+This significantly simplifies maintenance costs and dev headache 
+when deploying for either Android or iOS devices. 
+
+- The Dart programming language used in Flutter
+ is object oriented and familiar to most developers.
+Flutter benefits immensely by leveraging Dart. 
+Being a language optimized for UI and compiling to ARM 
+& x64 machine code for mobile, desktop and backend,
+it offers amazing performance benchmarks. 
+
+- Development times are significantly faster
+ than other cross-platform frameworks 
+ thanks to stateful hot-reloading 
+ and excellent virtual device support.
+If we close the application,
+when we open it again 
+we can continue from where we stopped.
+
+- Flutter has a _complete_ design system 
+with a library of Material UI widgets 
+included which speeds up the 
+development process.
+
+- It's growing at a fast-pace and being increasingly used
+in production worldwide. 
+
+https://user-images.githubusercontent.com/194400/84572723-e3b04800-ad93-11ea-85e2-19e9693e5a26.png
+
+- Flutter has overtaken React Native in searchs, 
+further showcasing the growing trend of Flutter. 
+Also, Flutter is [probably more performant](https://www.orientsoftware.com/blog/flutter-vs-react-native-performance/)
+than React Native in mobile devices.
+
+https://user-images.githubusercontent.com/17494745/198244948-29e5d3a5-1b2b-4d1f-a434-d4eee2a5799c.png
 
 ## Core Principles
 
