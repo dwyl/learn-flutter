@@ -2228,3 +2228,28 @@ screen showing the todo list.
 If we rerun our app, we can now navigate between pages. Hurray! :tada:
 
 ![navigation](https://user-images.githubusercontent.com/17494745/200880357-314bb388-5c0c-4955-ac22-f9ec59e418a6.gif)
+
+# 5. Finishing touches
+We can quickly custmize the theme of the app, and it's title.
+Let's change the colors and give our fancy app a new title.
+
+```dart
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Todo App',
+      theme: ThemeData(
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.black,
+          foregroundColor: Colors.white,
+        )
+      ), 
+      home: const TodoList(),
+    );
+  }
+```
+
+Your app should look like this, now! 
+You can choose the colors you like. Go creative! :tada:
+
+<img width="600" alt="final" src="https://user-images.githubusercontent.com/17494745/200881816-b19fa0c4-4107-4a25-8923-3eafda3a94fd.png">
