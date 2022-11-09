@@ -1542,5 +1542,44 @@ And you're done! Congratulations, you just
 unit *and* integration tested your application.
 Awesome work! :tada:
 
+# App demo 📱
 
-## Fazer sample app simples
+We've learnt a lot about basic Flutter principles. There is no
+better way of learning them by creating an app and applying them!
+In this section, we'll walk you through to creating an 
+application that fetches information from a rest API,
+lists them and allows the user to choose his favourites. 
+
+Let's get cracking!
+
+## 0. Setting up a new project
+In this walkthrough we are going to use Visual Studio Code.
+We will assume you have this IDE installed, as well as the 
+`Flutter` and `Dart` extensions installed. If not, do so.
+
+<img width="252" alt="extensions" src="https://user-images.githubusercontent.com/17494745/200812248-0c9336da-74aa-49ff-9aba-758501f4dce2.png">
+
+After restarting Visual Studio Code, let's create a new project!
+Click on `View > Command Palette`, type `Flutter` and click on 
+`Flutter: New Project`. It will ask you for a name of the new project 
+- just type something like 'demo_app' - and then click `Enter` and your
+project should start setting up!
+
+Let's run our newly created app. 
+On the bottom menu of Visual Studio Code, click on the device button
+and you are shown a menu asking you to choose a device you want to run
+the app from. I'll be going with iPhone 14 Pro Max.
+
+Bottom menu             |  After clicking, you are prompted with this menu
+:-------------------------:|:-------------------------:
+![](https://user-images.githubusercontent.com/17494745/200813538-ceb06084-95ed-492f-940e-27ceaf86c6da.png)  |  ![](https://user-images.githubusercontent.com/17494745/200813745-5c75d190-5306-4f7c-88da-cffea66d4a27.png)
+
+After setting up the device, the emulator should be shown.
+After that, in Visual Studio Code, click on `Run > Start debugging`.
+The build process will start and, after it is finished,
+the app will start on the newly created emulator. 
+You should now see an "Hello World" app running. 
+Awesome! :tada:
+
+<img width="600" alt="hello_world" src="https://user-images.githubusercontent.com/17494745/200814531-31579684-e6ec-4da4-a504-642eb31fedb9.png">
+
