@@ -2253,3 +2253,19 @@ Your app should look like this, now!
 You can choose the colors you like. Go creative! :tada:
 
 <img width="600" alt="final" src="https://user-images.githubusercontent.com/17494745/200881816-b19fa0c4-4107-4a25-8923-3eafda3a94fd.png">
+
+
+# Final remarks 👋
+In this document (if you actually read it all the way through 😉),
+you went from 0 to hero with Flutter. You learnt important
+principles and you *applied* them to create your own app in just
+around 20 minutes! Give yourself a pat on the back! :tada:
+
+If you wish to learn a bit more, take a look
+at this repo's `guides` folder to
+learn about [logging in with Firebase](./guides/login-firebase-tutorial.md) 
+or [webviews in Flutter](./guides/webview-tutorial.md)
+
+If you want to see more examples, check these out!
+- [flutter-todo-list-tutorial](https://github.com/dwyl/flutter-todo-list-tutorial)
+- [flutter-counter-example](https://github.com/dwyl/flutter-counter-example)
