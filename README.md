@@ -1123,41 +1123,424 @@ to learn and is often very opinionated. As long
 as you understood *what it is*, it's awesome! :tada:
 
 
+# Testing 🧪
 
+As in all programming languages, frameworks or platforms,
+the secret to a successful application is to test it _extensively_.
+Implementing tests is not only advantageous to catch bugs
+but also avoid regression when implementing new features.
 
+> To learn more about an example of using TDD:
+> https://github.com/dwyl/flutter-counter-example
 
+> If you are interested in a more thorough introduction
+> to testing and debugging in various IDEs with Flutter, please
+> take a look at the [official docs](https://docs.flutter.dev/testing/debugging)
 
+## Unit testing
+Unit testing are handy to verify the behaviour
+of a single function/method/class. 
+Let's add some unit tests in Flutter, shall we?
 
+Firstly, we ought to import the [`test`](https://pub.dev/packages/test)
+which offers the core functionality for writing tests in Dart.
 
+```dart
+dev_dependencies:
+  test: 1.22.0
+```
 
+And now, let's create a simple class and a referring test
+file to test it. Create two files so you have the following
+folder structure.
 
+```
+counter_app/
+  lib/
+    counter.dart
+  test/
+    counter_test.dart
+```
 
+In `counter.dart`, add the following piece of code.
 
+```dart
+class Counter {
+  int value = 0;
 
+  void increment() => value++;
 
+  void decrement() => value--;
+}
+```
 
+In `counter_test.dart`, add the following:
 
+```dart
+// Import the test package and Counter class
+import 'package:counter_app/counter.dart';
+import 'package:test/test.dart';
 
+void main() {
+  group('Counter', () {
+    test('value should start at 0', () {
+      expect(Counter().value, 0);
+    });
 
+    test('value should be incremented', () {
+      final counter = Counter();
 
+      counter.increment();
 
+      expect(counter.value, 1);
+    });
 
-## Testing
+    test('value should be decremented', () {
+      final counter = Counter();
 
-As in all programming languages, frameworks or platforms the secret to a successful Flutter application is to test it _extensively_.
-Several tests should created included functional tests and UX tests 
-which can help us discover and fix any bugs before users see them!</br>
+      counter.decrement();
 
-An application must have tested all functions, classes or tasks needed to run correctly without errors.</br>
+      expect(counter.value, -1);
+    });
+  });
+}
+```
 
-Widget tests are necessary to confirm that they are performing their intended function 
-and correctly positioned in the layout.</br>
-Integration tests serve to test the application as a whole so that we can test the app in a real-world scenario. 
+We can group tests using the `group()` function. In each 
+`test()` we use the `expect()` function to compare 
+expected assertions.
 
-> To learn more about an example of using TDD: https://github.com/dwyl/flutter-counter-example
+You can type the following command to run the tests
+we just created:
 
-## Dart Before Flutter?
-Before you dive into Flutter you have to learn the programming language that is used to build Flutter apps, and that is Dart.
+```sh
+flutter test test/counter_test.dart
+```
+
+### Mock testing
+Sometimes functions fetch data from web services or databases.
+When we are unit testing these, it is inconvenient to do so
+because calling external dependencies may slow down 
+the execution time. Needless to say, this external dependency
+may sometimes be down, amongst other scenarios.
+
+In these situations, it is useful to **mock** 
+these dependencies. In Flutter, the *de facto* way of
+mocking classes and objects is using the 
+[`mockito`](https://pub.dev/packages/mockito)
+package. 
+
+In this small section, we are going to add
+this dependency, create a function to test 
+and mock a test file with a mock `http.Client`.
+
+Firstly, add the `mockito` package to the `pubspec.yaml` 
+file, along with the `flutter_test` dependency
+(will provide core testing functionalities) and the
+`http` package for HTTP requests. 
+Do take note that each test dependency will be
+added to the `dev_dependencies` section of the file.
+
+```dart
+dependencies:
+  http: 0.13.5
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  mockito: 5.3.2
+  build_runner: 2.3.2
+```
+
+Now let's create a function to test.
+This function will fetch data from the internet.
+
+```dart
+Future<Album> fetchAlbum(http.Client client) async {
+  final response = await client
+      .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
+
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    return Album.fromJson(jsonDecode(response.body));
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load album');
+  }
+}
+```
+
+You might have noticed the `http.Client` is provided 
+to the argument. This makes it so that the client
+that fetches data changes according to any situation.
+In Flutter, we can provide an `http.IOClient`. 
+For testing, we can pass a mock `http.Client`.
+
+In a test file, we will add an an annotation to the main function
+to generate a `MockClient` class with `mockito`.
+According to the argument passed to the annotation,
+the generated `MockClient` class will implement it.
+When generating, the mocks will be located in a file
+named `XX_test.mocks.dart`. We will import this file to use them.
+For now, create a test file where we will add tests.
+
+```dart
+import 'package:http/http.dart' as http;
+import 'package:mocking/main.dart';
+import 'package:mockito/annotations.dart';
+
+// Generate a MockClient using the Mockito package.
+// Create new instances of this class in each test.
+@GenerateMocks([http.Client])
+void main() {
+}
+```
+
+Now run `flutter pub run build_runner build`. 
+This command will generate the mocks in `XX_test.mocks.dart`.
+Now we can use these mocks in our tests! 
+Let's add two: one for a successful request and
+another for a failing one, and catch the raised exception.
+
+```dart
+import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+import 'package:mocking/main.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
+
+import 'fetch_album_test.mocks.dart';
+
+// Generate a MockClient using the Mockito package.
+// Create new instances of this class in each test.
+@GenerateMocks([http.Client])
+void main() {
+  group('fetchAlbum', () {
+    test('returns an Album if the http call completes successfully', () async {
+      final client = MockClient();
+
+      // Use Mockito to return a successful response when it calls the
+      // provided http.Client.
+      when(client
+              .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1')))
+          .thenAnswer((_) async =>
+              http.Response('{"userId": 1, "id": 2, "title": "mock"}', 200));
+
+      expect(await fetchAlbum(client), isA<Album>());
+    });
+
+    test('throws an exception if the http call completes with an error', () {
+      final client = MockClient();
+
+      // Use Mockito to return an unsuccessful response when it calls the
+      // provided http.Client.
+      when(client
+              .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1')))
+          .thenAnswer((_) async => http.Response('Not Found', 404));
+
+      expect(fetchAlbum(client), throwsException);
+    });
+  });
+}
+```
+
+In these tests, we are **importing** the generated mocks
+(`fetch_album_test.mocks.dart`).
+Plus, we create the `MockClient()`, define the behaviour
+we expect the mock to do, and then pass it to the function,
+effectively asserting its output.
+
+We can run the tests and see if they fail or not
+by running 
+
+```sh
+flutter test test/fetch_album_test.dart
+```
+
+Congratulations! You just mocked a `http.Client` object
+and properly tested a function that used an external dependency.
+`mockito` has many other features. 
+You can read about them
+[in their documentation](https://pub.dev/packages/mockito).
+
+## Integration testing
+While unit testing is useful for testing individual
+classes, functions or widgets, they don't
+test how all of these *work together*, as a whole.
+These tasks are captured and tested
+with **integration tests**. 
+
+We can luckily leverage the SDK's 
+[`integration_test`](https://github.com/flutter/flutter/tree/main/packages/integration_test)
+package to do this.
+
+Let's start by creating a super simple app. 
+This app will just have a button and a counter
+displaying the number of time the button was clicked.
+
+But, before that, let's add the needed dependencies.
+We'll be adding the `integration_test` and `flutter_test` 
+packages to the `dev_dependencies` section of `pubspec.yaml`.
+
+```yaml
+dev_dependencies:
+  integration_test:
+    sdk: flutter
+  flutter_test:
+    sdk: flutter
+```
+
+Now, let's create our app. In `lib/app.dart`, 
+let's use the following piece of code.
+
+```dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      title: 'Counter App',
+      home: MyHomePage(title: 'Counter App Home Page'),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              'You have pushed the button this many times:',
+            ),
+            Text(
+              '$_counter',
+              // Provide a Key to this specific Text widget. This allows
+              // identifying the widget from inside the test suite,
+              // and reading the text.
+              key: const Key('counter'),
+              style: Theme.of(context).textTheme.headline4,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        // Provide a Key to this button. This allows finding this
+        // specific button inside the test suite, and tapping it.
+        key: const Key('increment'),
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+```
+
+Now, inside `integration_test/app_test.dart`, we are
+going to test the action of clicking and checking
+if the counter is incremented. For this, we will
+initialize a singleton service `IntegrationTestWidgetsFlutterBinding`, 
+which executes the tests on a physical device and
+leverage the `WidgetTester` class to interact 
+with the widgets. 
+
+```dart
+import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
+
+import 'package:counter_app/main.dart' as app;
+
+void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  group('end-to-end test', () {
+    testWidgets('tap on the floating action button, verify counter',
+        (tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      // Verify the counter starts at 0.
+      expect(find.text('0'), findsOneWidget);
+
+      // Finds the floating action button to tap on.
+      final Finder fab = find.byTooltip('Increment');
+
+      // Emulate a tap on the floating action button.
+      await tester.tap(fab);
+
+      // Trigger a frame.
+      await tester.pumpAndSettle();
+
+      // Verify the counter increments by 1.
+      expect(find.text('1'), findsOneWidget);
+    });
+  });
+}
+```
+
+Running these on mobile devices is the same
+process as before - just run `flutter test integration_test`.
+However, if you were to run these on a web browser,
+you'd need to download [`ChromeDriver`](https://chromedriver.chromium.org/downloads),
+create a file in `test_driver/integration_test.dart` with
+
+```dart
+import 'package:integration_test/integration_test_driver.dart';
+
+Future<void> main() => integrationDriver();
+```
+
+and open two terminal windows.
+In the first one, we launch `chromedriver` with 
+
+```sh
+chromedriver --port=4444
+```
+
+and in the other, from the root of the project, run flutter 
+with the drive file path we just created and 
+targetting the test file we want to test, like so:
+
+```dart
+flutter drive \
+  --driver=test_driver/integration_test.dart \
+  --target=integration_test/app_test.dart \
+  -d chrome
+```
+
+And you're done! Congratulations, you just 
+unit *and* integration tested your application.
+Awesome work! :tada:
 
 
 
