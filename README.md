@@ -2039,3 +2039,192 @@ and set them as `done` and reverse that action. Great job!
 
 ![interactivity](https://user-images.githubusercontent.com/17494745/200861445-b4550a49-98cc-4f80-ba02-6ceff7fa17da.gif)
 
+# 4. Adding navigation
+We have added a stateful widget and are keeping track of what
+todos are marked as `completed` or not. It would be great to
+actually have a page where we see this list of completed items.
+
+Currently, our widget tree looks like this. 
+`MyApp` 
+-> `MyHomePage` (which has the `todoList` as local state)
+-> `TodoList` (which has the `doneList` as local state). 
+
+We need to merge `MyHomePage` and `TodoList` into a single
+widget with having the `todoList` and `doneList` to be able to 
+add navigation. Mergint these two in one will lead to a new
+`TodoList` widget, that will look like this.
+
+```dart
+class TodoList extends StatefulWidget {
+  const TodoList({super.key});
+
+  @override
+  State<TodoList> createState() => _TodoListState();
+}
+
+class _TodoListState extends State<TodoList> {
+  late Future<List<Todo>> futureTodosList;
+  final Set<Todo> _doneList = <Todo>{};
+
+  @override
+  void initState() {
+    super.initState();
+    futureTodosList = TodoService().getTodos();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Todo item List'),
+        ),
+        body: FutureBuilder<List<Todo>>(
+          future: futureTodosList,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final todolist = snapshot.data!;
+
+              return ListView.builder(
+                itemCount: todolist.length,
+                padding: const EdgeInsets.all(16.0),
+                itemBuilder: (context, i) {
+                  final index = i ~/ 2;
+                  final todoObj = todolist[index];
+
+                  if (i.isOdd) return const Divider();
+
+                  final completed = _doneList.contains(todoObj);
+
+                  return ListTile(
+                    title: Text(
+                      todoObj.title,
+                      style: TextStyle(
+                          fontSize: 18,
+                          decoration: completed
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none),
+                    ),
+                    onTap: (() {
+                      setState(() {
+                        if (completed) {
+                          _doneList.remove(todoObj);
+                        } else {
+                          _doneList.add(todoObj);
+                        }
+                      });
+                    }),
+                  );
+                },
+              );
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
+
+            // By default, show a loading spinner.
+            return const CircularProgressIndicator();
+          },
+        ));
+  }
+}
+
+```
+
+Nothing was fundamentally changed. 
+We wrapped the `TodoList` with the same widgets of
+the `MyHomePage` widget. We also changed the `AppBar.title`
+to `Text('Todo item list')`.
+
+We now also need to change the `MyApp` to call this
+newly edited widget.
+
+```dart
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(          // MODIFY with const
+      title: 'FlutterDemo',
+      home: TodoList(),             // REMOVE Scaffold
+    );
+  }
+}
+```
+
+If you run the application, it looks the same as before.
+The only difference now is that we have all the state in the same widget
+(`TodoList`).
+
+Inside the `_TodoListState` widget state class, let's add a button in the app bar
+to navigate to the new page.
+
+```dart
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Todo item List'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.list),
+              onPressed: _pushCompleted,
+              tooltip: 'Completed todo list',
+            ),
+          ],
+        ),
+```
+
+Let's implement the `_pushCompleted` function, that is executed
+everytime the icon button is clicked on the appbar. 
+We want to navigate to the page that shows the completed todo items.
+Add the following function in `_TodoListState`.
+
+```dart
+  void _pushCompleted() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) {
+          final tiles = _doneList.map(
+            (todo) {
+              return ListTile(
+                title: Text(
+                  todo.title,
+                  style: const TextStyle(fontSize: 18),
+                ),
+              );
+            },
+          );
+          final divided = tiles.isNotEmpty
+              ? ListTile.divideTiles(
+                  context: context,
+                  tiles: tiles,
+                ).toList()
+              : <Widget>[];
+
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Completed todo list'),
+            ),
+            body: ListView(children: divided),
+          );
+        },
+      ),
+    );
+  }
+```
+
+Let's break this down. We use the `Navigator` to push a new screen to 
+the stack. We pass the widget's `context` and then use the `push()` function
+to add the screen to the stack.
+In this case, we are pushing a `MaterialPageRoute`, inside the `builder`
+property, we return a `Scaffold` object with an `appBar` and a `body`.
+Inside this `body`, we are rendering a `ListView` with each todo item
+inside the `_doneList` set.
+
+Since we are using `MaterialPageRoute` and `Scaffold`, the back button is automatically added
+to the appbar, making it possible to *pop* the screen and go back to the
+screen showing the todo list.
+
+If we rerun our app, we can now navigate between pages. Hurray! :tada:
+
+![navigation](https://user-images.githubusercontent.com/17494745/200880357-314bb388-5c0c-4955-ac22-f9ec59e418a6.gif)

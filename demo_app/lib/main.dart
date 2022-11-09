@@ -13,45 +13,55 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: TodoList(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class TodoList extends StatefulWidget {
+  const TodoList({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<TodoList> createState() => _TodoListState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _TodoListState extends State<TodoList> {
   late Future<List<Todo>> futureTodosList;
+  final Set<Todo> _doneList = <Todo>{};
+
+  void _pushCompleted() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) {
+          final tiles = _doneList.map(
+            (todo) {
+              return ListTile(
+                title: Text(
+                  todo.title,
+                  style: const TextStyle(fontSize: 18),
+                ),
+              );
+            },
+          );
+          final divided = tiles.isNotEmpty
+              ? ListTile.divideTiles(
+                  context: context,
+                  tiles: tiles,
+                ).toList()
+              : <Widget>[];
+
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Completed todo list'),
+            ),
+            body: ListView(children: divided),
+          );
+        },
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -61,26 +71,55 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: FutureBuilder<List<Todo>>(
+        appBar: AppBar(
+          title: const Text('Todo item List'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.list),
+              onPressed: _pushCompleted,
+              tooltip: 'Completed todo list',
+            ),
+          ],
+        ),
+        body: FutureBuilder<List<Todo>>(
           future: futureTodosList,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return TodoList(todoList: snapshot.data!);
+              final todolist = snapshot.data!;
+
+              return ListView.builder(
+                itemCount: todolist.length,
+                padding: const EdgeInsets.all(16.0),
+                itemBuilder: (context, i) {
+                  final index = i ~/ 2;
+                  final todoObj = todolist[index];
+
+                  if (i.isOdd) return const Divider();
+
+                  final completed = _doneList.contains(todoObj);
+
+                  return ListTile(
+                    title: Text(
+                      todoObj.title,
+                      style: TextStyle(
+                          fontSize: 18,
+                          decoration: completed
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none),
+                    ),
+                    onTap: (() {
+                      setState(() {
+                        if (completed) {
+                          _doneList.remove(todoObj);
+                        } else {
+                          _doneList.add(todoObj);
+                        }
+                      });
+                    }),
+                  );
+                },
+              );
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');
             }
@@ -88,58 +127,6 @@ class _MyHomePageState extends State<MyHomePage> {
             // By default, show a loading spinner.
             return const CircularProgressIndicator();
           },
-        ),
-      ),
-    );
-  }
-}
-
-class TodoList extends StatefulWidget {
-  const TodoList({required this.todoList, super.key});
-
-  final List<Todo> todoList;
-
-  @override
-  State<TodoList> createState() => _TodoListState();
-}
-
-class _TodoListState extends State<TodoList> {
-  final Set<Todo> _doneList = <Todo>{};
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: widget.todoList.length,
-      padding: const EdgeInsets.all(16.0),
-      itemBuilder: (context, i) {
-
-        final index = i ~/ 2;
-        final todoObj = widget.todoList[index];
-
-        if (i.isOdd) return const Divider();
-
-        final completed = _doneList.contains(todoObj);
-
-        return ListTile(
-          title: Text(
-            todoObj.title,
-            style: TextStyle(
-                fontSize: 18,
-                decoration: completed
-                    ? TextDecoration.lineThrough
-                    : TextDecoration.none),
-          ),
-          onTap: (() {
-            setState(() {
-              if (completed) {
-                _doneList.remove(todoObj);
-              } else {
-                _doneList.add(todoObj);
-              }
-            });            
-          }),
-        );
-      },
-    );
+        ));
   }
 }
