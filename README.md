@@ -1583,3 +1583,217 @@ Awesome! :tada:
 
 <img width="600" alt="hello_world" src="https://user-images.githubusercontent.com/17494745/200814531-31579684-e6ec-4da4-a504-642eb31fedb9.png">
 
+## 1. Project structure
+We could implement a really simple project structure for this demo.
+But, just for learning purposes, let's implement a structure that is 
+divided into four layers:
+
+- [**presentation**](https://codewithandrea.com/articles/flutter-presentation-layer/):
+consisting of widgets, states (either local or shared) and controllers.
+- [**application**](https://codewithandrea.com/articles/flutter-app-architecture-application-layer/):
+in this layer we will have *services*, which will fetch data from the *data layer*.
+- [**domain layer**](https://codewithandrea.com/articles/flutter-app-architecture-domain-model/):
+where we define domain classes for the business logic.
+- [**data**](https://codewithandrea.com/articles/flutter-repository-pattern/):
+our data sources and repositories. We will interact with APIs here. 
+
+
+![structure](https://codewithandrea.com/articles/flutter-project-structure/images/flutter-app-architecture.webp)
+
+> This structure borrows many concepts from
+[DDD (Domain-driven-design)](https://en.wikipedia.org/wiki/Domain-driven_design),
+where the codebase is modeled and implemented according 
+to domain logic and concepts.
+
+We will simplify these four layers because it is a small project.
+But if you were to work in a corporate environmnent, you would be dealing
+with various APIs, data sources and a large amount of models.
+This structure makes it much easier to maintain code at a larger scale.
+Although we might be breaking the [YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it)
+principle here, this is just to show how to structure your code
+in a maintainable manner. 
+
+Let's start! Firstly create the following folder structure.
+
+```
+lib
+  - models
+     todo.dart
+  - repository
+     todoRepository.dart
+  - services
+     todoService.dart
+  main.dart
+```
+
+In the `lib/models/todo.dart` file, add the following piece of code.
+
+```dart
+class Todo {
+  final int userId;
+  final int id;
+  final String title;
+  final bool completed;
+
+  const Todo({
+    required this.userId,
+    required this.id,
+    required this.title,
+    required this.completed,
+  });
+
+  factory Todo.fromJson(Map<String, dynamic> json) {
+    return Todo(
+      userId: json['userId'],
+      id: json['id'],
+      title: json['title'],
+      completed: json['completed'],
+    );
+  }
+}
+```
+
+This should be nothing new to you. We declared 
+each member field and added a function that
+parses a JSON object to the class.
+
+Next up, let's head to the repository file. Firstly,
+run `flutter pub add http`
+to install the `http` package, 
+as we are going to need it to fetch data from a third-party API.
+
+After that, let's create the `lib/repository/todoRepository.dart` file.
+
+```dart
+import 'dart:convert';
+
+import 'package:demo_app/models/todo.dart';
+import 'package:http/http.dart' as http;
+
+abstract class TodoRepository {
+  Future<List<Todo>> getTodos();
+}
+
+class HTTPTodoRepository implements TodoRepository {
+  @override
+  Future<List<Todo>> getTodos() async {
+    final response =
+        await http.get(Uri.parse("https://jsonplaceholder.typicode.com/todos"));
+
+    if (response.statusCode == 200) {
+      Iterable l = json.decode(response.body);
+      List<Todo> todos =
+          List<Todo>.from(l.map((model) => Todo.fromJson(model)));
+
+      return todos;
+    } else {
+      throw Exception('Failed to load Todo\'s.');
+    }
+  }
+}
+```
+
+Here, we are creating an `abstract` class, which will serve
+as an interface for creating the `HTTPTodoRepository` class.
+The class, since implements the `TodoRepository` abstract class,
+will have to implement the `getTodos()` function. 
+In this function, we will call an API which returns an array of todos.
+In case the call is successful, we parse each decoded json object
+and convert it to a `Todo` object.
+
+Now let's go and implement the `lib/services/todoService.dart` file.
+
+```dart
+import 'package:demo_app/models/todo.dart';
+import 'package:demo_app/repository/todoRepository.dart';
+
+class TodoService {
+  late final TodoRepository todoRepository;
+
+  TodoService() {
+    todoRepository = HTTPTodoRepository();
+  }
+
+  Future<List<Todo>> getTodos() => todoRepository.getTodos();
+}
+```
+
+In this class, we initialize it by creating a `TodoRepository`.
+We use this field member in the `getTodos()` function, 
+which in turn, calls the `TodoRepository's` function to fetch
+the todos list.
+
+You might be asking yourself: "Well, mate, that's a lot of work
+for just a simple fetching function, isn't it?".
+Well, in this case, you'd be right. But we're just learning a 
+maintainable way of structuring our code. 
+This service might (and *is*, in this case) redudant. 
+But imagine if we have widgets that necessitate objects
+that stem from various data sources.
+It will be *the service's just* to fetch whatever data is needed
+from each repository, compile it and give it to the widget. 
+
+Let's continue. In the `main.dart` file, let's fetch the todo list
+and show the first one, just to check that everything works.
+Import the service and the models.
+
+```dart
+import 'package:demo_app/models/todo.dart';
+import 'services/todoService.dart';
+```
+
+and then change the `_MyHomePageState` class, like so.
+
+```dart
+class _MyHomePageState extends State<MyHomePage> {
+  late Future<List<Todo>> futureTodosList;
+
+  @override
+  void initState() {
+    super.initState();
+    futureTodosList = TodoService().getTodos();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // This method is rerun every time setState is called, for instance as done
+    // by the _incrementCounter method above.
+    //
+    // The Flutter framework has been optimized to make rerunning build methods
+    // fast, so that you can just rebuild anything that needs updating rather
+    // than having to individually change instances of widgets.
+    return Scaffold(
+      appBar: AppBar(
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        title: Text(widget.title),
+      ),
+      body: Center(
+        // Center is a layout widget. It takes a single child and positions it
+        // in the middle of the parent.
+        child: FutureBuilder<List<Todo>>(
+            future: futureTodosList,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Text(snapshot.data![0].title);
+              } else if (snapshot.hasError) {
+                return Text('${snapshot.error}');
+              }
+
+              // By default, show a loading spinner.
+              return const CircularProgressIndicator();
+            },
+          ),
+        ),
+      )
+    ;
+  }
+}
+```
+
+If you re-run the app, you should see something like this.
+It is displaying the first todo title from the fetched list.
+Hurray, we just set up all the data we need! 
+Now it's just about making it pretty :sparkles:.
+
+<img width="600" alt="" src="https://user-images.githubusercontent.com/17494745/200836044-9e00923a-9092-4099-ad96-7bbc56986bf1.png">
