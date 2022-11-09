@@ -1793,7 +1793,89 @@ class _MyHomePageState extends State<MyHomePage> {
 
 If you re-run the app, you should see something like this.
 It is displaying the first todo title from the fetched list.
+We used the `FutureBuilder` class to indicate
+that the data residing within will come at a later stage -
+the todo list. If the data comes, we show the first todo title.
+And we did all this in a `StatefulWidget`, with the `State`.
+
+In the `_MyHomePageState` class, we declared that a 
+`Future` todos list is expected and fetched it in the
+`initState()` method - it only runs one time, which is exactly what we want.
+
 Hurray, we just set up all the data we need! 
 Now it's just about making it pretty :sparkles:.
 
 <img width="600" alt="" src="https://user-images.githubusercontent.com/17494745/200836044-9e00923a-9092-4099-ad96-7bbc56986bf1.png">
+
+## 2 - Creating a list of todos
+Let's create a new widget to encapsulate our todo list.
+In Visual Studio Code, at the end of the `main.dart` file,
+click `Enter` a few times and type `stful`. 
+The IDE will ask if we want to create a Stateful or Stateless widget.
+Since we already get the information on the `HomePage` `Stateful Widget`,
+we will pass it down to a `Stateless Widget` we are going to now create.
+
+Name your new `Stateless Widget` "`TodoList`". 
+Check the following code and use it.
+
+```dart
+class TodoList extends StatelessWidget {
+  const TodoList({required this.todoList, super.key});
+
+  final List<Todo> todoList;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: todoList.length,
+      padding: const EdgeInsets.all(16.0),
+      itemBuilder: (context, i) {
+        if (i.isOdd) return const Divider();
+        final index = i ~/ 2;
+
+        return ListTile(
+          title: Text(
+            todoList[index].title,
+            style: const TextStyle(fontSize: 18),
+          ),
+        );
+      },
+    );
+  }
+}
+```
+
+This new stateless widget receives a `todoList` as argument. 
+This widget will return a `ListView` widget, which has a `itemBuilder`
+property that will render a list of items. 
+
+In the `itemCount` property, we will tell how many items we want
+the list to show. In this case, we want the length of the todo list.
+
+In the `padding` property, we will add an 
+[`EdgeInsets.all()`](https://api.flutter.dev/flutter/painting/EdgeInsets-class.html)
+spacing. This will add a spacing of `16.0` on all directions (up, right, left, down).
+
+In the `itemBuilder` property, we get access to the `context` and `index`
+of the rendered component. We are adding a `Divider` in between 
+every item. So, the `i` value *includes* the `Divider` components as well.
+Therefore, to correctly fetch the index of the item in the list,
+we will use the ListView index and use the 
+[`~/`](https://api.flutter.dev/flutter/dart-core/double/operator_truncate_divide.html) 
+operator. This will yield integer part of a division.
+For example, `1 2 3 4 5` will be `0 1 1 2 2`.
+
+Now, let's use this new widget and change the `_MyHomePageState`, 
+more specifically the `FutureBuilder.builder` return value.
+
+```dart
+  if (snapshot.hasData) {
+    return TodoList(todoList: snapshot.data!);
+  } else if (snapshot.hasError) {
+    return Text('${snapshot.error}');
+  }
+```
+
+You should now be able to scroll the list, like so!
+
+<img width="600" alt="list" src="https://user-images.githubusercontent.com/17494745/200851244-234f5850-0398-4c45-9df4-fac3890080a5.png">

@@ -77,20 +77,44 @@ class _MyHomePageState extends State<MyHomePage> {
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: FutureBuilder<List<Todo>>(
-            future: futureTodosList,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Text(snapshot.data![0].title);
-              } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
+          future: futureTodosList,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return TodoList(todoList: snapshot.data!);
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
 
-              // By default, show a loading spinner.
-              return const CircularProgressIndicator();
-            },
-          ),
+            // By default, show a loading spinner.
+            return const CircularProgressIndicator();
+          },
         ),
-      )
-    ;
+      ),
+    );
+  }
+}
+
+class TodoList extends StatelessWidget {
+  const TodoList({required this.todoList, super.key});
+
+  final List<Todo> todoList;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: todoList.length,
+      padding: const EdgeInsets.all(16.0),
+      itemBuilder: (context, i) {
+        if (i.isOdd) return const Divider();
+        final index = i ~/ 2;
+
+        return ListTile(
+          title: Text(
+            todoList[index].title,
+            style: const TextStyle(fontSize: 18),
+          ),
+        );
+      },
+    );
   }
 }
