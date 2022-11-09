@@ -94,25 +94,50 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class TodoList extends StatelessWidget {
+class TodoList extends StatefulWidget {
   const TodoList({required this.todoList, super.key});
 
   final List<Todo> todoList;
 
   @override
+  State<TodoList> createState() => _TodoListState();
+}
+
+class _TodoListState extends State<TodoList> {
+  final Set<Todo> _doneList = <Todo>{};
+
+  @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: todoList.length,
+      itemCount: widget.todoList.length,
       padding: const EdgeInsets.all(16.0),
       itemBuilder: (context, i) {
-        if (i.isOdd) return const Divider();
+
         final index = i ~/ 2;
+        final todoObj = widget.todoList[index];
+
+        if (i.isOdd) return const Divider();
+
+        final completed = _doneList.contains(todoObj);
 
         return ListTile(
           title: Text(
-            todoList[index].title,
-            style: const TextStyle(fontSize: 18),
+            todoObj.title,
+            style: TextStyle(
+                fontSize: 18,
+                decoration: completed
+                    ? TextDecoration.lineThrough
+                    : TextDecoration.none),
           ),
+          onTap: (() {
+            setState(() {
+              if (completed) {
+                _doneList.remove(todoObj);
+              } else {
+                _doneList.add(todoObj);
+              }
+            });            
+          }),
         );
       },
     );

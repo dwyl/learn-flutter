@@ -1807,7 +1807,7 @@ Now it's just about making it pretty :sparkles:.
 
 <img width="600" alt="" src="https://user-images.githubusercontent.com/17494745/200836044-9e00923a-9092-4099-ad96-7bbc56986bf1.png">
 
-## 2 - Creating a list of todos
+## 2. Creating a list of todos
 Let's create a new widget to encapsulate our todo list.
 In Visual Studio Code, at the end of the `main.dart` file,
 click `Enter` a few times and type `stful`. 
@@ -1879,3 +1879,163 @@ more specifically the `FutureBuilder.builder` return value.
 You should now be able to scroll the list, like so!
 
 <img width="600" alt="list" src="https://user-images.githubusercontent.com/17494745/200851244-234f5850-0398-4c45-9df4-fac3890080a5.png">
+
+## 3. Adding interactivity
+We want to be able to click on a todo item and
+mark it as "completed". To do this, we ought to add
+interactivity to our `TodoList`. 
+To do this, we got to convert our stateless widget
+into a *stateful widget*. 
+Doing this is fairly simple with Visual Studio Code.
+Simply double-click on `TodoList`, a yellow lightbulb
+will appear to the left side. Simply click it and
+click in `Convert to Stateful Widget`.
+
+<img width="304" alt="lightbuld" src="https://user-images.githubusercontent.com/17494745/200854841-26e1e6db-de93-42e3-9661-34a4018ec37b.png">
+
+This will effectively create a new `State` to the 
+widget and add it. You should now have the following code:
+
+```dart
+class TodoList extends StatefulWidget {
+  const TodoList({required this.todoList, super.key});
+
+  final List<Todo> todoList;
+
+  @override
+  State<TodoList> createState() => _TodoListState();
+}
+
+class _TodoListState extends State<TodoList> {
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: widget.todoList.length,
+      padding: const EdgeInsets.all(16.0),
+      itemBuilder: (context, i) {
+        if (i.isOdd) return const Divider();
+        final index = i ~/ 2;
+
+        return ListTile(
+          title: Text(
+            widget.todoList[index].title,
+            style: const TextStyle(fontSize: 18),
+          ),
+        );
+      },
+    );
+  }
+}
+```
+
+You now have the `TodoList` and `_TodoListState`, 
+which refers to the state of the former. Notice it
+is preceded with an underscore. This enforces privacy
+and is best practice for `State` objects and private fields.
+
+Let's change the widget to look like the following:
+
+```dart
+
+class TodoList extends StatefulWidget {
+  const TodoList({required this.todoList, super.key});
+
+  final List<Todo> todoList;
+
+  @override
+  State<TodoList> createState() => _TodoListState();
+}
+
+class _TodoListState extends State<TodoList> {
+  final Set<Todo> _doneList = <Todo>{};
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: widget.todoList.length,
+      padding: const EdgeInsets.all(16.0),
+      itemBuilder: (context, i) {
+        
+        final index = i ~/ 2;
+        final todoObj = widget.todoList[index];
+
+        if (i.isOdd) return const Divider();
+
+        final completed = todoObj.completed || _doneList.contains(todoObj);
+
+        return ListTile(
+          title: Text(
+            todoObj.title,
+            style: TextStyle(
+                fontSize: 18,
+                decoration: completed
+                    ? TextDecoration.lineThrough
+                    : TextDecoration.none),
+          ),
+          onTap: (() {
+            setState(() {
+              if (completed) {
+              _doneList.remove(todoObj);
+            } else {
+              _doneList.add(todoObj);
+            }
+            });            
+          }),
+        );
+      },
+    );
+  }
+}
+```
+
+Let's break it down. The `State` object (`_TodoListState`)
+now has a `_doneList` set. This set 
+(a set is like a list but guarantees each object is unique)
+, as the underscore symbol entails, is private. 
+This list will hold *the list of todos marked as **done***.
+
+Inside the `ListView.builder()` widget, we have changed
+the `itemBuilder`. We have added the following line:
+
+```dart
+final completed = _doneList.contains(todoObj);
+```
+
+We are checking the item is in the `_doneList` set.
+If so, we will add a strikethrough effect on the text to symbolize this.
+
+```dart
+    title: Text(
+      todoObj.title,
+      style: TextStyle(
+          fontSize: 18,
+          decoration: completed
+              ? TextDecoration.lineThrough
+              : TextDecoration.none),
+    ),
+```
+
+Now, the only thing that is left is to mark a todo item
+as *complete* or *incomplete* by tapping it.
+Inside the `ListTile`, we add an `onTap` property, 
+which is called everytime the list item is tapped, 
+and change the state accordingly. 
+If the item is completed, we mark it as incomplete, and vice-versa.
+
+```dart
+  onTap: (() {
+    setState(() {
+      if (completed) {
+        _doneList.remove(todoObj);
+      } else {
+        _doneList.add(todoObj);
+      }
+    });            
+  }),
+```
+
+Now, if you open your app, you can scroll and check items
+and set them as `done` and reverse that action. Great job!
+
+![interactivity](https://user-images.githubusercontent.com/17494745/200861445-b4550a49-98cc-4f80-ba02-6ceff7fa17da.gif)
+
