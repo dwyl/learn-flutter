@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 
 import 'services/todoService.dart';
 
+// coverage:ignore-start
 void main() {
   runApp(const MyApp());
 }
+// coverage:ignore-end
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -15,18 +17,19 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Todo App',
       theme: ThemeData(
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.black,
-          foregroundColor: Colors.white,
-        )
-      ), 
-      home: const TodoList(),
+          appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+      )),
+      home: TodoList(todoService: TodoService()),
     );
   }
 }
 
 class TodoList extends StatefulWidget {
-  const TodoList({super.key});
+  final TodoService todoService;
+
+  const TodoList({super.key, required this.todoService});
 
   @override
   State<TodoList> createState() => _TodoListState();
@@ -59,7 +62,7 @@ class _TodoListState extends State<TodoList> {
 
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Completed todo list'),
+              title: const Text('completed todo list'),
             ),
             body: ListView(children: divided),
           );
@@ -71,19 +74,19 @@ class _TodoListState extends State<TodoList> {
   @override
   void initState() {
     super.initState();
-    futureTodosList = TodoService().getTodos();
+    futureTodosList = widget.todoService.getTodos();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Todo item List'),
+          title: const Text('todo item list'),
           actions: [
             IconButton(
               icon: const Icon(Icons.list),
               onPressed: _pushCompleted,
-              tooltip: 'Completed todo list',
+              tooltip: 'completed todo list',
             ),
           ],
         ),

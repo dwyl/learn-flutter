@@ -2076,7 +2076,7 @@ class _TodoListState extends State<TodoList> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Todo item List'),
+          title: const Text('todo item list'),
         ),
         body: FutureBuilder<List<Todo>>(
           future: futureTodosList,
@@ -2132,7 +2132,7 @@ class _TodoListState extends State<TodoList> {
 Nothing was fundamentally changed. 
 We wrapped the `TodoList` with the same widgets of
 the `MyHomePage` widget. We also changed the `AppBar.title`
-to `Text('Todo item list')`.
+to `Text('todo item list')`.
 
 We now also need to change the `MyApp` to call this
 newly edited widget.
@@ -2163,12 +2163,12 @@ to navigate to the new page.
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Todo item List'),
+          title: const Text('todo item list'),
           actions: [
             IconButton(
               icon: const Icon(Icons.list),
               onPressed: _pushCompleted,
-              tooltip: 'Completed todo list',
+              tooltip: 'completed todo list',
             ),
           ],
         ),
@@ -2203,7 +2203,7 @@ Add the following function in `_TodoListState`.
 
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Completed todo list'),
+              title: const Text('completed todo list'),
             ),
             body: ListView(children: divided),
           );
@@ -2266,6 +2266,6 @@ at this repo's `guides` folder to
 learn about [logging in with Firebase](./guides/login-firebase-tutorial.md) 
 or [webviews in Flutter](./guides/webview-tutorial.md)
 
-If you want to see more examples, check these out!
+If you want to see more fully tested, check these out!
 - [flutter-todo-list-tutorial](https://github.com/dwyl/flutter-todo-list-tutorial)
 - [flutter-counter-example](https://github.com/dwyl/flutter-counter-example)
