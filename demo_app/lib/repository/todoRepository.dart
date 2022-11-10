@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:demo_app/models/todo.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:http/http.dart' show Client;
 
 abstract class TodoRepository {

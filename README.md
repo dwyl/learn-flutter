@@ -1122,6 +1122,71 @@ shared app state is not a beginner-friendly topic
 to learn and is often very opinionated. As long 
 as you understood *what it is*, it's awesome! :tada:
 
+### Dependency injection
+You might be wondering what dependency injection
+has to do with the aforementioned state management libraries.
+You'll see why this effects how the code is structure and
+how it effects testing.
+
+> "[Dependency injection](https://en.wikipedia.org/wiki/Dependency_injection)
+> is a design pattern
+> in which an object or function
+> receives other objects or functions that it depends on."
+
+Let's write an example of dependency injection in Flutter 
+in its simplest form.
+
+```dart
+class LoginService {
+  Api api;
+
+  // Inject the API through the constructor
+  LoginService(this.api)
+}
+
+class Api {}
+```
+
+Here, the `LoginService` receives the `Api` object
+in the constructor, something it depends on. 
+This is no problem if the `LoginService` is one or
+two levels deep from a widget it uses it.
+However, it does become a problem when it's 
+ten levels deep.
+
+```sh
+Widget 1 -> Widget 2 -> Widget 3 -> Widget 4
+```
+
+Let's consider we have a `Widget X`, that returns a list of albums.
+If `Widget 4` needed these list of albums, it would need `Widget X`.
+To do this, `Widget X` would need to be passed on 
+from `Widget 1` all the way to `Widget 4` so `Widget 4` could
+use it. This is not sustainable and it can become nightmarish.
+
+Instead of using a [singleton](https://en.wikipedia.org/wiki/Singleton_pattern)
+which can often lead to unexpected behaviour and 
+harder to test codebase, we need to use *dependency injection*.
+But in cases of deeply nested widgets, using packages like
+[`get_it`](https://pub.dev/packages/get_it) or
+[`Riverpod`](https://riverpod.dev/) or 
+[`Provider`](https://pub.dev/packages/provider)
+are the way to go, as they give us much better
+control over our dependencies without any of the
+drawbacks of creating our own singletons with `Singleton.instance`, 
+allowing us to inject dependencies and accessin values
+in deeply nested widgets without chaining dependencies 
+along the widget tree. 
+This is also useful for mocking objects in testing.
+
+If you are interested in how you would 
+implement these, we highly recommend taking a look
+at this video -> https://www.youtube.com/watch?v=vBT-FhgMaWM&ab_channel=FilledStacks .
+It's a 10 minute video that explains this topic in 
+simple terms and shows implementation examples using
+`get_it` and `Provider`. Great stuff!
+
+
 
 # Testing 🧪
 
@@ -1370,6 +1435,16 @@ classes, functions or widgets, they don't
 test how all of these *work together*, as a whole.
 These tasks are captured and tested
 with **integration tests**. 
+
+> There is a concept in Flutter that is **widget testing**.
+> Widget testing tests a single widget while
+> integration testing can test a complete app or large parts of it.
+> Integration testing will require *a device* or *emulator*.
+> So it should be used sparingly and to capture behaviours
+> that were missed by unit testing and widget testing.
+>
+> Implementation-wise, widget testing uses the 
+> `testWidget` function, much like integration tests. So they can be similar.
 
 We can luckily leverage the SDK's 
 [`integration_test`](https://github.com/flutter/flutter/tree/main/packages/integration_test)
@@ -2039,7 +2114,7 @@ and set them as `done` and reverse that action. Great job!
 
 ![interactivity](https://user-images.githubusercontent.com/17494745/200861445-b4550a49-98cc-4f80-ba02-6ceff7fa17da.gif)
 
-# 4. Adding navigation
+## 4. Adding navigation
 We have added a stateful widget and are keeping track of what
 todos are marked as `completed` or not. It would be great to
 actually have a page where we see this list of completed items.
@@ -2229,7 +2304,7 @@ If we rerun our app, we can now navigate between pages. Hurray! :tada:
 
 ![navigation](https://user-images.githubusercontent.com/17494745/200880357-314bb388-5c0c-4955-ac22-f9ec59e418a6.gif)
 
-# 5. Finishing touches
+## 5. Finishing touches
 We can quickly custmize the theme of the app, and it's title.
 Let's change the colors and give our fancy app a new title.
 
@@ -2253,6 +2328,643 @@ Your app should look like this, now!
 You can choose the colors you like. Go creative! :tada:
 
 <img width="600" alt="final" src="https://user-images.githubusercontent.com/17494745/200881816-b19fa0c4-4107-4a25-8923-3eafda3a94fd.png">
+
+## 6. Testing!
+We have our app running. In fact, we should 
+have used a [TDD](https://github.com/dwyl/learn-tdd)
+approach to get our app running. 
+The reason we didn't do this is to show you how some
+code needs to be laid out to be *testable*. 
+
+As you previously seen, mocking objects in Flutter
+works through **dependency injection**. 
+That is, these are functions receive the dependencies that 
+they depend on through, for example, their constructor.
+
+For simplicity sake, we are not going to be using
+any libraries like `get_it` or `Riverpod` to do
+deeply nested dependency injection. 
+In our demo app, we only have two levels deep,
+so mocking and testing is very simple. 
+
+Let's start testing!
+
+### 6.1 Unit testing
+Let's start unit testing our `TodoRepository`
+and `TodoService`. As it stands, both of these files
+are not "testable". We ought to find a way to
+mock the `http` requests. How do we do that?
+Exactly. *Dependency injection*.
+
+But first, we need to add the dependencies
+in `pubspec.yaml`. 
+In the `dev_dependencies` section, 
+add the following two lines of code.
+
+```yaml
+  mockito: 5.3.2
+  build_runner: 2.3.2
+```
+
+And run `flutter pub get`. 
+This will download the newly added dependencies.
+Now let's start testing!
+
+Change `lib/repository/todoRepository.dart`
+so it looks like the following.
+
+```dart
+import 'package:http/http.dart' show Client;
+
+class HTTPTodoRepository implements TodoRepository {
+  Client client = Client();
+
+  @override
+  Future<List<Todo>> getTodos() async {
+    final response = await client
+        .get(Uri.parse("https://jsonplaceholder.typicode.com/todos"));
+
+    if (response.statusCode == 200) {
+      Iterable l = json.decode(response.body);
+      List<Todo> todos =
+          List<Todo>.from(l.map((model) => Todo.fromJson(model)));
+
+      return todos;
+    } else {
+      throw Exception('Failed to load Todo\'s.');
+    }
+  }
+}
+```
+
+Now, on to testing. Create a directory in `test/unit`
+and add a new file `todoRepository_test.dart`.
+
+```dart
+import 'package:http/http.dart' as http;
+import 'package:mockito/annotations.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+
+@GenerateMocks([http.Client])
+void main() {
+}
+```
+
+We are going to use `mockito`'s `@GenerateMocks` annotation
+to generate a mock object for the `http.Client`, 
+which is used inside the function. 
+We could do it manually but since we can get it generated
+to ourselves automatically, let's do it.
+
+Run the following command.
+
+```sh
+flutter pub run  build_runner build --delete-conflicting-outputs
+```
+
+This will generate a `todoRepository_test.mocks.dart` file 
+with the generated mocks. 
+Import the file in the `todoRepository_test.dart` file and 
+let's create our first tests!
+
+```dart
+import 'todoRepository_test.mocks.dart';
+
+@GenerateMocks([http.Client])
+void main() {
+  test('Checks if a Todo array is yielded and has the expected length',
+      () async {
+    final client = MockClient();
+    final repo = HTTPTodoRepository();
+
+    // Use Mockito to return a successful response when it calls the
+    // provided http.Client.
+    when(client.get(Uri.parse('https://jsonplaceholder.typicode.com/todos')))
+        .thenAnswer((_) async => http.Response(
+            '[{"userId": 1, "id": 2, "title": "mock", "completed": true}]',
+            200));
+
+    repo.client = client;
+
+    expect(await repo.getTodos().then((value) => value.length), equals(1));
+  });
+
+  test('throws an exception if the http call completes with an error', () {
+    final client = MockClient();
+    final repo = HTTPTodoRepository();
+
+    // Use Mockito to return an unsuccessful response when it calls the
+    // provided http.Client.
+    when(client.get(Uri.parse('https://jsonplaceholder.typicode.com/todos')))
+        .thenAnswer((_) async => http.Response('Not Found', 404));
+
+    repo.client = client;
+
+    expect(repo.getTodos(), throwsException);
+  });
+}
+```
+
+Let's break down how we are testing the repository.
+We are creating a `final client = MockClient()` using
+the generated `MockClient` from the `todoRepository_test.mocks.dart`
+file. We are specifying that this client
+will return an array with a single todo item. 
+Using this new `MockClient`, we replace the class `client`
+with the `MockClient` and run the test. 
+The same procedure is done, except an exception
+is expected to rise.
+
+Let's do the same process for the `TodoService.dart` file.
+We need to change it, like so.
+
+```dart
+import 'package:demo_app/models/todo.dart';
+import 'package:demo_app/repository/todoRepository.dart';
+
+class TodoService {
+  TodoRepository todoRepository = HTTPTodoRepository();
+
+  Future<List<Todo>> getTodos() => todoRepository.getTodos();
+}
+```
+
+
+Create a new `todoService_test.dart` and add
+the following lines of code.
+
+```dart
+import 'package:http/http.dart' as http;
+import 'package:mockito/annotations.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+
+@GenerateMocks([http.Client])
+void main() {
+}
+```
+
+Run the following command.
+
+```sh
+flutter pub run  build_runner build --delete-conflicting-outputs
+```
+
+This will generate a `todoService_test.mocks.dart` file 
+with the generated mocks. Similarly, we will use this
+file for the tests in the same fashion as before.
+In `todoService_test.dart`, add the following code.
+
+```dart
+import 'todoService_test.mocks.dart';
+
+// Generate a MockClient using the Mockito package.
+// Create new instances of this class in each test.
+@GenerateMocks([http.Client])
+void main() {
+  test(
+      'Checks if a Todo array is returned from the service and has the expected length',
+      () async {
+    final client = MockClient();
+    final repo = HTTPTodoRepository();
+
+    // Use Mockito to return a successful response when it calls the
+    // provided http.Client.
+    when(client.get(Uri.parse('https://jsonplaceholder.typicode.com/todos')))
+        .thenAnswer((_) async => http.Response(
+            '[{"userId": 1, "id": 2, "title": "mock", "completed": true}]',
+            200));
+
+    repo.client = client;
+
+    final service = TodoService();
+    service.todoRepository = repo;
+
+    expect(await service.getTodos().then((value) => value.length), equals(1));
+  });
+
+  test('throws an exception if the http call completes with an error', () {
+    final client = MockClient();
+    final repo = HTTPTodoRepository();
+
+    // Use Mockito to return an unsuccessful response when it calls the
+    // provided http.Client.
+    when(client.get(Uri.parse('https://jsonplaceholder.typicode.com/todos')))
+        .thenAnswer((_) async => http.Response('Not Found', 404));
+
+    repo.client = client;
+
+    final service = TodoService();
+    service.todoRepository = repo;
+
+    expect(service.getTodos(), throwsException);
+  });
+}
+
+```
+
+This is the same process as before. 
+We have all the unit tests we want.
+Let's run the following command.
+
+```sh
+flutter test --coverage
+```
+
+This will run the four tests. 
+They should all pass.
+All that's left is testing the widgets. 
+Let's do it!
+
+### 6.2 Widget testing
+To test our widgets, we need to pass 
+the `TodoService` so we can mock it in our tests.
+Normally we would use a Provider to do this but this
+is a simple app, so there is no need to add complexity
+and third-party libraries.
+
+Let's do these changes. Head over to `lib/main.dart`
+and change the `TodoList` class like so.
+
+```dart
+class TodoList extends StatefulWidget {
+  final TodoService todoService;
+
+  const TodoList({super.key, required this.todoService});
+
+  @override
+  State<TodoList> createState() => _TodoListState();
+}
+```
+
+Now, we need to change the `MyApp` class to pass
+a `TodoService` instance to `TodoList`. 
+It should look like this, now.
+
+```dart
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Todo App',
+      theme: ThemeData(
+          appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+      )),
+      home: TodoList(todoService: TodoService()),
+    );
+  }
+}
+```
+
+Now we can test these widgets! 
+Create a new directory `test/widget` and
+create a file named `widget_test.dart`.
+
+```dart
+
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:mockito/annotations.dart';
+import 'package:demo_app/main.dart';
+
+
+@GenerateMocks([TodoService])
+void main() {
+}
+```
+
+Run the following command.
+
+```sh
+flutter pub run  build_runner build --delete-conflicting-outputs
+```
+
+This will generate a `widget_test.mocks.dart` file 
+with the generated mocks for `TodoService`. 
+Now we are ready to test our first widget! 
+Add the following test inside `main()`.
+
+```dart
+import 'widget_test.mocks.dart';
+
+@GenerateMocks([TodoService])
+void main() {
+  testWidgets('Check if appbar renders', (WidgetTester tester) async {
+    // Build our app and trigger a frame.
+    await tester.pumpWidget(const MyApp());
+
+    // Verify that the appbar renders
+    expect(find.text('todo item list'), findsOneWidget);
+  });
+}
+```
+
+We use the `testWidgets` function to test the widget.
+In turn, we get a `tester` object which allows us
+to perform actions. We initialize and create the 
+widget by using `await test.pumpWidget(const MyApp())`.
+We then check if the app bar is rendered. 
+To do this, we use the `find` class to find
+the widget by text and check if it was built in the widget tree.
+We then use a `Matcher` to make the assertion. 
+In this case, we check if we `findOneWidget`. 
+
+If we run `flutter test --coverage`, we will see this test should pass.
+
+Let's now add a test to check if the list is rendered
+with a list of todos. Add the following test.
+
+```dart
+  testWidgets('Check if item list is rendered', (WidgetTester tester) async {
+    final TodoService mockService = MockTodoService();
+
+    when(mockService.getTodos()).thenAnswer((_) async =>
+        [const Todo(userId: 1, id: 1, title: 'mocktitle', completed: true)]);
+
+    Widget testWidget = MediaQuery(
+        data: const MediaQueryData(),
+        child: MaterialApp(home: TodoList(todoService: mockService)));
+
+    await tester.pumpWidget(testWidget);
+    await tester.pump(const Duration(milliseconds: 100));
+
+    // Expect the mocked todo item to be displayed
+    expect(find.text('mocktitle'), findsOneWidget);
+  });
+```
+
+In this test, we are instantiating a `MockTodoService`, 
+specifying the return value of the `getTodos()`
+and then using it when creating a `TodoList` widget.
+We can't create `TodoList` by itself because 
+it necessitates to be a child of `MaterialApp`.
+Hence why we use `MediaQuery` with `MaterialApp` which in turn
+creates a `TodoList` widget that we want to test.
+
+With `tester.pumpWidget()`, we instantiate the 
+widget. This won't suffice, though. 
+The widget needs to render any animations and
+run `initState` to fetch the todos item.
+For this, we add `await tester.pump()` with a specified duration.
+This schedules a frame and triggers a rebuild of the widget, 
+running the clock by that amount. 
+We only need `100 ms` in our case. 
+
+After this, we assert if the rendered list 
+contains a todo item with a title "mocktitle".
+
+Let's add another test.
+
+```dart
+  testWidgets('Navigating to the todo list directly and find empty widget array',
+      (WidgetTester tester) async {
+    final TodoService mockService = MockTodoService();
+
+    when(mockService.getTodos()).thenAnswer((_) async => [
+          const Todo(userId: 1, id: 1, title: 'mocktitle', completed: true),
+          const Todo(userId: 1, id: 2, title: 'mocktitle2', completed: true),
+        ]);
+
+    Widget testWidget = MediaQuery(
+        data: const MediaQueryData(),
+        child: MaterialApp(home: TodoList(todoService: mockService)));
+
+    await tester.pumpWidget(testWidget);
+    await tester.pump(const Duration(milliseconds: 100));
+
+    // Navigating away
+    await tester.tap(find.byIcon((Icons.list)));
+    await tester.pumpAndSettle();
+
+    // Expect the todo list page to be shown
+    expect(find.text('completed todo list'), findsOneWidget);
+  });
+```
+
+In this test, we are rendering the `TodoList`, 
+tapping on a todo item (thus marking it as `complete`)
+and then navigating to the done todo item list.
+For this, we use `tester.tap(find.byIcon((Icons.list)))`
+to find the button and tap it.
+We then use `tester.pumpAndSettle()`, which essentially
+waits for all the animations to complete.
+After this, we check if the done list screen is rendered
+in the widget tree.
+
+We can keep adding tests to cover the rest of
+the scenarios. Copy the following code and replace
+your existing tests to cover all edge cases.
+Your `main` function should now look like this.
+
+```dart
+@GenerateMocks([TodoService])
+void main() {
+  testWidgets('Check if appbar renders', (WidgetTester tester) async {
+    // Build our app and trigger a frame.
+    await tester.pumpWidget(const MyApp());
+
+    // Verify that the appbar renders
+    expect(find.text('todo item list'), findsOneWidget);
+  });
+
+  testWidgets('Check if item list is rendered', (WidgetTester tester) async {
+    final TodoService mockService = MockTodoService();
+
+    when(mockService.getTodos()).thenAnswer((_) async =>
+        [const Todo(userId: 1, id: 1, title: 'mocktitle', completed: true)]);
+
+    Widget testWidget = MediaQuery(
+        data: const MediaQueryData(),
+        child: MaterialApp(home: TodoList(todoService: mockService)));
+
+    await tester.pumpWidget(testWidget);
+    await tester.pump(const Duration(milliseconds: 100));
+
+    // Expect the mocked todo item to be displayed
+    expect(find.text('mocktitle'), findsOneWidget);
+  });
+
+  testWidgets('Error should be displayed if the server returns error',
+      (WidgetTester tester) async {
+    final TodoService mockService = MockTodoService();
+
+    when(mockService.getTodos())
+        .thenAnswer((_) async => throw Exception('Error getting todos.'));
+
+    Widget testWidget = MediaQuery(
+        data: const MediaQueryData(),
+        child: MaterialApp(home: TodoList(todoService: mockService)));
+
+    await tester.pumpWidget(testWidget);
+    await tester.pump(const Duration(milliseconds: 100));
+
+    // Expect the mocked todo item to be displayed
+    expect(find.text('Exception: Error getting todos.'), findsOneWidget);
+  });
+
+  testWidgets('Tapping on a todo item and navigating to the done list page.',
+      (WidgetTester tester) async {
+    final TodoService mockService = MockTodoService();
+
+    when(mockService.getTodos()).thenAnswer((_) async => [
+          const Todo(userId: 1, id: 1, title: 'mocktitle', completed: true),
+          const Todo(userId: 1, id: 2, title: 'mocktitle2', completed: true),
+        ]);
+
+    Widget testWidget = MediaQuery(
+        data: const MediaQueryData(),
+        child: MaterialApp(home: TodoList(todoService: mockService)));
+
+    await tester.pumpWidget(testWidget);
+    await tester.pump(const Duration(milliseconds: 100));
+
+    // Tapping on a todo
+    await tester.tap(find.text('mocktitle'));
+    await tester.pumpAndSettle();
+
+    // Navigating away
+    await tester.tap(find.byIcon((Icons.list)));
+    await tester.pumpAndSettle();
+
+    // Expect the todo list page to be shown
+    expect(find.text('completed todo list'), findsOneWidget);
+    expect(find.text('todo item list'), findsNothing);
+  });
+
+  testWidgets('Navigating to the todo list directly and find empty widget array',
+      (WidgetTester tester) async {
+    final TodoService mockService = MockTodoService();
+
+    when(mockService.getTodos()).thenAnswer((_) async => [
+          const Todo(userId: 1, id: 1, title: 'mocktitle', completed: true),
+          const Todo(userId: 1, id: 2, title: 'mocktitle2', completed: true),
+        ]);
+
+    Widget testWidget = MediaQuery(
+        data: const MediaQueryData(),
+        child: MaterialApp(home: TodoList(todoService: mockService)));
+
+    await tester.pumpWidget(testWidget);
+    await tester.pump(const Duration(milliseconds: 100));
+
+    // Navigating away
+    await tester.tap(find.byIcon((Icons.list)));
+    await tester.pumpAndSettle();
+
+    // Expect the todo list page to be shown
+    expect(find.text('completed todo list'), findsOneWidget);
+  });
+
+  testWidgets('Marking todo as done and then as undone',
+      (WidgetTester tester) async {
+    final TodoService mockService = MockTodoService();
+
+    when(mockService.getTodos()).thenAnswer((_) async => [
+          const Todo(userId: 1, id: 1, title: 'mocktitle', completed: true),
+          const Todo(userId: 1, id: 2, title: 'mocktitle2', completed: true),
+        ]);
+
+    Widget testWidget = MediaQuery(
+        data: const MediaQueryData(),
+        child: MaterialApp(home: TodoList(todoService: mockService)));
+
+    await tester.pumpWidget(testWidget);
+    await tester.pump(const Duration(milliseconds: 100));
+
+    // Tap and untap
+    await tester.tap(find.text('mocktitle'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('mocktitle'));
+    await tester.pumpAndSettle();
+
+    // Expect the todo list page to be shown
+    expect(find.text('mocktitle'), findsOneWidget);
+  });
+
+  testWidgets('Testing main mount',
+      (WidgetTester tester) async {
+    final TodoService mockService = MockTodoService();
+
+    when(mockService.getTodos()).thenAnswer((_) async => [
+          const Todo(userId: 1, id: 1, title: 'mocktitle', completed: true),
+          const Todo(userId: 1, id: 2, title: 'mocktitle2', completed: true),
+        ]);
+
+    Widget testWidget = MediaQuery(
+        data: const MediaQueryData(),
+        child: MaterialApp(home: TodoList(todoService: mockService)));
+
+    await tester.pumpWidget(testWidget);
+    await tester.pump(const Duration(milliseconds: 100));
+
+    // Tap and untap
+    await tester.tap(find.text('mocktitle'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('mocktitle'));
+    await tester.pumpAndSettle();
+
+    // Expect the todo list page to be shown
+    expect(find.text('mocktitle'), findsOneWidget);
+  });
+}
+```
+
+The final changes we ought to do is in the `main.dart` file.
+We can't directly test the `main()` function that 
+runs the application. 
+So, in order to get a real coverage report, 
+add the following lines around the function. 
+This way, when testing, the compiler skips this function,
+as it is not needed to be tested.
+
+```dart
+// coverage:ignore-start
+void main() {
+  runApp(const MyApp());
+}
+// coverage:ignore-end
+```
+
+### 6.3 Test coverage
+To get the test coverage, we are going to simply run 
+three commands. However, firstly, if you are on MacOS,
+you need to install `lcov`. For this, run the following command
+to install it in your computer.
+
+```sh
+brew install lcov
+```
+
+Now, to get the coverage, run the following commands.
+
+```sh
+# Generate `coverage/lcov.info` file
+flutter test --coverage
+# Generate HTML report
+genhtml coverage/lcov.info -o coverage/html
+# Open the report
+open coverage/html/index.html
+```
+
+The generated HTML will create files inside
+the `coverage/` folder. Add it to your 
+`.gitignore` file.
+
+Your browser should have opened a window, 
+like so.
+
+<img width="1013" alt="image" src="https://user-images.githubusercontent.com/17494745/201144025-f68d9446-dd1c-4a5e-a985-e3bf92fc77fc.png">
+
+Congratulations, you now have a fully tested
+application! Awesome job! :tada:
 
 
 # Final remarks 👋
