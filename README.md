@@ -3116,8 +3116,8 @@ around 20 minutes! Give yourself a pat on the back! :tada:
 If you wish to learn a bit more, take a look
 at this repo's `guides` folder to
 learn about [logging in with Firebase](./guides/login-firebase-tutorial.md) 
-or [webviews in Flutter](./guides/webview-tutorial.md)
+or [webviews in Flutter](./guides/webview-tutorial.md).
 
-If you want to see more fully tested, check these out!
+If you want to see more fully tested projects, check these out!
 - [flutter-todo-list-tutorial](https://github.com/dwyl/flutter-todo-list-tutorial)
 - [flutter-counter-example](https://github.com/dwyl/flutter-counter-example)
