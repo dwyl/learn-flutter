@@ -2,18 +2,73 @@
 
 ![Learn](https://user-images.githubusercontent.com/17494745/200544789-0b024c77-0d49-4702-8866-b69f61521033.png)
 
-Learn the Flutter basics to get up-and-running **fast** and build **awesome cross-platform applications**!
+Learn the **`Flutter`** basics to get up-and-running **fast** 
+and build **awesome cross-platform applications**!
 
 </div>
 
+
+- [What? 💡](#what-)
+- [Why? 🤷](#why-)
+- [Who? 👤](#who-)
+  - [Mac Focussed? 🍏](#mac-focussed-)
+    - ["_`iOS` users spend more than double on subscriptions compared to `Android` users_"](#ios-users-spend-more-than-double-on-subscriptions-compared-to-android-users)
+- [Install ⬇️](#install-️)
+  - [Mac: Homebrew 🍺](#mac-homebrew-)
+  - [_Manual_ Install](#manual-install)
+  - [Installing Flutter SDK](#installing-flutter-sdk)
+  - [Install XCode](#install-xcode)
+    - [Install Android Studio](#install-android-studio)
+  - [Installing Cocoapods](#installing-cocoapods)
+  - [Adding plugins to Android Studio](#adding-plugins-to-android-studio)
+  - [Checking everything](#checking-everything)
+    - [Installing for Windows devices](#installing-for-windows-devices)
+- [Core Principles 🐣](#core-principles-)
+  - [Widgets](#widgets)
+    - [Stateless widgets](#stateless-widgets)
+    - [Stateful widgets](#stateful-widgets)
+  - [Layout](#layout)
+  - [Assets](#assets)
+  - [Navigation and routing](#navigation-and-routing)
+  - [Networking](#networking)
+  - [Local databases](#local-databases)
+    - [SQLite](#sqlite)
+      - [1. Add the dependencies](#1-add-the-dependencies)
+      - [2. Define a model](#2-define-a-model)
+      - [3. Open connection to the database](#3-open-connection-to-the-database)
+      - [4. Creating table](#4-creating-table)
+      - [5. CRUD operations](#5-crud-operations)
+    - [ObjectBox](#objectbox)
+  - [State management](#state-management)
+    - [Dependency injection](#dependency-injection)
+- [Testing 🧪](#testing-)
+  - [Unit testing](#unit-testing)
+    - [Mock testing](#mock-testing)
+  - [Integration testing](#integration-testing)
+- [App demo 📱](#app-demo-)
+  - [0. Setting up a new project](#0-setting-up-a-new-project)
+  - [1. Project structure](#1-project-structure)
+  - [2. Creating a list of todos](#2-creating-a-list-of-todos)
+  - [3. Adding interactivity](#3-adding-interactivity)
+  - [4. Adding navigation](#4-adding-navigation)
+  - [5. Finishing touches](#5-finishing-touches)
+  - [6. Testing!](#6-testing)
+    - [6.1 Unit testing](#61-unit-testing)
+    - [6.2 Widget testing](#62-widget-testing)
+    - [6.3 Test coverage](#63-test-coverage)
+- [Final remarks 👋](#final-remarks-)
+
+
+<br />
+
 # What? 💡
 
-Flutter is an open-source framework created by Google
+**`Flutter`** is an open-source framework created by Google
 for creating multi-platform, high-performance applications
 from a single codebase. It makes it easier for you to build
 user interfaces that works both on web and mobile devices.
 
-`Flutter` uses 
+**`Flutter`** uses 
 [`Dart`](https://github.com/dwyl/learn-dart), 
 a general-purpose programming language created by **Google**.
 If you come from an object-oriented programming language 
@@ -23,7 +78,7 @@ you will feel right at home.
 
 # Why? 🤷
 
-1. Flutter can be used to build cross platform **native** applications 
+1. **`Flutter`** can be used to build cross platform **native** applications 
 (Android, iOS, Desktop and Web) using the _same_ codebase. 
 This significantly simplifies maintenance costs and dev headache 
 when deploying for either Android or iOS devices. 
@@ -35,7 +90,7 @@ Being a language optimized for UI and compiling to ARM
 & x64 machine code for mobile, desktop and backend,
 it offers amazing performance benchmarks. 
 
-3. Development times are significantly faster
+3. **Development times** are **_significantly_ faster**
  than other cross-platform frameworks 
  thanks to stateful hot-reloading 
  and excellent virtual device support.
@@ -83,8 +138,8 @@ The _reason_ we use **`Mac`** is simple:
 it's the _only_ way to ship apps for **`iOS`**.
 
 Like it or not, **`iPhone`** now has a 
-**`50%` Market Share in the US**:
-https://www.visualcapitalist.com/iphone-majority-us-smartphones/
+**`50%` Market Share in the US**: <br />
+[visualcapitalist.com/iphone-majority-us-smartphones](https://www.visualcapitalist.com/iphone-majority-us-smartphones/)
 
 ![iphone-americas-top-smartphone](https://user-images.githubusercontent.com/194400/202679987-28743fa1-45c7-455b-a8b8-ca2f29567628.jpg)
 
@@ -95,12 +150,12 @@ with
 and 
 [**`68.89%`**](https://gs.statcounter.com/os-market-share/mobile/norway) 
 respectively.
-https://mezha.media/en/2022/10/10/percentage-of-iphone-users-in-different-european-countries/
+[mezha.media/en/2022/10/10/percentage-of-iphone-users-in-different-european-countries](https://mezha.media/en/2022/10/10/percentage-of-iphone-users-in-different-european-countries/)
 
 ![europe-iphone-market-share](https://user-images.githubusercontent.com/194400/202684011-b58184e6-3501-42f2-ad63-cca14c8e828f.png)
 
-Worldwide **`iPhone`** a **`~30%` Market Share**:
-https://gs.statcounter.com/os-market-share/mobile/worldwide
+Worldwide **`iPhone`** has a **`~30%` Market Share**:
+[gs.statcounter.com/os-market-share/mobile/worldwide](https://gs.statcounter.com/os-market-share/mobile/worldwide)
 Mostly because there are _many_ cheap Android devices 
 that have flooded the market.
 
@@ -109,13 +164,16 @@ from an Native Mobile App development perspective is:
 
 ### "_`iOS` users spend more than double on subscriptions compared to `Android` users_"
 
-https://www.phonearena.com/news/app-store-users-spend-more-than-double-google-play-users-subscriptions_id138692
+[phonearena.com/news/app-store-users-spend-more-than-double-google-play-users-subscriptions_id138692](https://www.phonearena.com/news/app-store-users-spend-more-than-double-google-play-users-subscriptions_id138692)
 
 So ... if you're building a **`SaaS` product**,
-you should pour _most_ of your effort into perfecting the UI/UX on **`iPhone`**.
+you should focus _most_ of your effort 
+on perfecting the UI/UX on **`iPhone`**.
 
-This is why we use **`Mac`**computers for our **`Flutter`** dev.
-So we can run **`XCode`** and test on **`iOS`** devices
+This is why we use **`Mac`**computers 
+for our **`Flutter`** dev work.
+So we can run **`XCode`** 
+and test on **`iOS`** devices
 and pay our bills.
 
 
@@ -124,10 +182,11 @@ and pay our bills.
 
 ## Mac: Homebrew 🍺
 
-The easiest way to install `Flutter` 
-on a Mac is using [Homebrew](https://brew.sh/).
-After installing Homebrew, 
-you can install `Flutter` 
+The easiest way to install **`Flutter`**
+on a Mac is using **`Homebrew`**: 
+[brew.sh](https://brew.sh)
+After installing `brew`, 
+you can install **`Flutter`**
 by running the command:
 
 ```sh
@@ -147,7 +206,7 @@ You should see something similar to:
 
 
 
-## Manual Install
+## _Manual_ Install
 
 Installing Flutter might seem like a daunting task.
 But do not worry, we'll help you get your local environment
