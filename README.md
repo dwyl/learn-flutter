@@ -12,14 +12,14 @@ and build **awesome cross-platform applications**!
 - [Why? 🤷](#why-)
 - [Who? 👤](#who-)
   - [Mac Focussed? 🍏](#mac-focussed-)
-    - ["_`iOS` users spend more than double on subscriptions compared to `Android` users_"](#ios-users-spend-more-than-double-on-subscriptions-compared-to-android-users)
+    - ["_`iOS` users `spend` more than `double` on `subscriptions` compared to `Android` users_"](#ios-users-spend-more-than-double-on-subscriptions-compared-to-android-users)
 - [Install ⬇️](#install-️)
   - [Mac: Homebrew 🍺](#mac-homebrew-)
   - [_Manual_ Install](#manual-install)
   - [Installing Flutter SDK](#installing-flutter-sdk)
-  - [Install XCode](#install-xcode)
+  - [Install `XCode`](#install-xcode)
     - [Install Android Studio](#install-android-studio)
-  - [Installing Cocoapods](#installing-cocoapods)
+  - [Installing `Cocoapods`](#installing-cocoapods)
   - [Adding plugins to Android Studio](#adding-plugins-to-android-studio)
   - [Checking everything](#checking-everything)
     - [Installing for Windows devices](#installing-for-windows-devices)
@@ -99,7 +99,7 @@ when we open it again
 we can continue from where we stopped.
 
 4. `Flutter` has a **_complete_ design system**
-with a library of Material UI widgets 
+with a library of **Material UI widgets**
 included which speeds up the 
 development process.
 
@@ -108,7 +108,7 @@ and is wildly used in production worldwide.
 
 ![fast-pace](https://user-images.githubusercontent.com/194400/84572723-e3b04800-ad93-11ea-85e2-19e9693e5a26.png)
 
-`Flutter` has overtaken React Native in Google searches, 
+`Flutter` overtook React Native 2020 in Google searches, 
 further showcasing the growing trend of `Flutter`:
 
 https://trends.google.com/trends/explore?date=today%205-y&q=flutter,react%20native
@@ -144,7 +144,10 @@ Like it or not, **`iPhone`** now has a
 ![iphone-americas-top-smartphone](https://user-images.githubusercontent.com/194400/202679987-28743fa1-45c7-455b-a8b8-ca2f29567628.jpg)
 
 In Europe, **`iPhone`** ownership/use correlates strongly to wealth of the nation;
-Monaco and Norway the two countries with the highest GDP/Capita top the table 
+[Monaco](https://en.wikipedia.org/wiki/Monaco#Economy)
+and 
+[Norway](https://en.wikipedia.org/wiki/Norway#Economy)
+the two countries with the highest GDP/Capita top the table 
 with 
 [**`69.91%`**](https://www.reddit.com/r/MapPorn/comments/xx4gp6/percentage_of_iphone_users_in_europe/) 
 and 
@@ -162,20 +165,26 @@ that have flooded the market.
 But by _far_ the most important fact/stat to pay attention 
 from an Native Mobile App development perspective is:
 
-### "_`iOS` users spend more than double on subscriptions compared to `Android` users_"
+### "_`iOS` users `spend` more than `double` on `subscriptions` compared to `Android` users_"
 
 [phonearena.com/news/app-store-users-spend-more-than-double-google-play-users-subscriptions_id138692](https://www.phonearena.com/news/app-store-users-spend-more-than-double-google-play-users-subscriptions_id138692)
 
-So ... if you're building a **`SaaS` product**,
+So ... if you're building a 
+[**`SaaS` product**](https://github.com/dwyl/product-roadmap#why-are-we-building-an-app),
 you should focus _most_ of your effort 
 on perfecting the UI/UX on **`iPhone`**.
 
-This is why we use **`Mac`**computers 
+This is _why_ we use **`Mac`** computers 
 for our **`Flutter`** dev work.
 So we can run **`XCode`** 
 and test on **`iOS`** devices
 and pay our bills.
-
+We would _much_ rather use 
+a fully Open Source Hardware/Software platform.
+e.g: 
+[Framework](https://github.com/dwyl/hq/issues/565);
+We _love_ their 
+[Mission](https://frame.work/about)
 
 
 # Install ⬇️
@@ -184,10 +193,10 @@ and pay our bills.
 
 The easiest way to install **`Flutter`**
 on a Mac is using **`Homebrew`**: 
-[brew.sh](https://brew.sh)
-After installing `brew`, 
+[brew.sh](https://brew.sh) <br />
+After you've installed `brew`, 
 you can install **`Flutter`**
-by running the command:
+with the command:
 
 ```sh
 brew install --cask flutter
@@ -196,8 +205,8 @@ brew install --cask flutter
 You should see something similar to:
 
 ```sh
-==> Downloading https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_maco
-######################################################################## 100.0%
+==> Downloading https://storage.googleapis.com/releases/stable/macos/flutter
+#################################################################### 100.0%
 ==> Installing Cask flutter
 ==> Linking Binary 'dart' to '/opt/homebrew/bin/dart'
 ==> Linking Binary 'flutter' to '/opt/homebrew/bin/flutter'
@@ -246,10 +255,10 @@ terminal window. It checks it all the necessary tools for development
 for all devices are correctly installed. Let's do just that.
 
 
-## Install XCode
+## Install `XCode`
 
 If you don't already have **`XCode`** installed,
-open your **`AppStore`**, search for 'XCode'
+open your **`AppStore`**, search for `"XCode"`
 and press `Install`. It's that easy.
 
 <img width="1292" alt="image" src="https://user-images.githubusercontent.com/17494745/200554456-ff9dc9cb-7a2a-4eb8-aff4-90dfd00a0427.png">
@@ -264,8 +273,8 @@ the installer do its magic. After this, you should be prompted with the followin
 
 <img width="798" alt="image" src="https://user-images.githubusercontent.com/17494745/200555036-2f7916aa-7171-409f-8f44-70f13ca3a8ec.png">
 
-Click on the `More actions` dropdown and click on `SDK Manager`. 
-You should be prompted with this window.
+Click on the `More actions` dropdown and click on `SDK Manager`. <br />
+You should be prompted with this window:
 
 <img width="1094" alt="Screenshot 2022-11-08 at 11 41 29" src="https://user-images.githubusercontent.com/17494745/200555203-7108472b-62b7-4df7-9709-a6797901094f.png">
 
@@ -294,7 +303,8 @@ Restart your terminal again and type `flutter doctor --android-licenses`.
 This will prompt you to accept the Android licenses. Just type `y` as you read
 through them to accept.
 
-## Installing Cocoapods
+## Installing `Cocoapods`
+
 If you run `flutter doctor` again, you should see we are almost done. 
 You might see a text saying `CocoaPods not installed`. Let's fix that.
 
@@ -303,6 +313,7 @@ Install [Homebrew](https://brew.sh/) and run `brew install cocoapods`.
 And you should be all sorted!
 
 ## Adding plugins to Android Studio
+
 If you happen to use Android Studio when developing, 
 adding the Flutter plugin will help you tremendously. 
 Just open Android Studio, click on `Plugins`, 
