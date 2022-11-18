@@ -13,26 +13,29 @@ for creating multi-platform, high-performance applications
 from a single codebase. It makes it easier for you to build
 user interfaces that works both on web and mobile devices.
 
-Flutter uses [Dart](https://github.com/dwyl/learn-dart), a
-general-purpose programming language created by Google.
-If you come from an object-oriented language like `Java`, `C#`,
-`Go` or `Javascript/Typescript`, you will feel right at home. 
+`Flutter` uses 
+[`Dart`](https://github.com/dwyl/learn-dart), 
+a general-purpose programming language created by **Google**.
+If you come from an object-oriented programming language 
+like `Java`, `C#`,
+`Go` or `Javascript/Typescript`, 
+you will feel right at home. 
 
 # Why? 🤷
 
-- Flutter can be used to build cross platform native applications 
-(Android, iOS, Desktop and Web) using the same codebase. 
+1. Flutter can be used to build cross platform **native** applications 
+(Android, iOS, Desktop and Web) using the _same_ codebase. 
 This significantly simplifies maintenance costs and dev headache 
 when deploying for either Android or iOS devices. 
 
-- The Dart programming language used in Flutter
+2. The `Dart` programming language used in `Flutter`
  is object oriented and familiar to most developers.
-Flutter benefits immensely by leveraging Dart. 
+`Flutter` benefits immensely by leveraging `Dart`. 
 Being a language optimized for UI and compiling to ARM 
 & x64 machine code for mobile, desktop and backend,
 it offers amazing performance benchmarks. 
 
-- Development times are significantly faster
+3. Development times are significantly faster
  than other cross-platform frameworks 
  thanks to stateful hot-reloading 
  and excellent virtual device support.
@@ -40,36 +43,115 @@ If we close the application,
 when we open it again 
 we can continue from where we stopped.
 
-- Flutter has a _complete_ design system 
+4. `Flutter` has a **_complete_ design system**
 with a library of Material UI widgets 
 included which speeds up the 
 development process.
 
-- It's growing at a fast-pace and being increasingly used
-in production worldwide. 
+5. `Flutter` is the fastest-growing mobile development platform 
+and is wildly used in production worldwide. 
 
 ![fast-pace](https://user-images.githubusercontent.com/194400/84572723-e3b04800-ad93-11ea-85e2-19e9693e5a26.png)
 
-- Flutter has overtaken React Native in searchs, 
-further showcasing the growing trend of Flutter. 
-Also, Flutter is [probably more performant](https://www.orientsoftware.com/blog/flutter-vs-react-native-performance/)
-than React Native in mobile devices.
+`Flutter` has overtaken React Native in Google searches, 
+further showcasing the growing trend of `Flutter`:
 
-![rn](https://user-images.githubusercontent.com/17494745/198244948-29e5d3a5-1b2b-4d1f-a434-d4eee2a5799c.png)
+https://trends.google.com/trends/explore?date=today%205-y&q=flutter,react%20native
+
+![flutter-vs-react-native](https://user-images.githubusercontent.com/194400/202675546-b2bbdd8a-c4fb-4b97-9e7c-1997fdcf0905.png)
+
 
 # Who? 👤
+
 This repo is useful for anyone 
 that is interested in mobile and web app development. 
-For anyone that hasn't yet touched Flutter, this 
+For anyone that hasn't yet touched `Flutter`, this 
 repo is a *great* place to start to get your computer
 ready for Flutter/Dart development, understand the
 **main concepts** and *guide* you to then create
-your very first Flutter app. 
+your very first `Flutter` app. 
 
-# Installing Flutter ⬇️
+
+## Mac Focussed? 🍏
+
+While the _installation_ steps below
+include Mac-specific steps like `Homebrew` and `XCode`,
+this guide can still _easily_ be followed by people
+using Linux or Windows as their OS.
+
+The _reason_ we use **`Mac`** is simple: 
+it's the _only_ way to ship apps for **`iOS`**.
+
+Like it or not, **`iPhone`** now has a 
+**`50%` Market Share in the US**:
+https://www.visualcapitalist.com/iphone-majority-us-smartphones/
+
+![iphone-americas-top-smartphone](https://user-images.githubusercontent.com/194400/202679987-28743fa1-45c7-455b-a8b8-ca2f29567628.jpg)
+
+In Europe, **`iPhone`** ownership/use correlates strongly to wealth of the nation;
+Monaco and Norway the two countries with the highest GDP/Capita top the table 
+with 
+[**`69.91%`**](https://www.reddit.com/r/MapPorn/comments/xx4gp6/percentage_of_iphone_users_in_europe/) 
+and 
+[**`68.89%`**](https://gs.statcounter.com/os-market-share/mobile/norway) 
+respectively.
+https://mezha.media/en/2022/10/10/percentage-of-iphone-users-in-different-european-countries/
+
+![europe-iphone-market-share](https://user-images.githubusercontent.com/194400/202684011-b58184e6-3501-42f2-ad63-cca14c8e828f.png)
+
+Worldwide **`iPhone`** a **`~30%` Market Share**:
+https://gs.statcounter.com/os-market-share/mobile/worldwide
+Mostly because there are _many_ cheap Android devices 
+that have flooded the market.
+
+But by _far_ the most important fact/stat to pay attention 
+from an Native Mobile App development perspective is:
+
+### "_`iOS` users spend more than double on subscriptions compared to `Android` users_"
+
+https://www.phonearena.com/news/app-store-users-spend-more-than-double-google-play-users-subscriptions_id138692
+
+So ... if you're building a **`SaaS` product**,
+you should pour _most_ of your effort into perfecting the UI/UX on **`iPhone`**.
+
+This is why we use **`Mac`**computers for our **`Flutter`** dev.
+So we can run **`XCode`** and test on **`iOS`** devices
+and pay our bills.
+
+
+
+# Install ⬇️
+
+## Mac: Homebrew 🍺
+
+The easiest way to install `Flutter` 
+on a Mac is using [Homebrew](https://brew.sh/).
+After installing Homebrew, 
+you can install `Flutter` 
+by running the command:
+
+```sh
+brew install --cask flutter
+```
+
+You should see something similar to:
+
+```sh
+==> Downloading https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_maco
+######################################################################## 100.0%
+==> Installing Cask flutter
+==> Linking Binary 'dart' to '/opt/homebrew/bin/dart'
+==> Linking Binary 'flutter' to '/opt/homebrew/bin/flutter'
+🍺  flutter was successfully installed!
+```
+
+
+
+## Manual Install
+
 Installing Flutter might seem like a daunting task.
 But do not worry, we'll help you get your local environment
-running in no time! Since we are targetting web and mobile,
+running in no time! Since we are targeting web and mobile,
 there are a few tools and SDKs we ought to install first. 
 
 These steps will be oriented to Mac/Unix devices but you should 
@@ -78,6 +160,7 @@ don't be shy! Reach out to us and [open an issue](https://github.com/dwyl/learn-
 we'll get back to you as fast as we can!
 
 ## Installing Flutter SDK
+
 Head over to https://docs.flutter.dev/get-started/install,
 select your operating system and follow the instructions. 
 
@@ -103,13 +186,11 @@ you should be able to run the command with no problems.
 terminal window. It checks it all the necessary tools for development
 for all devices are correctly installed. Let's do just that.
 
-> If you found this procedure convoluted, you can alternatively
-install Flutter through [Homebrew](https://brew.sh/).
-After installing Homebrew, you can install Flutter by simply running 
-`brew install --cask flutter`.
 
 ## Install XCode
-To install XCode, simply open your AppStore, search for 'XCode'
+
+If you don't already have **`XCode`** installed,
+open your **`AppStore`**, search for 'XCode'
 and press `Install`. It's that easy.
 
 <img width="1292" alt="image" src="https://user-images.githubusercontent.com/17494745/200554456-ff9dc9cb-7a2a-4eb8-aff4-90dfd00a0427.png">
