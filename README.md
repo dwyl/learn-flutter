@@ -506,19 +506,25 @@ class MyAppBar extends StatelessWidget {
 We notice straight away the widget is a subclass of 
 [`StatelessWidget`](https://api.flutter.dev/flutter/widgets/StatelessWidget-class.html).
 
-All widgets have a `Key key` (`super.key`) as optional parameter in their ocnstructor. 
-It is by the flutter engine at the step of recognizingg which widget 
-in a list as changed. It's more useful when you have a list of widgets 
-*of the same type* that can potentially be removed or inserted.
+All widgets have a `Key key` (`super.key`) 
+as an optional parameter in their constructor. 
+The `key` is used by the **`Flutter` engine** 
+at the step of recognizing which widget 
+in a list has changed. 
+It's more useful when you have a list of widgets 
+*of the same type* 
+that can potentially be removed or inserted.
 
 This `MyAppBar` widget takes as argument a `title`.
 This effectively becomes the `field` of the widget,
 and is used in the `Expanded` children widget. 
 Additionally, since this is a widget (more specifically, 
 a subclass of `Stateless Widget`), we have to 
-implement the `build()` function. This is what is rendered.
+implement the `build()` function. 
+This is what is rendered.
 
-This widget could be used in a container and be one of its childrens
+This widget could be used in a container 
+and be one of its children
 like so: 
 
 ```dart
@@ -530,20 +536,25 @@ like so:
 ```
 
 Simple enough, right?
+Here the `MyAppBar` is the parent widget,
+`title` is a property
+and `Text` is the child widget. 
 
 ### Stateful widgets
-While stateless widgets are static (never change),
-**stateful widgets** are dynamic. For example,
-they change its appearance or behaviour according
-to events triggered by user interaction or when 
-it receives data.
 
-For example `Checkbox`, `Slider`, `Textfield` are examples 
-of stateful widgets - subclass of 
+While stateless widgets are static (never change),
+**stateful widgets** are dynamic. 
+For example: they change appearance or behavior 
+according to events triggered by user interaction 
+or when it receives data.
+
+For example `Checkbox`, `Slider`, `Textfield` 
+are examples of  
 [`StatefulWidget`](https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html).
 A widget's state is stored in a `State` object. 
-Therefore, we *separate* the widget's state from its appearance. 
-Whenever the state changes, the `State` object calls `setState()`,
+Therefore, we _separate_ the widget's state from its appearance. 
+Whenever the state changes, 
+the `State` object calls `setState()`,
 thus rerendering the widget.
 
 Let's see some code!
@@ -552,9 +563,9 @@ Let's see some code!
 import 'package:flutter/material.dart';
 
 class Counter extends StatefulWidget {
-  // This is the state object, different from the appearance.
-  // It holds the state configuration and
-  // the values provided by the parent and used by the build method
+  // Counter is the Stateful Widget, different from the appearance.
+  // It holds the state configuration and values 
+  // provided by the parent and used by the build method
   // of the State (no values are provided in this instance)
   // Fields in a Widget subclass are always marked
 
@@ -615,19 +626,25 @@ void main() {
 }
 ```
 
-Let's unpack the code above. The `StatefulWidget` and `State` are separate objects.
-The former (being the first one) declares its state by using the State object.
-The State object is declared right after, initializing a `_counter` at 0.
+Let's unpack the code above. 
+The `StatefulWidget` and `State` are separate objects.
+The former (being the first one) 
+declares its' state by using the `State` object.
+The `State` object is declared right after, initializing an `int _counter` at `0`.
 It declares an `_increment()` function that calls `setState()` 
 (indicating the state is going to be changed) and increments the `_counter` variable.
 
-As with any widget, the `build()` method makes use of the `_counter` variable
-to display the number of times the button is pressed. Everytime it is pressed,
-the `_increment()` function is called, effectively changing the state and incrementing it.
+As with any widget, the `build()` method 
+makes use of the `_counter` variable
+to display the number of times the button is pressed. 
+Everytime it is pressed,
+the `_increment()` function is called, 
+effectively changing the state and incrementing it.
 
 ## Layout
 
-As we've already stated, the core of Flutter are widgets. 
+As we've already stated, 
+the core of `Flutter` are widgets. 
 In fact, almost everything is a widget - even layout models.
 The things you see are widgets.
 
@@ -637,30 +654,35 @@ But things that you *don't see* are also widgets.
 We mentioned this before but we'll understand it better now. 
 For any web or mobile app development, 
 we need to create layouts to organize our components in and
-make it look *shiny* :shiny: and *good-looking* :art:.
+make it look _shiny_ ✨ and _good-looking_ 🎨.
 
-This example is taken from the official docs 
--> https://docs.flutter.dev/development/ui/layout#lay-out-a-widget
+This example is taken from the official docs: 
+https://docs.flutter.dev/development/ui/layout#lay-out-a-widget
 
 Layout           |  Layout with padding and delimited borders
 :-------------------------:|:-------------------------:
 ![](https://docs.flutter.dev/assets/images/docs/ui/layout/lakes-icons.png)  |  ![](https://docs.flutter.dev/assets/images/docs/ui/layout/lakes-icons-visual.png)
 
 
-So, you may ask, **how many widgets are there in this menu**?
-Great question! There are visible widgets but also widgets that
+So, you may ask, 
+**how many widgets are there in this menu**?
+Great question! <br /> 
+There are visible widgets but also widgets that
 *help us* lay out the items correctly, center them and space
 them evenly to make it look good. 
-Here's how the widget tree looks like for this menu.
+
+Here's how the widget tree looks like for this menu:
 
 ![widget_tree](https://docs.flutter.dev/assets/images/docs/ui/layout/sample-flutter-layout.png)
 
-The nodes in *pink* are containters. They are *not visible* 
-but help us customize its child widget by adding
+The **pink nodes** are **containers**. 
+They are **_not_ visible** 
+but help us **customize** its **child widget** 
+by adding
 `padding`, `margin`, `border`, `background color`, etc...
 
 Let's see a code example of an invisible widget that will
-center a text in the middle of the screen.
+center a block of `text` in the middle of the screen:
 
 ```dart
 class MyApp extends StatelessWidget {
@@ -687,23 +709,26 @@ class MyApp extends StatelessWidget {
 
 The `Center` widget centers all its children inside of it.
 `Center` is *invisible* but is a widget nonetheless.
-This yields the following result.
+This yields the following result:
 
-![invisible_result](https://docs.flutter.dev/assets/images/docs/ui/layout/hello-world.png)
+![centered-text](https://user-images.githubusercontent.com/194400/203043079-7c9be65a-0b2b-4580-9dac-15f42ef3fb25.png)
 
 
-See? Isn't it so simple? :tada:
+See? Isn't it so simple? 🎉
 
-As you would do in React, you can whatever Layout you wish just
-by encapsulating widgets (akin to components) and ordering
-them accordingly.
+You can create _any_ Layout you wish just
+by encapsulating widgets 
+and ordering them accordingly.
 
 ## Assets
-For any application, sometimes we need images and assets to display to the user.
-Common resources are image files, static data (`JSON` files), 
-videos, icons...
 
-In Flutter, we use the `pubspec.yaml` file
+Sometimes we need images and assets to be displayed in our App.
+Common resources are: 
+image files, 
+static data (`JSON` files), 
+videos, buttons and icons.
+
+In Flutter, we use a `pubspec.yaml` file
 (often located at the root of the project) to
 require assets in the app.
 
@@ -728,20 +753,22 @@ flutter:
 > Both are imported and included in the asset bundle. 
 > One is considered the **main asset** and the other
 > a **variant**.
-> This behaviour is useful for images on different resolutions.
+> This behavior is useful for images of different resolutions.
 
 There are two ways of accessing the loaded access. 
-Each Flutter app has a `RootBundle` for easy access
-to the main asset bundle. You can import directly
+Each `Flutter` app has a `RootBundle` 
+for easy access to the main asset bundle. 
+You can import directly
 using the `rootBundle` global static. 
-However, inside a widget context, it's recommended to obtain the
-asset bundle for the widget `BuildContext` using the 
+However, inside a widget context, 
+it's recommended to obtain the asset bundle 
+for the widget `BuildContext` using the 
 [`DefaultAssetBundle`](https://api.flutter.dev/flutter/widgets/DefaultAssetBundle-class.html).
 This approach allows the parent widget to substitute a different 
 asset bundle at runtime, which is useful for localization
 or testing purposes.
 
-Here's a code example for the `rootBundle` approach.
+Here's a code example for the `rootBundle` approach:
 
 ```dart
 import 'package:flutter/services.dart' show rootBundle;
@@ -751,8 +778,9 @@ Future<String> loadAsset() async {
 }
 ```
 
-Here's a code example for the recommended approach inside
-a widget.
+Here's a code example 
+for the recommended approach 
+inside a widget:
 
 ```dart
 String data = await DefaultAssetBundle.of(context).loadString("assets/data.json");
@@ -760,18 +788,25 @@ final jsonResult = jsonDecode(data); //latest Dart
 ```
 
 ## Navigation and routing
-Most web and mobile apps aren't just a single page.
-The user needs to navigate between screens to do whatever
-action needs to be done, be it checking the details of a
-product or just wanting to see the shopping cart. 
 
-Flutter provides a `Navigator` widget to display screns as a stack,
+Most web and mobile apps aren't just a single page.
+The person using the app 
+needs to navigate between screens to do 
+whatever action needs to be done, 
+be it checking the details of a product 
+or just wanting to see the shopping cart. 
+
+`Flutter` provides a `Navigator` widget 
+to display screens as a stack,
 using the native transition animations of the target device. 
 Navigating between screens necessitates the route's 
-`BuildContext` (which can be accessed through the widget) and 
-is made by calling methods like `push()` and `pop()`.
+`BuildContext` (which can be accessed through the widget) 
+and is made by calling methods like 
+`push()` 
+and 
+`pop()`.
 
-Here's a code showcasing navigating between two routes.
+Here's code showcasing navigating between two routes:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -829,7 +864,7 @@ class SecondRoute extends StatelessWidget {
 }
 ```
 
-This basic code example shocases two routes,
+This basic code example showcases two routes,
 each one containing only a single button.
 Tapping the one on the first route
 will navigate to the second route. 
