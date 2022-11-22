@@ -184,7 +184,23 @@ a fully Open Source Hardware/Software platform.
 e.g: 
 [Framework](https://github.com/dwyl/hq/issues/565);
 We _love_ their 
-[Mission](https://frame.work/about)
+[Mission](https://frame.work/about)!
+
+
+> Note: We also _love_ that Apple focusses on Privacy.
+So while we don't like the vendor lock-in
+and often absurd over-pricing
+of the Apple ecosystem, 
+we _definitely_ prefer it 
+to sharing _all_ our data 
+with a Google 
+the way you are forced to with Android. 😢
+Yes, there are 
+Google-free privacy focussed versions
+of Android, e.g:
+[makeuseof.com/tag/using-android-without-google](https://www.makeuseof.com/tag/using-android-without-google/)
+but have you tried _using_ them in _practice_?
+If you have, please share your experience! 🙏
 
 
 # Install ⬇️
@@ -224,7 +240,9 @@ there are a few tools and SDKs we ought to install first.
 
 These steps will be oriented to Mac/Unix devices but you should 
 be able to follow if you have a Windows device. If you're ever stuck,
-don't be shy! Reach out to us and [open an issue](https://github.com/dwyl/learn-flutter/issues),
+don't be shy! 
+Please reach out to us and 
+[open an issue](https://github.com/dwyl/learn-flutter/issues),
 we'll get back to you as fast as we can!
 
 ## Installing Flutter SDK
@@ -264,6 +282,7 @@ and press `Install`. It's that easy.
 <img width="1292" alt="image" src="https://user-images.githubusercontent.com/17494745/200554456-ff9dc9cb-7a2a-4eb8-aff4-90dfd00a0427.png">
 
 ### Install Android Studio
+
 Now targetting for Android devices, we need to install Android SDK and toolkits.
 For this, we are going to install Android Studio and work from there.
 Head over to https://developer.android.com/studio and download.
@@ -324,6 +343,7 @@ search for "Flutter" and click `Install`.
 You are asked to "Restart the IDE". Do so and ta-da :tada:, you are done!
 
 ## Checking everything
+
 If you run `flutter doctor`, you should have everything in the green.
 
 <img width="697" alt="image" src="https://user-images.githubusercontent.com/17494745/200557242-d192557b-8354-4182-9b57-19764261ca71.png">
@@ -417,7 +437,8 @@ In the following `.gif` the sample application contains a total of 6 widgets:
 
 Image attribution: https://uxplanet.org/why-you-should-use-google-flutter-42f2c6ba036c
 
-1. The **container** widget `Scaffold` starting on line 38 groups all other widgets in the layout.
+1. The **container** widget `Scaffold` starting 
+   on line 38 groups all other widgets in the layout.
 2. The ***`appBar`*** widget displays the text "Flutter Demo Home Page"
 3. The ***`body`*** contains a **child** widget which in turn has **Text** and a **$_counter** placeholder. 
 4. The ***`floatingActionButton`*** is the button that gets clicked, 
@@ -458,6 +479,7 @@ There are several other widgets that have a similar behaviour,
 such as padding, alignment, row, columns, and grids.
 
 ### Stateless widgets 
+
 Widgets are not all stateless. Stateless widgets never change. 
 They receive arguments from their parent, store them in `final` member variables
 (`final` is analogous to a `const`ant variable). When a widget is asked
