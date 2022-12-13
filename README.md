@@ -458,6 +458,7 @@ There are several other widgets that have a similar behaviour,
 such as padding, alignment, row, columns, and grids.
 
 ### Stateless widgets 
+
 Widgets are not all stateless. Stateless widgets never change. 
 They receive arguments from their parent, store them in `final` member variables
 (`final` is analogous to a `const`ant variable). When a widget is asked
@@ -548,11 +549,14 @@ For example: they change appearance or behavior
 according to events triggered by user interaction 
 or when it receives data.
 
-For example `Checkbox`, `Slider`, `Textfield` 
+For example: 
+`Checkbox`, `Slider`, `Textfield` 
 are examples of  
 [`StatefulWidget`](https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html).
 A widget's state is stored in a `State` object. 
-Therefore, we _separate_ the widget's state from its appearance. 
+Therefore, 
+we _separate_ the widget's state 
+from its appearance. 
 Whenever the state changes, 
 the `State` object calls `setState()`,
 thus rerendering the widget.
@@ -626,16 +630,20 @@ void main() {
 }
 ```
 
-Let's unpack the code above. 
+Let's unpack this. 
 The `StatefulWidget` and `State` are separate objects.
 The former (being the first one) 
-declares its' state by using the `State` object.
-The `State` object is declared right after, initializing an `int _counter` at `0`.
-It declares an `_increment()` function that calls `setState()` 
-(indicating the state is going to be changed) and increments the `_counter` variable.
+declares its state 
+by using the `State` object.
+The `State` object is declared right after, 
+initializing an `int _counter` at `0`.
+It declares an `_increment()` function 
+that calls `setState()` 
+(indicating the state is going to be changed) 
+and increments the `_counter` variable.
 
-As with any widget, the `build()` method 
-makes use of the `_counter` variable
+As with any widget, 
+the `build()` method makes use of the `_counter` variable
 to display the number of times the button is pressed. 
 Everytime it is pressed,
 the `_increment()` function is called, 
@@ -645,16 +653,19 @@ effectively changing the state and incrementing it.
 
 As we've already stated, 
 the core of `Flutter` are widgets. 
-In fact, almost everything is a widget - even layout models.
+In fact, almost everything is a widget - 
+even layout models.
 The things you see are widgets.
 
 ![image](https://user-images.githubusercontent.com/17494745/200579851-de25d19d-5c80-4033-8491-c2ff452f7137.png)
 
 But things that you *don't see* are also widgets. 
-We mentioned this before but we'll understand it better now. 
+We mentioned this before 
+but we'll understand it better now. 
 For any web or mobile app development, 
-we need to create layouts to organize our components in and
-make it look _shiny_ ✨ and _good-looking_ 🎨.
+we need to create layouts to organize our components 
+and make them look _shiny_ ✨ 
+and _good-looking_ 🎨.
 
 This example is taken from the official docs: 
 https://docs.flutter.dev/development/ui/layout#lay-out-a-widget
@@ -666,10 +677,15 @@ Layout           |  Layout with padding and delimited borders
 
 So, you may ask, 
 **how many widgets are there in this menu**?
-Great question! <br /> 
-There are visible widgets but also widgets that
-*help us* lay out the items correctly, center them and space
-them evenly to make it look good. 
+Great question! 
+
+In the pictures above,
+there are *visible* widgets 
+but also widgets that *help us* lay out the items correctly, 
+center them 
+and space them evenly to make 
+everything look good. 
+These widgets **are not visible**.
 
 Here's how the widget tree looks like for this menu:
 
@@ -677,12 +693,14 @@ Here's how the widget tree looks like for this menu:
 
 The **pink nodes** are **containers**. 
 They are **_not_ visible** 
-but help us **customize** its **child widget** 
+but help us **customize** 
+their **child widget** 
 by adding
 `padding`, `margin`, `border`, `background color`, etc...
 
-Let's see a code example of an invisible widget that will
-center a block of `text` in the middle of the screen:
+Let's see a code example of an invisible widget 
+that will center a block of `text` 
+in the middle of the screen:
 
 ```dart
 class MyApp extends StatelessWidget {
@@ -708,7 +726,8 @@ class MyApp extends StatelessWidget {
 ```
 
 The `Center` widget centers all its children inside of it.
-`Center` is *invisible* but is a widget nonetheless.
+`Center` is *invisible* 
+but is a widget nonetheless.
 This yields the following result:
 
 ![centered-text](https://user-images.githubusercontent.com/194400/203043079-7c9be65a-0b2b-4580-9dac-15f42ef3fb25.png)
@@ -722,15 +741,17 @@ and ordering them accordingly.
 
 ## Assets
 
-Sometimes we need images and assets to be displayed in our App.
+Sometimes,
+we need images and assets to be displayed in our App.
 Common resources are: 
 image files, 
 static data (`JSON` files), 
 videos, buttons and icons.
 
-In Flutter, we use a `pubspec.yaml` file
-(often located at the root of the project) to
-require assets in the app.
+In Flutter, 
+we use a `pubspec.yaml` file
+(often located at the root of the project) 
+to require assets into our app.
 
 ```yaml
 flutter:
@@ -740,8 +761,11 @@ flutter:
 ```
 
 > There's a nuanced behavior when loading assets.
-> If you have two files ` .../graphics/background.png` and
-> `.../graphics/dark/background.png` and the `pubspec.yaml` file 
+>
+> If you have two files 
+> ` .../graphics/background.png` 
+> and `.../graphics/dark/background.png` 
+> and the `pubspec.yaml` file 
 > contains the following:
 
 > ```yaml
@@ -751,21 +775,23 @@ flutter:
 > ```
 
 > Both are imported and included in the asset bundle. 
-> One is considered the **main asset** and the other
-> a **variant**.
+> One is considered the **main asset** 
+> and the other a **variant**.
 > This behavior is useful for images of different resolutions.
 
-There are two ways of accessing the loaded access. 
+There are two ways of accessing the loaded assets. 
 Each `Flutter` app has a `RootBundle` 
 for easy access to the main asset bundle. 
 You can import directly
 using the `rootBundle` global static. 
+
 However, inside a widget context, 
 it's recommended to obtain the asset bundle 
 for the widget `BuildContext` using the 
 [`DefaultAssetBundle`](https://api.flutter.dev/flutter/widgets/DefaultAssetBundle-class.html).
-This approach allows the parent widget to substitute a different 
-asset bundle at runtime, which is useful for localization
+This approach allows the parent widget 
+to substitute a different asset bundle at runtime, 
+which is useful for localization
 or testing purposes.
 
 Here's a code example for the `rootBundle` approach:
@@ -784,29 +810,29 @@ inside a widget:
 
 ```dart
 String data = await DefaultAssetBundle.of(context).loadString("assets/data.json");
-final jsonResult = jsonDecode(data); //latest Dart
+final jsonResult = jsonDecode(data); 
 ```
 
 ## Navigation and routing
 
 Most web and mobile apps aren't just a single page.
 The person using the app 
-needs to navigate between screens to do 
-whatever action needs to be done, 
+needs to navigate between screens 
+to do whatever action needs to be done, 
 be it checking the details of a product 
 or just wanting to see the shopping cart. 
 
 `Flutter` provides a `Navigator` widget 
-to display screens as a stack,
+to display screens as a **stack**
 using the native transition animations of the target device. 
-Navigating between screens necessitates the route's 
-`BuildContext` (which can be accessed through the widget) 
+Navigating between screens 
+necessitates the route's `BuildContext` 
+(which can be accessed through the widget) 
 and is made by calling methods like 
-`push()` 
-and 
-`pop()`.
+`push()` and `pop()`.
 
-Here's code showcasing navigating between two routes:
+Here's code showcasing 
+the navigation between two routes:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -870,11 +896,14 @@ Tapping the one on the first route
 will navigate to the second route. 
 Clicking on the button of the second route 
 will return the user to the first route.
-We are using the `Navigator.push()` and `Navigator.pop()`
-functions to achieve this, by passing the context of
-the widget. 
-Additionally, we are leveraging `MaterialPageRoute` to
-transition between routes using a platform-specific animation
+We are using 
+the `Navigator.push()` 
+and `Navigator.pop()` functions to achieve this, 
+by passing the context of the widget. 
+Additionally, 
+we are leveraging `MaterialPageRoute`
+to transition between routes 
+using a platform-specific animation
 according to the [Material Design guidelines](https://m3.material.io/).
 
 Here's how it should look!
@@ -882,23 +911,34 @@ Here's how it should look!
 ![navigating_gif](https://user-images.githubusercontent.com/17494745/200613079-f65baeee-a822-4a58-b075-ce169d751325.gif)
 
 
-If your application necessitates advanced navigation and routing requirements
+If your application needs advanced navigation 
+and routing requirements
 (which is often the case with web apps that use direct links to each screen,
-or an app with multiple `Navigator` widgets), you should consider using a
+or an app with multiple `Navigator` widgets), 
+you should consider using a
 routing package like [`go_router`](https://pub.dev/packages/go_router). 
-This package allows one to parse the route path and configure the `Navigator`
-whenever an app receives, for example, a deep link.
+This package allows one to parse the route path 
+and configure the `Navigator` whenever an app receives, 
+for example, a deep link.
 
 
 ## Networking
-For most apps, fetching data from the internet is a must. 
-Luckily, fetching data from the internet is a breeze. Let's do it!
 
-Firstly, we need to add the [`http`](https://pub.dev/packages/http)
-package to the dependencies section in the `pubspec.yaml` file. 
-This file can be found at the route of your project.
+For most apps, 
+fetching data from the internet is a must. 
+Luckily, 
+fetching data from the internet is a breeze. 
+Let's do it!
 
-Let's add the package to the dependency list and import it.
+Firstly, 
+we need to add the [`http`](https://pub.dev/packages/http) package
+to the dependencies section 
+in the `pubspec.yaml` file. 
+This file can be found 
+at the route of your project.
+
+Let's add the package to the dependency list
+and import it.
 
 ```yaml
 dependencies:
@@ -909,9 +949,11 @@ dependencies:
 import 'package:http/http.dart' as http;
 ```
 
-We also need to change the `AndroidManifest.xml` file to 
-add Internet permission on Android devices. This file can be found in the 
-`android/app/src/main` on newly created projects. Add the following line.
+We also need to change the `AndroidManifest.xml` file 
+to add Internet permission on Android devices. 
+This file can be found in the `android/app/src/main` 
+on newly created projects. 
+Add the following line.
 
 ```xml
 <!-- Required to fetch data from the internet. -->
@@ -919,8 +961,10 @@ add Internet permission on Android devices. This file can be found in the
 ```
 
 
-Now, to make a network request is as easy
-as apple pie. Check the following code.
+Now, 
+to make a network request 
+is as easy as apple pie. 
+Check the following code.
 
 ```dart
 Future<http.Response> fetchAlbum() {
@@ -928,13 +972,17 @@ Future<http.Response> fetchAlbum() {
 }
 ```
 
-By calling `http.get()`, it returns a [`Future`](https://github.com/dwyl/learn-dart#asynchronous-events)
-that contains a `Response`. `Future` is a class to work with async operations.
+By calling `http.get()`, 
+it returns a [`Future`](https://github.com/dwyl/learn-dart#asynchronous-events)
+that contains a `Response`. 
+`Future` is a class to work with async operations.
 It represents a potential value that will occur in the future.
 
-While `http.Response` has our data, it's much more useful to translate it
-to a logical class. We can convert `http.Response` to a `Todo` class, 
-representing a "todo item". Let's create that class!
+While `http.Response` has our data, 
+it's much more useful to translate it to a logical class. 
+We can convert `http.Response` 
+to a `Todo` class, representing a "todo item". 
+Let's create that class!
 
 ```dart
 class Todo {
@@ -958,10 +1006,11 @@ class Todo {
 }
 ```
 
-We can create a function that makes the http request and,
-if it is successful, tries to parse the data and create a
-`Todo` object or raise an an error if the http request is 
-unsuccessful.
+We can create a function that makes the HTTP request and,
+if it is successful, 
+tries to parse the data and create a `Todo` object 
+or raise an an error 
+if the HTTP request is unsuccessful.
 
 ```dart
 Future<Todo> fetchTodos() async {
@@ -1001,9 +1050,10 @@ class _MyAppState extends State<MyApp> {
 }
 ```
 
-Finally, to display the data, we would want to use the
-`FutureBuilder` widget. As the name implies, it's a 
-widget made to handle async data operations. 
+Finally, to display the data, 
+we would want to use the `FutureBuilder` widget. 
+As the name implies, 
+it's a widget made to handle async data operations. 
 
 ```dart
 FutureBuilder<Todo>(
@@ -1022,25 +1072,31 @@ FutureBuilder<Todo>(
 ```
 
 The `future` paramter relates to object we want to work with.
-In this case, it is a parsed `Todo` object. 
+In this case, 
+it is a parsed `Todo` object. 
 
 The `builder` function tells Flutter what needs to be rendered, 
-depending on the current state of `Future`, which can 
-be *loading*, *success* or *error*. 
-Depending on the result of the operation, we
-either show the error, the data or a loading animation
+depending on the current state of `Future`, 
+which can be *loading*, *success* or *error*. 
+Depending on the result of the operation, 
+we either show the error, 
+the data
+or a loading animation
 while we wait for the http request to fulfill.
 
-Isn't it easy? =)
+Isn't it easy? 😃
 
 ## Local databases
-Sometimes, when writing an app, we need to persist
-and query large amounts of data on the local device. 
-In these cases, it is beneficial considering 
-using a database instead of a local file or a key-value store. 
 
-In this walkthrough, we are going to present
-two alternatives: SQLite and ObjectBox.
+Sometimes, when writing an app, 
+we need to persist and query large amounts of data on the local device. 
+In these cases, 
+it is beneficial considering using a database 
+instead of a local file or a key-value store. 
+
+In this walkthrough, 
+we are going to present two alternatives: 
+SQLite and ObjectBox.
 
 ### SQLite 
 
@@ -1052,11 +1108,11 @@ Sqflite is one of the most used and updated packages
 to connect to SQLite databases in Flutter.
 
 #### 1. Add the dependencies
-To work with SQLite databases, we need
-to import two dependencies. 
+
+To work with SQLite databases, 
+we need to import two dependencies. 
 We'll use `sqflite` to interact with the SQLite database,
-and `path` to define the location for storing the database
-on disk.
+and `path` to define the location for storing the database on disk.
 
 
 ```dart
@@ -1078,9 +1134,10 @@ import 'package:sqflite/sqflite.dart';
 ```
 
 #### 2. Define a model
+
 Let's take a look at the data we are going to store.
-Let's define a class  for the table we are going to create
-in SQLite.
+Let's define a class for the table 
+we are going to create in SQLite.
 
 ```dart
 class Item {
@@ -1114,9 +1171,10 @@ class Item {
 ```
 
 #### 3. Open connection to the database
+
 To open a connection to the SQLite database,
-we are going to define the path to the database file 
-using `path`
+we are going to define the path 
+to the database file using `path`
 **and** 
 open the database with `sqflite`.
 
@@ -1134,10 +1192,13 @@ final database = openDatabase(
 ```
 
 #### 4. Creating table
-To create the table to store our items, we must first
-verify the number of columns and type refer
-exactly to the ones we defined in the class. 
-After this, it's just a matter of running the appropriate
+
+To create the table to store our items, 
+we must first verify 
+the number of columns and type refer exactly 
+to the ones we defined in the class. 
+After this, 
+it's just a matter of running the appropriate
 `SQL` expression to create the table. 
 
 ```dart
@@ -1160,9 +1221,10 @@ final database = openDatabase(
 
 #### 5. CRUD operations
 
-Now that we have a database created, alongside the
-table, to create, update, list and insert Items is
-quite easy! Check the following piece of code.
+Now that we have a database created, 
+alongside the table, 
+to create, update, list and insert Items is quite easy! 
+Check the following piece of code.
 
 ```dart
 Future<void> crudOperations(Item item) async {
@@ -1204,29 +1266,34 @@ Future<void> crudOperations(Item item) async {
 }
 ```
 
-And there you have it! Here is a quick rundown of the 
-process of creating a database, a table and 
-applying CRUD operations on it. You can leverage
-this database to hold large amounts of data locally
-(up to a limit, of course) instead of relying 
-on common files.
+And there you have it! 
+Here is a quick rundown of the process of creating a database, 
+a table 
+and applying CRUD operations on it. 
+You can leverage this database to hold large amounts of data locally
+(up to a limit, of course) 
+instead of relying on common files.
 
 
 ### ObjectBox
-There are alternatives to SQLite, such as Hive and `ObjectBox`.
-In this section, we are going to just reference 
-`ObjectBox` so the user knows there isn't one single
+
+There are alternatives to SQLite, 
+such as Hive and `ObjectBox`.
+In this section, 
+we are going to just reference `ObjectBox` 
+so the you know there isn't one single
 database option.  
 
 `ObjectBox` provides a NoSQL database that uses a
-pure Dart API, so there is no need to learn
-and write SQL expressions. There are performance
-advantages to using this library. Make sure
-to read the [package docs](https://github.com/objectbox/objectbox-dart#flutter-database-for-fast-dart-object-persistence-)
+pure Dart API, 
+so there is no need to learn and write SQL expressions. 
+There are performance advantages to using this library. 
+Make sure to read the 
+[package docs](https://github.com/objectbox/objectbox-dart#flutter-database-for-fast-dart-object-persistence-)
 to find out if this option is best for you.
 
-Here is how basic setup and CRUD
-operations would work using `ObjectBox`.
+Here is how basic setup 
+and CRUD operations would work using `ObjectBox`.
 
 ```dart
 // Annotate a Dart class to create a box
@@ -1261,65 +1328,74 @@ box.remove(person.id);
 ```
 
 ## State management
+
 We have previously mentioned state within a widget.
-In stateful widgets, the state and how/when it changes
+In stateful widgets,
+the state and how/when it changes
 determines how many times the widget is rendered. 
 State that can be neatly contained in a single widget
 is referred as "local state" or **ephemeral state**. 
-Other parts of the widget tree seldom need to access this kind of state.
+Other parts of the widget tree 
+seldom need to access this kind of state.
 
-However, there is state that is *not ephemeral* 
+However, 
+there is state that is *not ephemeral* 
 and usually is needed across many widgets of the app.
 This shared state is usually called **application state**.
-Examples of these are user preferences or a shopping cart 
-in an e-commerce app.
+Examples of these 
+are user preferences or a shopping cart in an e-commerce app.
 
-Consider the following gif, taken directly 
-from the `Flutter` docs
+Consider the following gif, 
+taken directly from the `Flutter` docs
 -> https://docs.flutter.dev/development/data-and-backend/state-mgmt/intro
 
 ![cart](https://docs.flutter.dev/assets/images/docs/development/data-and-backend/state-mgmt/state-management-explainer.gif)
 
 
-Each widget in the widget tree might have its own
-local state but there's a piece of *application state* 
+Each widget in the widget tree might have its own local state,
+but there's a piece of *application state* 
 (i.e. shared state) in the form of a cart. 
 This cart is accessible from any widget of the app -
-in this case, the `MyCart` widget uses it to list what
-item was added to it.
+in this case, the `MyCart` widget uses it 
+to list what item was added to it.
 
 There are [many approaches to state management](https://docs.flutter.dev/development/data-and-backend/state-mgmt/options), 
-so it's up to you to decide which options are best
-suited for your use case. Many people recommend 
+so it's up to you to decide 
+which options are best suited for your use case. 
+Many people recommend 
 [`Provider`](https://pub.dev/packages/provider) or 
 [`Riverpod`](https://riverpod.dev/). 
 
-[Bloc](https://bloclibrary.dev/#/) is also an increasingly
-popular alternative which forces the logic and the UI
+[Bloc](https://bloclibrary.dev/#/) 
+is also an increasingly popular alternative 
+which forces the logic and the UI
 to be implemented separately. 
 
 State management and which alternative is best
-is a [big point of contention](https://www.reddit.com/r/FlutterDev/comments/w4osgi/for_you_what_is_the_best_state_management_with/)
-between developers. There is no bad option, just choose whichever
-you think it's best. 
+is a [big point of contention](https://www.reddit.com/r/FlutterDev/comments/w4osgi/for_you_what_is_the_best_state_management_with/) between developers. 
+There is no bad option, 
+just choose whichever you think it's best. 
 
-We shall not delve too much into state management as 
-shared app state is not a beginner-friendly topic
-to learn and is often very opinionated. As long 
-as you understood *what it is*, it's awesome! :tada:
+We shall not delve too much into state management 
+as shared app state 
+is not a beginner-friendly topic to learn 
+and is often very opinionated. 
+As long  as you understood *what it is*, 
+that's okay. 😄
 
 ### Dependency injection
+
 You might be wondering what dependency injection
 has to do with the aforementioned state management libraries.
-You'll see why this effects how the code is structure and
-how it effects testing.
+You'll see why this effects *how* the code is structured
+and how it effects testing.
 
 > "[Dependency injection](https://en.wikipedia.org/wiki/Dependency_injection)
 > is a design pattern
 > in which an object or function
 > receives other objects or functions that it depends on."
 
-Let's write an example of dependency injection in Flutter 
+Let's write an example of dependency injection
 in its simplest form.
 
 ```dart
@@ -1333,44 +1409,56 @@ class LoginService {
 class Api {}
 ```
 
-Here, the `LoginService` receives the `Api` object
-in the constructor, something it depends on. 
-This is no problem if the `LoginService` is one or
-two levels deep from a widget it uses it.
-However, it does become a problem when it's 
-ten levels deep.
+Here, 
+the `LoginService` 
+receives the `Api` object in the constructor, 
+something it depends on. 
+This is no problem 
+if the `LoginService` is one or two levels deep from a widget it uses it.
+However, 
+it does become a problem when it's ten levels deep.
 
 ```sh
 Widget 1 -> Widget 2 -> Widget 3 -> Widget 4
 ```
 
-Let's consider we have a `Widget X`, that returns a list of albums.
-If `Widget 4` needed these list of albums, it would need `Widget X`.
-To do this, `Widget X` would need to be passed on 
-from `Widget 1` all the way to `Widget 4` so `Widget 4` could
-use it. This is not sustainable and it can become nightmarish.
+Let's consider we have a `Widget X` that returns a list of albums.
+If `Widget 4` needed these list of albums,
+it would need `Widget X`.
+To do this, 
+`Widget X` would need to be passed on 
+from `Widget 1` all the way to `Widget 4` 
+so `Widget 4` could use it. 
+This is not sustainable and it can become nightmarish.
 
 Instead of using a [singleton](https://en.wikipedia.org/wiki/Singleton_pattern)
-which can often lead to unexpected behaviour and 
-harder to test codebase, we need to use *dependency injection*.
-But in cases of deeply nested widgets, using packages like
+which can often lead to unexpected behaviour 
+and harder to test codebases, 
+we need to use *dependency injection*.
+But in cases of deeply nested widgets, 
+using packages like
 [`get_it`](https://pub.dev/packages/get_it) or
 [`Riverpod`](https://riverpod.dev/) or 
 [`Provider`](https://pub.dev/packages/provider)
-are the way to go, as they give us much better
-control over our dependencies without any of the
-drawbacks of creating our own singletons with `Singleton.instance`, 
-allowing us to inject dependencies and accessin values
-in deeply nested widgets without chaining dependencies 
-along the widget tree. 
+are the way to go, 
+as they give us much better
+control over our dependencies 
+*without* any of the drawbacks of creating 
+our own singletons with `Singleton.instance`, 
+allowing us to inject dependencies 
+and accessing values in deeply nested widgets 
+without chaining dependencies along the widget tree. 
 This is also useful for mocking objects in testing.
 
-If you are interested in how you would 
-implement these, we highly recommend taking a look
+If you are interested 
+in how you would implement these, 
+we highly recommend taking a look
 at this video -> https://www.youtube.com/watch?v=vBT-FhgMaWM&ab_channel=FilledStacks .
-It's a 10 minute video that explains this topic in 
-simple terms and shows implementation examples using
-`get_it` and `Provider`. Great stuff!
+It's a 10 minute video that explains this topic
+in simple terms 
+and shows implementation examples 
+using `get_it` and `Provider`. 
+Great stuff!
 
 
 
@@ -1379,7 +1467,8 @@ simple terms and shows implementation examples using
 As in all programming languages, frameworks or platforms,
 the secret to a successful application is to test it _extensively_.
 Implementing tests is not only advantageous to catch bugs
-but also avoid regression when implementing new features.
+but also to avoid regression 
+when implementing new features.
 
 > To learn more about an example of using TDD:
 > https://github.com/dwyl/flutter-counter-example
@@ -1389,11 +1478,13 @@ but also avoid regression when implementing new features.
 > take a look at the [official docs](https://docs.flutter.dev/testing/debugging)
 
 ## Unit testing
-Unit testing are handy to verify the behaviour
-of a single function/method/class. 
+
+Unit testing are handy 
+to verify the behaviour of a single function/method/class. 
 Let's add some unit tests in Flutter, shall we?
 
-Firstly, we ought to import the [`test`](https://pub.dev/packages/test)
+Firstly, 
+we ought to import the [`test`](https://pub.dev/packages/test)
 which offers the core functionality for writing tests in Dart.
 
 ```dart
@@ -1401,9 +1492,10 @@ dev_dependencies:
   test: 1.22.0
 ```
 
-And now, let's create a simple class and a referring test
-file to test it. Create two files so you have the following
-folder structure.
+And now, 
+let's create a simple class 
+and a referring test file to test it. 
+Create two files so you have the following folder structure.
 
 ```
 counter_app/
@@ -1413,7 +1505,8 @@ counter_app/
     counter_test.dart
 ```
 
-In `counter.dart`, add the following piece of code.
+In `counter.dart`, 
+add the following piece of code.
 
 ```dart
 class Counter {
@@ -1425,7 +1518,8 @@ class Counter {
 }
 ```
 
-In `counter_test.dart`, add the following:
+In `counter_test.dart`, 
+add the following:
 
 ```dart
 // Import the test package and Counter class
@@ -1457,40 +1551,49 @@ void main() {
 }
 ```
 
-We can group tests using the `group()` function. In each 
-`test()` we use the `expect()` function to compare 
-expected assertions.
+We can group tests using the `group()` function. 
+In each `test()`,
+we use the `expect()` function 
+to compare expected assertions.
 
-You can type the following command to run the tests
-we just created:
+You can type the following command 
+to run the tests we just created:
 
 ```sh
 flutter test test/counter_test.dart
 ```
 
 ### Mock testing
+
 Sometimes functions fetch data from web services or databases.
-When we are unit testing these, it is inconvenient to do so
-because calling external dependencies may slow down 
-the execution time. Needless to say, this external dependency
-may sometimes be down, amongst other scenarios.
+When we are unit testing these, 
+it is inconvenient to do so 
+because calling external dependencies may slow down the execution time. 
+Needless to say, 
+this external dependency
+may sometimes be down, 
+amongst other scenarios.
+It's generally a **bad practice**.
 
-In these situations, it is useful to **mock** 
-these dependencies. In Flutter, the *de facto* way of
-mocking classes and objects is using the 
-[`mockito`](https://pub.dev/packages/mockito)
-package. 
+In these situations, 
+it is useful to **mock** 
+these dependencies. 
+In Flutter, the *de facto* way
+of mocking classes and objects 
+is using the [`mockito`](https://pub.dev/packages/mockito) package.
 
-In this small section, we are going to add
-this dependency, create a function to test 
+In this small section, 
+we are going to add this dependency, 
+create a function to test 
 and mock a test file with a mock `http.Client`.
 
-Firstly, add the `mockito` package to the `pubspec.yaml` 
-file, along with the `flutter_test` dependency
-(will provide core testing functionalities) and the
-`http` package for HTTP requests. 
-Do take note that each test dependency will be
-added to the `dev_dependencies` section of the file.
+Firstly, 
+add the `mockito` package to the `pubspec.yaml` file,
+along with the `flutter_test` dependency
+(will provide core testing functionalities) 
+and the `http` package for HTTP requests. 
+Do take note that each test dependency 
+will be added to the `dev_dependencies` section of the file.
 
 ```dart
 dependencies:
@@ -1522,18 +1625,21 @@ Future<Album> fetchAlbum(http.Client client) async {
 }
 ```
 
-You might have noticed the `http.Client` is provided 
-to the argument. This makes it so that the client
+You might have noticed 
+the `http.Client` is provided to the argument. 
+This makes it so that the client
 that fetches data changes according to any situation.
 In Flutter, we can provide an `http.IOClient`. 
 For testing, we can pass a mock `http.Client`.
 
-In a test file, we will add an an annotation to the main function
-to generate a `MockClient` class with `mockito`.
+In a test file, 
+we will add an an annotation 
+to the main function to generate a `MockClient` class with `mockito`.
 According to the argument passed to the annotation,
 the generated `MockClient` class will implement it.
-When generating, the mocks will be located in a file
-named `XX_test.mocks.dart`. We will import this file to use them.
+When generating, 
+the mocks will be located in a file named `XX_test.mocks.dart`. 
+We will import this file to use them.
 For now, create a test file where we will add tests.
 
 ```dart
@@ -1551,8 +1657,10 @@ void main() {
 Now run `flutter pub run build_runner build`. 
 This command will generate the mocks in `XX_test.mocks.dart`.
 Now we can use these mocks in our tests! 
-Let's add two: one for a successful request and
-another for a failing one, and catch the raised exception.
+Let's add two: 
+one for a successful request 
+and another for a failing one,
+and catch the raised exception.
 
 ```dart
 import 'package:flutter_test/flutter_test.dart';
@@ -1596,53 +1704,63 @@ void main() {
 }
 ```
 
-In these tests, we are **importing** the generated mocks
+In these tests, 
+we are **importing** the generated mocks
 (`fetch_album_test.mocks.dart`).
-Plus, we create the `MockClient()`, define the behaviour
-we expect the mock to do, and then pass it to the function,
+Plus, we create the `MockClient()`, 
+define the behaviour we expect the mock to do, 
+and then pass it to the function,
 effectively asserting its output.
 
-We can run the tests and see if they fail or not
-by running 
+We can run the tests 
+and see if they fail or not by running 
 
 ```sh
 flutter test test/fetch_album_test.dart
 ```
 
-Congratulations! You just mocked a `http.Client` object
-and properly tested a function that used an external dependency.
+Congratulations! 
+You just mocked a `http.Client` object
+and properly tested a function 
+that used an external dependency.
 `mockito` has many other features. 
 You can read about them
 [in their documentation](https://pub.dev/packages/mockito).
 
 ## Integration testing
-While unit testing is useful for testing individual
-classes, functions or widgets, they don't
-test how all of these *work together*, as a whole.
-These tasks are captured and tested
-with **integration tests**. 
+
+While unit testing is useful 
+for testing individual classes, functions or widgets, 
+they don't test how all of these *work together*, as a whole.
+These tasks are captured 
+and tested with **integration tests**. 
 
 > There is a concept in Flutter that is **widget testing**.
-> Widget testing tests a single widget while
-> integration testing can test a complete app or large parts of it.
+> Widget testing tests a single widget 
+> while integration testing can test a complete app or large parts of it.
 > Integration testing will require *a device* or *emulator*.
-> So it should be used sparingly and to capture behaviours
+> So, it should be used sparingly 
+> and to capture behaviours
 > that were missed by unit testing and widget testing.
 >
-> Implementation-wise, widget testing uses the 
-> `testWidget` function, much like integration tests. So they can be similar.
+> Implementation-wise, 
+> widget testing uses the `testWidget` function,
+> much like integration tests. 
+> So they *can be similar*.
 
 We can luckily leverage the SDK's 
 [`integration_test`](https://github.com/flutter/flutter/tree/main/packages/integration_test)
 package to do this.
 
 Let's start by creating a super simple app. 
-This app will just have a button and a counter
-displaying the number of time the button was clicked.
+This app will just have a button 
+and a counter displaying the number of time the button was clicked.
 
-But, before that, let's add the needed dependencies.
-We'll be adding the `integration_test` and `flutter_test` 
-packages to the `dev_dependencies` section of `pubspec.yaml`.
+But, before that, 
+let's add the needed dependencies.
+We'll be adding the `integration_test` 
+and `flutter_test` packages 
+to the `dev_dependencies` section of `pubspec.yaml`.
 
 ```yaml
 dev_dependencies:
@@ -1652,7 +1770,8 @@ dev_dependencies:
     sdk: flutter
 ```
 
-Now, let's create our app. In `lib/app.dart`, 
+Now, let's create our app. 
+In `lib/app.dart`, 
 let's use the following piece of code.
 
 ```dart
@@ -1727,13 +1846,13 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 ```
 
-Now, inside `integration_test/app_test.dart`, we are
-going to test the action of clicking and checking
-if the counter is incremented. For this, we will
-initialize a singleton service `IntegrationTestWidgetsFlutterBinding`, 
-which executes the tests on a physical device and
-leverage the `WidgetTester` class to interact 
-with the widgets. 
+Now, inside `integration_test/app_test.dart`, 
+we are going to test the action of clicking 
+and checking if the counter is incremented. 
+For this, we will initialize a singleton service `IntegrationTestWidgetsFlutterBinding`, 
+which executes the tests on a physical device,
+and leverage the `WidgetTester` class 
+to interact with the widgets. 
 
 ```dart
 import 'package:flutter_test/flutter_test.dart';
@@ -1770,8 +1889,10 @@ void main() {
 ```
 
 Running these on mobile devices is the same
-process as before - just run `flutter test integration_test`.
-However, if you were to run these on a web browser,
+process as before - 
+just run `flutter test integration_test`.
+However, 
+if you were to run these on a web browser,
 you'd need to download [`ChromeDriver`](https://chromedriver.chromium.org/downloads),
 create a file in `test_driver/integration_test.dart` with
 
@@ -1788,9 +1909,12 @@ In the first one, we launch `chromedriver` with
 chromedriver --port=4444
 ```
 
-and in the other, from the root of the project, run flutter 
-with the drive file path we just created and 
-targetting the test file we want to test, like so:
+and in the other, 
+from the root of the project, 
+run `flutter` 
+with the drive file path we just created 
+and targeting the test file we want to test, 
+like so:
 
 ```dart
 flutter drive \
@@ -1799,55 +1923,75 @@ flutter drive \
   -d chrome
 ```
 
-And you're done! Congratulations, you just 
-unit *and* integration tested your application.
-Awesome work! :tada:
+And you're done! 
+Congratulations, you just unit 
+*and* integration tested your application.
+Awesome work! 🎉
 
 # App demo 📱
 
-We've learnt a lot about basic Flutter principles. There is no
-better way of learning them by creating an app and applying them!
-In this section, we'll walk you through to creating an 
-application that fetches information from a rest API,
-lists them and allows the user to choose his favourites. 
+We've learnt a lot about basic Flutter principles. 
+There is no better way of learning them 
+by creating an app and applying them!
+In this section, 
+we'll walk you through 
+to creating an  application that fetches information from a rest API,
+lists them 
+and allows the user to choose his favourites. 
 
 Let's get cracking!
 
 ## 0. Setting up a new project
-In this walkthrough we are going to use Visual Studio Code.
-We will assume you have this IDE installed, as well as the 
-`Flutter` and `Dart` extensions installed. If not, do so.
+
+In this walkthrough,
+we are going to use Visual Studio Code.
+We will assume you have this IDE installed, 
+as well as the `Flutter` and `Dart` extensions installed. 
+If not, do so.
 
 <img width="252" alt="extensions" src="https://user-images.githubusercontent.com/17494745/200812248-0c9336da-74aa-49ff-9aba-758501f4dce2.png">
 
-After restarting Visual Studio Code, let's create a new project!
-Click on `View > Command Palette`, type `Flutter` and click on 
-`Flutter: New Project`. It will ask you for a name of the new project 
-- just type something like 'demo_app' - and then click `Enter` and your
-project should start setting up!
+After restarting Visual Studio Code, 
+let's create a new project!
+Click on `View > Command Palette`, 
+type `Flutter`
+and click on 
+`Flutter: New Project`. 
+It will ask you for a name of the new project - 
+just type something like "demo_app" - 
+and then click `Enter`
+and your project should start setting up!
 
 Let's run our newly created app. 
-On the bottom menu of Visual Studio Code, click on the device button
-and you are shown a menu asking you to choose a device you want to run
-the app from. I'll be going with iPhone 14 Pro Max.
+On the bottom menu of Visual Studio Code, 
+click on the device button
+and you are shown a menu 
+asking you to choose a device you want to run the app from. 
+I'll be going with iPhone 14 Pro Max.
 
 Bottom menu             |  After clicking, you are prompted with this menu
 :-------------------------:|:-------------------------:
 ![](https://user-images.githubusercontent.com/17494745/200813538-ceb06084-95ed-492f-940e-27ceaf86c6da.png)  |  ![](https://user-images.githubusercontent.com/17494745/200813745-5c75d190-5306-4f7c-88da-cffea66d4a27.png)
 
-After setting up the device, the emulator should be shown.
-After that, in Visual Studio Code, click on `Run > Start debugging`.
-The build process will start and, after it is finished,
+After setting up the device, 
+the emulator should be shown.
+After that, 
+in Visual Studio Code, 
+click on `Run > Start debugging`.
+The build process will start and, 
+after it is finished,
 the app will start on the newly created emulator. 
 You should now see an "Hello World" app running. 
-Awesome! :tada:
+Awesome! 🎉 
 
 <img width="600" alt="hello_world" src="https://user-images.githubusercontent.com/17494745/200814531-31579684-e6ec-4da4-a504-642eb31fedb9.png">
 
 ## 1. Project structure
+
 We could implement a really simple project structure for this demo.
-But, just for learning purposes, let's implement a structure that is 
-divided into four layers:
+But, just for learning purposes, 
+let's implement a structure 
+that is divided into four layers:
 
 - [**presentation**](https://codewithandrea.com/articles/flutter-presentation-layer/):
 consisting of widgets, states (either local or shared) and controllers.
@@ -1863,18 +2007,22 @@ our data sources and repositories. We will interact with APIs here.
 
 > This structure borrows many concepts from
 [DDD (Domain-driven-design)](https://en.wikipedia.org/wiki/Domain-driven_design),
-where the codebase is modeled and implemented according 
-to domain logic and concepts.
+where the codebase is modeled 
+and implemented according to domain logic and concepts.
 
-We will simplify these four layers because it is a small project.
-But if you were to work in a corporate environmnent, you would be dealing
+We will simplify these four layers 
+because it is a small project.
+But if you were to work in a corporate environmnent, 
+you would be dealing 
 with various APIs, data sources and a large amount of models.
 This structure makes it much easier to maintain code at a larger scale.
-Although we might be breaking the [YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it)
-principle here, this is just to show how to structure your code
+Although we might be breaking \
+the [YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it) principle here,
+this is just to show how to structure your code
 in a maintainable manner. 
 
-Let's start! Firstly create the following folder structure.
+Let's start! 
+Firstly create the following folder structure.
 
 ```
 lib
@@ -1887,7 +2035,8 @@ lib
   main.dart
 ```
 
-In the `lib/models/todo.dart` file, add the following piece of code.
+In the `lib/models/todo.dart` file, 
+add the following piece of code.
 
 ```dart
 class Todo {
@@ -1914,16 +2063,19 @@ class Todo {
 }
 ```
 
-This should be nothing new to you. We declared 
-each member field and added a function that
-parses a JSON object to the class.
+This should be nothing new to you. 
+We declared each member field 
+and added a function 
+that parses a JSON object to the class.
 
-Next up, let's head to the repository file. Firstly,
-run `flutter pub add http`
+Next up, 
+let's head to the repository file. 
+Firstly, run `flutter pub add http`
 to install the `http` package, 
 as we are going to need it to fetch data from a third-party API.
 
-After that, let's create the `lib/repository/todoRepository.dart` file.
+After that, 
+let's create the `lib/repository/todoRepository.dart` file.
 
 ```dart
 import 'dart:convert';
@@ -1954,12 +2106,15 @@ class HTTPTodoRepository implements TodoRepository {
 }
 ```
 
-Here, we are creating an `abstract` class, which will serve
-as an interface for creating the `HTTPTodoRepository` class.
-The class, since implements the `TodoRepository` abstract class,
+Here, we are creating an `abstract` class,
+which will serve as an interface for creating the `HTTPTodoRepository` class.
+The class, 
+since implements the `TodoRepository` abstract class,
 will have to implement the `getTodos()` function. 
-In this function, we will call an API which returns an array of todos.
-In case the call is successful, we parse each decoded json object
+In this function, 
+we will call an API which returns an array of todos.
+In case the call is successful, 
+we parse each decoded json object
 and convert it to a `Todo` object.
 
 Now let's go and implement the `lib/services/todoService.dart` file.
@@ -1979,23 +2134,33 @@ class TodoService {
 }
 ```
 
-In this class, we initialize it by creating a `TodoRepository`.
+In this class, 
+we initialize it by creating a `TodoRepository`.
 We use this field member in the `getTodos()` function, 
-which in turn, calls the `TodoRepository's` function to fetch
-the todos list.
+which in turn, 
+calls the `TodoRepository's` function to fetch the todos list.
 
-You might be asking yourself: "Well, mate, that's a lot of work
+You might be asking yourself: 
+"Well, mate, that's a lot of work
 for just a simple fetching function, isn't it?".
-Well, in this case, you'd be right. But we're just learning a 
-maintainable way of structuring our code. 
-This service might (and *is*, in this case) redudant. 
-But imagine if we have widgets that necessitate objects
+Well, in this case, you'd be right. 
+But we're just learning a maintainable way of structuring our code. 
+This service might 
+(and *is*, in this case) 
+redudant. 
+But imagine if we have widgets 
+that necessitate objects
 that stem from various data sources.
-It will be *the service's just* to fetch whatever data is needed
-from each repository, compile it and give it to the widget. 
+It will be *the service's job* 
+to fetch whatever data is needed from each repository, 
+compile it 
+and give it to the widget. 
 
-Let's continue. In the `main.dart` file, let's fetch the todo list
-and show the first one, just to check that everything works.
+Let's continue. 
+In the `main.dart` file, 
+let's fetch the todo list
+and show the first one, 
+just to check that everything works.
 Import the service and the models.
 
 ```dart
@@ -2054,21 +2219,27 @@ class _MyHomePageState extends State<MyHomePage> {
 
 If you re-run the app, you should see something like this.
 It is displaying the first todo title from the fetched list.
-We used the `FutureBuilder` class to indicate
-that the data residing within will come at a later stage -
-the todo list. If the data comes, we show the first todo title.
-And we did all this in a `StatefulWidget`, with the `State`.
+We used the `FutureBuilder` class 
+to indicate that the data residing within will come at a later stage -
+the todo list. 
+If the data comes, 
+we show the first todo title.
+And we did all this in a `StatefulWidget`, 
+with the `State`.
 
-In the `_MyHomePageState` class, we declared that a 
-`Future` todos list is expected and fetched it in the
-`initState()` method - it only runs one time, which is exactly what we want.
+In the `_MyHomePageState` class, 
+we declared that a  `Future` todos list is expected 
+and is later fetched in the `initState()` method - 
+it only runs one time, which is exactly what we want.
 
 Hurray, we just set up all the data we need! 
-Now it's just about making it pretty :sparkles:.
+Now it's just about making
+our app look pretty ✨.
 
 <img width="600" alt="" src="https://user-images.githubusercontent.com/17494745/200836044-9e00923a-9092-4099-ad96-7bbc56986bf1.png">
 
 ## 2. Creating a list of todos
+
 Let's create a new widget to encapsulate our todo list.
 In Visual Studio Code, at the end of the `main.dart` file,
 click `Enter` a few times and type `stful`. 
@@ -2107,23 +2278,28 @@ class TodoList extends StatelessWidget {
 ```
 
 This new stateless widget receives a `todoList` as argument. 
-This widget will return a `ListView` widget, which has a `itemBuilder`
-property that will render a list of items. 
+This widget will return a `ListView` widget, 
+which has a `itemBuilder` property 
+that will render a list of items. 
 
-In the `itemCount` property, we will tell how many items we want
-the list to show. In this case, we want the length of the todo list.
+In the `itemCount` property, 
+we will tell how many items we want the list to show. 
+In this case, we want the length of the todo list.
 
-In the `padding` property, we will add an 
+In the `padding` property, 
+we will add an 
 [`EdgeInsets.all()`](https://api.flutter.dev/flutter/painting/EdgeInsets-class.html)
-spacing. This will add a spacing of `16.0` on all directions (up, right, left, down).
+spacing widget. 
+This will add a spacing of `16.0` on all directions (up, right, left, down).
 
-In the `itemBuilder` property, we get access to the `context` and `index`
-of the rendered component. We are adding a `Divider` in between 
-every item. So, the `i` value *includes* the `Divider` components as well.
+In the `itemBuilder` property, 
+we get access to the `context` and `index` of the rendered component. 
+We are adding a `Divider` in between every item. 
+So, the `i` value *includes* the `Divider` components as well.
 Therefore, to correctly fetch the index of the item in the list,
-we will use the ListView index and use the 
-[`~/`](https://api.flutter.dev/flutter/dart-core/double/operator_truncate_divide.html) 
-operator. This will yield integer part of a division.
+we will use the ListView index 
+and use the [`~/`](https://api.flutter.dev/flutter/dart-core/double/operator_truncate_divide.html) operator.
+This will yield integer part of a division.
 For example, `1 2 3 4 5` will be `0 1 1 2 2`.
 
 Now, let's use this new widget and change the `_MyHomePageState`, 
@@ -2142,20 +2318,23 @@ You should now be able to scroll the list, like so!
 <img width="600" alt="list" src="https://user-images.githubusercontent.com/17494745/200851244-234f5850-0398-4c45-9df4-fac3890080a5.png">
 
 ## 3. Adding interactivity
-We want to be able to click on a todo item and
-mark it as "completed". To do this, we ought to add
-interactivity to our `TodoList`. 
+
+We want to be able to click on a todo item 
+and mark it as "completed". 
+To do this, we ought to add interactivity to our `TodoList`. 
 To do this, we got to convert our stateless widget
 into a *stateful widget*. 
 Doing this is fairly simple with Visual Studio Code.
-Simply double-click on `TodoList`, a yellow lightbulb
-will appear to the left side. Simply click it and
-click in `Convert to Stateful Widget`.
+Simply double-click on `TodoList`
+and a yellow lightbulb will appear to the left side.
+Simply click it
+and click in `Convert to Stateful Widget`.
 
 <img width="304" alt="lightbuld" src="https://user-images.githubusercontent.com/17494745/200854841-26e1e6db-de93-42e3-9661-34a4018ec37b.png">
 
-This will effectively create a new `State` to the 
-widget and add it. You should now have the following code:
+This will effectively create a new `State` 
+to the widget and add to it. 
+You should now have the following code:
 
 ```dart
 class TodoList extends StatefulWidget {
@@ -2189,9 +2368,10 @@ class _TodoListState extends State<TodoList> {
 }
 ```
 
-You now have the `TodoList` and `_TodoListState`, 
-which refers to the state of the former. Notice it
-is preceded with an underscore. This enforces privacy
+You now have the `TodoList` 
+and `_TodoListState`, which refers to the state of the former. 
+Notice it is preceded with an underscore. 
+This enforces privacy
 and is best practice for `State` objects and private fields.
 
 Let's change the widget to look like the following:
@@ -2249,21 +2429,24 @@ class _TodoListState extends State<TodoList> {
 }
 ```
 
-Let's break it down. The `State` object (`_TodoListState`)
-now has a `_doneList` set. This set 
-(a set is like a list but guarantees each object is unique)
-, as the underscore symbol entails, is private. 
+Let's break it down. 
+The `State` object (`_TodoListState`) now has a `_doneList` set. 
+This set (a set is like a list but guarantees each object is unique),
+as the underscore symbol entails, 
+is private. 
 This list will hold *the list of todos marked as **done***.
 
-Inside the `ListView.builder()` widget, we have changed
-the `itemBuilder`. We have added the following line:
+Inside the `ListView.builder()` widget, 
+we have changed the `itemBuilder`. 
+We have added the following line:
 
 ```dart
 final completed = _doneList.contains(todoObj);
 ```
 
 We are checking the item is in the `_doneList` set.
-If so, we will add a strikethrough effect on the text to symbolize this.
+If so, 
+we will add a strikethrough effect on the text to symbolize this.
 
 ```dart
     title: Text(
@@ -2276,12 +2459,14 @@ If so, we will add a strikethrough effect on the text to symbolize this.
     ),
 ```
 
-Now, the only thing that is left is to mark a todo item
-as *complete* or *incomplete* by tapping it.
-Inside the `ListTile`, we add an `onTap` property, 
+Now, the only thing that is left to do
+is to mark a todo item as *complete* or *incomplete* by tapping it.
+Inside the `ListTile`, 
+let's add an `onTap` property, 
 which is called everytime the list item is tapped, 
 and change the state accordingly. 
-If the item is completed, we mark it as incomplete, and vice-versa.
+If the item is completed, 
+we mark it as incomplete, and vice-versa.
 
 ```dart
   onTap: (() {
@@ -2295,25 +2480,32 @@ If the item is completed, we mark it as incomplete, and vice-versa.
   }),
 ```
 
-Now, if you open your app, you can scroll and check items
-and set them as `done` and reverse that action. Great job!
+Now, if you open your app, 
+you can scroll and check items
+and set them as `done` and reverse that action. 
+Great job!
 
 ![interactivity](https://user-images.githubusercontent.com/17494745/200861445-b4550a49-98cc-4f80-ba02-6ceff7fa17da.gif)
 
 ## 4. Adding navigation
-We have added a stateful widget and are keeping track of what
-todos are marked as `completed` or not. It would be great to
-actually have a page where we see this list of completed items.
+
+We have added a stateful widget 
+and are keeping track of what todos are marked as `completed` or not. 
+It would be great to actually have a page 
+where we see this list of completed items.
 
 Currently, our widget tree looks like this. 
 `MyApp` 
 -> `MyHomePage` (which has the `todoList` as local state)
 -> `TodoList` (which has the `doneList` as local state). 
 
-We need to merge `MyHomePage` and `TodoList` into a single
-widget with having the `todoList` and `doneList` to be able to 
-add navigation. Mergint these two in one will lead to a new
-`TodoList` widget, that will look like this.
+We need to merge `MyHomePage` and `TodoList` 
+into a single widget 
+that has the `todoList` and `doneList` fields 
+so we are be able to add navigation. 
+Merging these two in one 
+will lead to a new `TodoList` widget, 
+that will look like this.
 
 ```dart
 class TodoList extends StatefulWidget {
@@ -2391,12 +2583,13 @@ class _TodoListState extends State<TodoList> {
 ```
 
 Nothing was fundamentally changed. 
-We wrapped the `TodoList` with the same widgets of
-the `MyHomePage` widget. We also changed the `AppBar.title`
+We wrapped the `TodoList` 
+with the same widgets of the `MyHomePage` widget. 
+We also changed the `AppBar.title`
 to `Text('todo item list')`.
 
-We now also need to change the `MyApp` to call this
-newly edited widget.
+We now also need to change the `MyApp` 
+to call this newly edited widget.
 
 ```dart
 class MyApp extends StatelessWidget {
@@ -2412,11 +2605,13 @@ class MyApp extends StatelessWidget {
 }
 ```
 
-If you run the application, it looks the same as before.
+If you run the application, 
+it looks the same as before.
 The only difference now is that we have all the state in the same widget
 (`TodoList`).
 
-Inside the `_TodoListState` widget state class, let's add a button in the app bar
+Inside the `_TodoListState` widget state class, 
+let's add a button in the app bar
 to navigate to the new page.
 
 ```dart
@@ -2435,9 +2630,10 @@ to navigate to the new page.
         ),
 ```
 
-Let's implement the `_pushCompleted` function, that is executed
-everytime the icon button is clicked on the appbar. 
-We want to navigate to the page that shows the completed todo items.
+Let's implement the `_pushCompleted` function,
+that is executed everytime the icon button is clicked on the appbar. 
+We want to navigate to the page 
+that shows the completed todo items.
 Add the following function in `_TodoListState`.
 
 ```dart
@@ -2474,25 +2670,32 @@ Add the following function in `_TodoListState`.
   }
 ```
 
-Let's break this down. We use the `Navigator` to push a new screen to 
-the stack. We pass the widget's `context` and then use the `push()` function
-to add the screen to the stack.
-In this case, we are pushing a `MaterialPageRoute`, inside the `builder`
-property, we return a `Scaffold` object with an `appBar` and a `body`.
-Inside this `body`, we are rendering a `ListView` with each todo item
-inside the `_doneList` set.
+Let's break this down. 
+We use the `Navigator` to push a new screen to the stack. 
+We pass the widget's `context` 
+and then use the `push()` function to add the screen to the stack.
+In this case, 
+we are pushing a `MaterialPageRoute`. 
+Inside the `builder` property, 
+we return a `Scaffold` object with an `appBar` and a `body`.
+Inside this `body`, 
+we are rendering a `ListView` with each todo item inside the `_doneList` set.
 
-Since we are using `MaterialPageRoute` and `Scaffold`, the back button is automatically added
-to the appbar, making it possible to *pop* the screen and go back to the
-screen showing the todo list.
+Since we are using `MaterialPageRoute` and `Scaffold`, 
+the back button is automatically added to the appbar, 
+making it possible to *pop* the screen 
+and go back to the screen showing the todo list.
 
-If we rerun our app, we can now navigate between pages. Hurray! :tada:
+If we rerun our app, 
+we can now navigate between pages. 
+Hurray! 🎉
 
 ![navigation](https://user-images.githubusercontent.com/17494745/200880357-314bb388-5c0c-4955-ac22-f9ec59e418a6.gif)
 
 ## 5. Finishing touches
-We can quickly custmize the theme of the app, and it's title.
-Let's change the colors and give our fancy app a new title.
+
+We can quickly customize the theme of the app and its title.
+Let's change the colors and give our fancy app a new one.
 
 ```dart
   @override
@@ -2510,40 +2713,47 @@ Let's change the colors and give our fancy app a new title.
   }
 ```
 
-Your app should look like this, now! 
-You can choose the colors you like. Go creative! :tada:
+Your app should look like this now! 
+You can choose the colors you like. 
+Go creative! 
 
 <img width="600" alt="final" src="https://user-images.githubusercontent.com/17494745/200881816-b19fa0c4-4107-4a25-8923-3eafda3a94fd.png">
 
 ## 6. Testing!
-We have our app running. In fact, we should 
-have used a [TDD](https://github.com/dwyl/learn-tdd)
-approach to get our app running. 
-The reason we didn't do this is to show you how some
-code needs to be laid out to be *testable*. 
 
-As you previously seen, mocking objects in Flutter
+We have our app running. 
+In fact, we should have used a [TDD](https://github.com/dwyl/learn-tdd)
+approach whilst developing our app.
+The reason we didn't do this 
+is to show you how some code needs to be laid out 
+to be *testable*. 
+
+As you have previously seen, 
+mocking objects in Flutter
 works through **dependency injection**. 
-That is, these are functions receive the dependencies that 
-they depend on through, for example, their constructor.
+That is, these are functions receive the dependencies 
+that they depend on through, for example, their constructor.
 
-For simplicity sake, we are not going to be using
-any libraries like `get_it` or `Riverpod` to do
-deeply nested dependency injection. 
-In our demo app, we only have two levels deep,
+For simplicity sake, 
+we are not going to be using any libraries like `get_it` or `Riverpod` 
+to do deeply nested dependency injection. 
+In our demo app, 
+we only have two levels deep,
 so mocking and testing is very simple. 
 
 Let's start testing!
 
 ### 6.1 Unit testing
-Let's start unit testing our `TodoRepository`
-and `TodoService`. As it stands, both of these files
-are not "testable". We ought to find a way to
-mock the `http` requests. How do we do that?
-Exactly. *Dependency injection*.
 
-But first, we need to add the dependencies
-in `pubspec.yaml`. 
+Let's start unit testing our `TodoRepository` and `TodoService`. 
+As it stands, both of these files are not "testable". 
+We ought to find a way to mock the `http` requests. 
+How do we do that?
+Exactly. 
+*Dependency injection*.
+
+But first, 
+we need to add the dependencies in `pubspec.yaml`. 
 In the `dev_dependencies` section, 
 add the following two lines of code.
 
@@ -2583,7 +2793,8 @@ class HTTPTodoRepository implements TodoRepository {
 }
 ```
 
-Now, on to testing. Create a directory in `test/unit`
+Now, on to testing. 
+Create a directory in `test/unit`
 and add a new file `todoRepository_test.dart`.
 
 ```dart
@@ -2600,8 +2811,9 @@ void main() {
 We are going to use `mockito`'s `@GenerateMocks` annotation
 to generate a mock object for the `http.Client`, 
 which is used inside the function. 
-We could do it manually but since we can get it generated
-to ourselves automatically, let's do it.
+We could do it manually 
+but since we can get it generated to ourselves automatically, 
+we should take advantage of this.
 
 Run the following command.
 
@@ -2609,10 +2821,10 @@ Run the following command.
 flutter pub run  build_runner build --delete-conflicting-outputs
 ```
 
-This will generate a `todoRepository_test.mocks.dart` file 
-with the generated mocks. 
-Import the file in the `todoRepository_test.dart` file and 
-let's create our first tests!
+This will generate 
+a `todoRepository_test.mocks.dart` file with the generated mocks. 
+Import the file in the `todoRepository_test.dart` file 
+and let's create our first tests!
 
 ```dart
 import 'todoRepository_test.mocks.dart';
@@ -2653,14 +2865,16 @@ void main() {
 ```
 
 Let's break down how we are testing the repository.
-We are creating a `final client = MockClient()` using
-the generated `MockClient` from the `todoRepository_test.mocks.dart`
-file. We are specifying that this client
+We are creating a `final client = MockClient()` 
+using the generated `MockClient` 
+from the `todoRepository_test.mocks.dart` file. 
+We are specifying that this client
 will return an array with a single todo item. 
-Using this new `MockClient`, we replace the class `client`
-with the `MockClient` and run the test. 
-The same procedure is done, except an exception
-is expected to rise.
+Using this new `MockClient`, 
+we replace the class `client` with the `MockClient` 
+and run the test. 
+The same procedure is done, 
+except an exception is expected to rise.
 
 Let's do the same process for the `TodoService.dart` file.
 We need to change it, like so.
@@ -2677,8 +2891,8 @@ class TodoService {
 ```
 
 
-Create a new `todoService_test.dart` and add
-the following lines of code.
+Create a new `todoService_test.dart` 
+and add the following lines of code.
 
 ```dart
 import 'package:http/http.dart' as http;
@@ -2697,9 +2911,9 @@ Run the following command.
 flutter pub run  build_runner build --delete-conflicting-outputs
 ```
 
-This will generate a `todoService_test.mocks.dart` file 
-with the generated mocks. Similarly, we will use this
-file for the tests in the same fashion as before.
+This will generate a 
+`todoService_test.mocks.dart` file with the generated mocks. 
+Similarly, we will use this file for the tests in the same fashion as before.
 In `todoService_test.dart`, add the following code.
 
 ```dart
@@ -2764,14 +2978,17 @@ All that's left is testing the widgets.
 Let's do it!
 
 ### 6.2 Widget testing
-To test our widgets, we need to pass 
-the `TodoService` so we can mock it in our tests.
-Normally we would use a Provider to do this but this
-is a simple app, so there is no need to add complexity
-and third-party libraries.
 
-Let's do these changes. Head over to `lib/main.dart`
-and change the `TodoList` class like so.
+To test our widgets, 
+we need to pass the `TodoService` 
+so we can mock it in our tests.
+Normally we would use a Provider to do this
+but this is a simple app,
+so there is no need to add complexity and third-party libraries.
+
+Let's do these changes. 
+Head over to `lib/main.dart` and change the `TodoList` class.
+Like so.
 
 ```dart
 class TodoList extends StatefulWidget {
@@ -2784,8 +3001,8 @@ class TodoList extends StatefulWidget {
 }
 ```
 
-Now, we need to change the `MyApp` class to pass
-a `TodoService` instance to `TodoList`. 
+Now, we need to change the `MyApp` class 
+to pass a `TodoService` instance to `TodoList`. 
 It should look like this, now.
 
 ```dart
@@ -2808,8 +3025,8 @@ class MyApp extends StatelessWidget {
 ```
 
 Now we can test these widgets! 
-Create a new directory `test/widget` and
-create a file named `widget_test.dart`.
+Create a new directory `test/widget` 
+and create a file named `widget_test.dart`.
 
 ```dart
 
@@ -2852,19 +3069,20 @@ void main() {
 ```
 
 We use the `testWidgets` function to test the widget.
-In turn, we get a `tester` object which allows us
-to perform actions. We initialize and create the 
-widget by using `await test.pumpWidget(const MyApp())`.
+In turn, we get a `tester` object 
+which allows us to perform actions. 
+We initialize and create the widget by using `await test.pumpWidget(const MyApp())`.
 We then check if the app bar is rendered. 
-To do this, we use the `find` class to find
-the widget by text and check if it was built in the widget tree.
+To do this, we use the `find` class to find the widget by text 
+and check if it was built in the widget tree.
 We then use a `Matcher` to make the assertion. 
 In this case, we check if we `findOneWidget`. 
 
-If we run `flutter test --coverage`, we will see this test should pass.
+If we run `flutter test --coverage`, 
+we will see this test should pass.
 
-Let's now add a test to check if the list is rendered
-with a list of todos. Add the following test.
+Let's now add a test to check if the list is rendered with a list of todos. 
+Add the following test.
 
 ```dart
   testWidgets('Check if item list is rendered', (WidgetTester tester) async {
@@ -2885,25 +3103,28 @@ with a list of todos. Add the following test.
   });
 ```
 
-In this test, we are instantiating a `MockTodoService`, 
+In this test, 
+we are instantiating a `MockTodoService`, 
 specifying the return value of the `getTodos()`
 and then using it when creating a `TodoList` widget.
-We can't create `TodoList` by itself because 
-it necessitates to be a child of `MaterialApp`.
-Hence why we use `MediaQuery` with `MaterialApp` which in turn
-creates a `TodoList` widget that we want to test.
+We can't create `TodoList` by itself 
+because it needs to be a child of `MaterialApp`.
+Hence why we use `MediaQuery` with `MaterialApp` which,
+in turn, creates a `TodoList` widget that we want to test.
 
-With `tester.pumpWidget()`, we instantiate the 
-widget. This won't suffice, though. 
-The widget needs to render any animations and
-run `initState` to fetch the todos item.
+With `tester.pumpWidget()`, 
+we instantiate the widget. 
+This won't suffice, though. 
+The widget needs to render any animations 
+and run `initState` to fetch the todos item.
 For this, we add `await tester.pump()` with a specified duration.
-This schedules a frame and triggers a rebuild of the widget, 
+This schedules a frame 
+and triggers a rebuild of the widget, 
 running the clock by that amount. 
 We only need `100 ms` in our case. 
 
-After this, we assert if the rendered list 
-contains a todo item with a title "mocktitle".
+After this, 
+we assert if the rendered list contains a todo item with a title "mocktitle".
 
 Let's add another test.
 
@@ -2933,19 +3154,22 @@ Let's add another test.
   });
 ```
 
-In this test, we are rendering the `TodoList`, 
+In this test, 
+we are rendering the `TodoList`, 
 tapping on a todo item (thus marking it as `complete`)
 and then navigating to the done todo item list.
-For this, we use `tester.tap(find.byIcon((Icons.list)))`
+For this, 
+we use `tester.tap(find.byIcon((Icons.list)))`
 to find the button and tap it.
-We then use `tester.pumpAndSettle()`, which essentially
-waits for all the animations to complete.
-After this, we check if the done list screen is rendered
-in the widget tree.
+We then use `tester.pumpAndSettle()`, 
+which essentially waits for all the animations to complete.
+After this, 
+we check if the done list screen is rendered in the widget tree.
 
-We can keep adding tests to cover the rest of
-the scenarios. Copy the following code and replace
-your existing tests to cover all edge cases.
+We can keep adding tests 
+to cover the rest of the scenarios. 
+Copy the following code 
+and replace your existing tests to cover all edge cases.
 Your `main` function should now look like this.
 
 ```dart
@@ -3104,11 +3328,12 @@ void main() {
 ```
 
 The final changes we ought to do is in the `main.dart` file.
-We can't directly test the `main()` function that 
-runs the application. 
+We can't directly test the `main()` function
+that runs the application. 
 So, in order to get a real coverage report, 
 add the following lines around the function. 
-This way, when testing, the compiler skips this function,
+This way, when testing, 
+the compiler skips this function,
 as it is not needed to be tested.
 
 ```dart
@@ -3120,9 +3345,12 @@ void main() {
 ```
 
 ### 6.3 Test coverage
-To get the test coverage, we are going to simply run 
-three commands. However, firstly, if you are on MacOS,
-you need to install `lcov`. For this, run the following command
+
+To get the test coverage, 
+we are going to simply run three commands. 
+However, firstly, if you are on MacOS,
+you need to install `lcov`. 
+For this, run the following command
 to install it in your computer.
 
 ```sh
@@ -3140,30 +3368,35 @@ genhtml coverage/lcov.info -o coverage/html
 open coverage/html/index.html
 ```
 
-The generated HTML will create files inside
-the `coverage/` folder. Add it to your 
-`.gitignore` file.
+The generated HTML will create files 
+inside the `coverage/` folder. 
+Add it to your `.gitignore` file.
 
 Your browser should have opened a window, 
 like so.
 
 <img width="1013" alt="image" src="https://user-images.githubusercontent.com/17494745/201144025-f68d9446-dd1c-4a5e-a985-e3bf92fc77fc.png">
 
-Congratulations, you now have a fully tested
-application! Awesome job! :tada:
+Congratulations, 
+you now have a fully tested application! 
+Awesome job! 👏
 
 
 # Final remarks 👋
-In this document (if you actually read it all the way through 😉),
-you went from 0 to hero with Flutter. You learnt important
-principles and you *applied* them to create your own app in just
-around 20 minutes! Give yourself a pat on the back! :tada:
 
-If you wish to learn a bit more, take a look
-at this repo's `guides` folder to
-learn about [logging in with Firebase](./guides/login-firebase-tutorial.md) 
+In this document (if you actually read it all the way through 😉),
+you went from 0 to hero with Flutter. 
+You learnt important principles and *applied* them 
+to create your own app in just around 20 minutes! 
+
+Give yourself a pat on the back!
+
+If you wish to learn a bit more,
+take a look at this repo's `guides` folder
+to learn about [logging in with Firebase](./guides/login-firebase-tutorial.md) 
 or [webviews in Flutter](./guides/webview-tutorial.md).
 
-If you want to see more fully tested projects, check these out!
+If you want to see more fully tested projects, 
+check these out!
 - [flutter-todo-list-tutorial](https://github.com/dwyl/flutter-todo-list-tutorial)
 - [flutter-counter-example](https://github.com/dwyl/flutter-counter-example)
