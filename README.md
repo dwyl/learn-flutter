@@ -19,10 +19,12 @@ and build **awesome cross-platform applications**!
   - [Installing Flutter SDK](#installing-flutter-sdk)
   - [Install `XCode`](#install-xcode)
     - [Install Android Studio](#install-android-studio)
+      - [Install Virtual `Android` Device](#install-virtual-android-device)
   - [Installing `Cocoapods`](#installing-cocoapods)
   - [Adding plugins to Android Studio](#adding-plugins-to-android-studio)
   - [Checking everything](#checking-everything)
-    - [Installing for Windows devices](#installing-for-windows-devices)
+  - [Windows?](#windows)
+- [_Before_ You Start: Run The `Demo App`!](#before-you-start-run-the-demo-app)
 - [Core Principles 🐣](#core-principles-)
   - [Widgets](#widgets)
     - [Stateless widgets](#stateless-widgets)
@@ -34,11 +36,11 @@ and build **awesome cross-platform applications**!
   - [Local databases](#local-databases)
     - [SQLite](#sqlite)
       - [1. Add the dependencies](#1-add-the-dependencies)
-      - [2. Define a model](#2-define-a-model)
+      - [2. Define a Model](#2-define-a-model)
       - [3. Open connection to the database](#3-open-connection-to-the-database)
       - [4. Creating table](#4-creating-table)
       - [5. CRUD operations](#5-crud-operations)
-    - [ObjectBox](#objectbox)
+    - [`ObjectBox`](#objectbox)
   - [State management](#state-management)
     - [Dependency injection](#dependency-injection)
 - [Testing 🧪](#testing-)
@@ -78,10 +80,14 @@ you will feel right at home.
 
 # Why? 🤷
 
-1. **`Flutter`** can be used to build cross platform **native** applications 
-(Android, iOS, Desktop and Web) using the _same_ codebase. 
-This significantly simplifies maintenance costs and dev headache 
-when deploying for either Android or iOS devices. 
+1. **`Flutter`** can be used to build 
+   **cross platform _native_ applications**
+(Android, iOS, Desktop and Web) 
+using the **_same_ codebase**. 
+This significantly simplifies 
+maintenance costs and dev headache 
+when deploying for Android or iOS devices, Desktop, Web and even 
+[Cars!](https://pub.dev/packages/flutter_carplay)
 
 2. The `Dart` programming language used in `Flutter`
  is object oriented and familiar to most developers.
@@ -120,9 +126,9 @@ https://trends.google.com/trends/explore?date=today%205-y&q=flutter,react%20nati
 
 This repo is useful for anyone 
 that is interested in mobile and web app development. 
-For anyone that hasn't yet touched `Flutter`, this 
-repo is a *great* place to start to get your computer
-ready for Flutter/Dart development, understand the
+For anyone that hasn't yet touched `Flutter`,  
+it's a *great* place to start to get your computer
+ready for `Flutter` development, understand the
 **main concepts** and *guide* you to then create
 your very first `Flutter` app. 
 
@@ -322,6 +328,52 @@ Restart your terminal again and type `flutter doctor --android-licenses`.
 This will prompt you to accept the Android licenses. Just type `y` as you read
 through them to accept.
 
+#### Install Virtual `Android` Device
+
+The `Android` simulator works on _any/all_ platforms.
+
+With `Android Studio` App open, 
+find the "Device Manager" icon in the top right:
+
+![android-studio-device-manager](https://user-images.githubusercontent.com/194400/215466189-3cf1d09c-8379-4d43-ae8a-563dfd9c7ec2.png "android studio device manager")
+
+In the **Device Manager** side-panel,
+click on the **`Create device`**:
+
+
+![android-studio-device-manager-create-device](https://user-images.githubusercontent.com/194400/215468534-3d3cf429-c48a-4910-a2e5-8e7848a367d0.png "device manager create device")
+
+Select a recent model of `Android` device, 
+e.g: `Pixel 6` and click **`Next`**:
+
+![android-studio-install-pixel-6-sim](https://user-images.githubusercontent.com/194400/215470167-8f9cb98a-2106-45c8-8e6f-5cd461379d89.png "select pixel 6")
+
+
+Accept the default/suggested `API` version and click **`Next`**:
+
+![select-api-default](https://user-images.githubusercontent.com/194400/215469793-66e46ec4-9415-4ad8-9cb7-71f05cb6b7c7.png "select default api")
+
+Accept all the defaults and click **`Finish`** to complete your virtual device setup:
+![finish-avd-setup](https://user-images.githubusercontent.com/194400/215470618-fb9ab93a-8c09-4106-98b1-dc46ed99e4a5.png "finish android virtual device setup")
+
+Your Device Manager should now list the `Pixel 6` virtual device:
+
+![device manager with pixel 6](https://user-images.githubusercontent.com/194400/215470839-c774f9f3-5323-48c1-b8dd-93f627ed5aa8.png "device manager with pixel 6")
+
+With that in place you can run the demo app below!
+
+<br />
+
+> **Note**: if you get stuck on this step,
+> a good + quick _video_ tutorial 
+> for adding simulator devices 
+in `Android Studio` 
+is: 
+[youtu.be/QjgmTiD8prA](https://www.youtube.com/watch?v=QjgmTiD8prA "Add Simulator Device to Android Studio 4 minute tutorial")
+[4 mins]
+
+
+
 ## Installing `Cocoapods`
 
 If you run `flutter doctor` again, you should see we are almost done. 
@@ -351,18 +403,11 @@ If you run `flutter doctor`, you should have everything in the green.
 Congratulations, give yourself a pat on the back, you are **all ready**!
 
 
-### Installing for Windows devices
+## Windows?
 
-Installing Flutter on Windows should be the same process
-as the one on MacOS'. However, setting up the `$PATH` 
-variable is different, since some terminal commands
-can't be used in Windows since it's not an Unix-based 
-operating system. 
-
-With this in mind, here's a quick rundown of how things 
-should go if you're installing Flutter on Windows.
-Firstly, head over to https://docs.flutter.dev/get-started/install/windows
-and download the `.zip` file.
+We don't use `Flutter` on `Windows` but plenty of people do.
+See:
+https://docs.flutter.dev/get-started/install/windows
 
 ![download](https://i.imgur.com/ZNPFKsl.png)   
 
@@ -404,34 +449,74 @@ run the `flutter` command, this should prop up.
  ![run_command](https://i.imgur.com/oSCrjRM.png)
  
 The rest of the steps should be straight forward. 
-Just follow the ones on the Mac device. 
-Installing Android Studio is the exact same procedure
-:smile:.  
+Just follow the ones on the `Mac` device. 
+Installing `Android Studio` is the exact same procedure.
+If you get stuck `Google` is your friend. 
+😄
+
+# _Before_ You Start: Run The `Demo App`!
+
+_Before_ you start learning,
+yes _before_,
+try and run the `demo_app`.
+Ensure you have everything installed 
+from the previous steps.
+Then follow these instructions:
+
+In your terminal window,
+clone this repo to your computer:
+
+```sh
+git clone git@github.com:dwyl/learn-flutter.git
+```
+
+Change into the `demo_app` directory:
+
+```sh
+cd learn-flutter/demo_app
+```
+
+Install the necessary dependencies:
+
+```sh
+
+```
+
+
+
 
 # Core Principles 🐣
 
-If you have had experience in mobile development prior to Flutter,
-either be it React Native or native, you will find the learning curve
-quite manageable, as Flutter's foundation is built upon a few principles
-that are present in both. Let's take a look at these :smile:.
+If you have had experience in mobile development prior to `Flutter`,
+you will find the learning curve quite manageable, 
+as `Flutter` foundations are built upon a few principles
+that are present in both. 
+Let's take a look at these.
 
 If you want an in-depth guide and learn every aspect of Flutter,
 check the official documentation -> https://flutter.dev/learn
 
 ## Widgets
 
-In Flutter _everything_ is a **Widget**.
+In `Flutter` _everything_ is a **`Widget`**.
 
-A Widget is a UI building block you can use to assemble your app. 
-If you come from `React`, you may find these akin to `components`.
+A `Widget` is a **UI building block** 
+you can use to assemble your app. 
 
-You will build your UI out of widgets. They essentially describe
-what *their view should look like* given their current state. 
-If their state changes, the widget rebuilds and checks the diff
-to determine the minimal changes to transition from the state `t0` to `t1`.
+You will build your UI out of `Widgets`. 
+They essentially describe
+what *the view should look like* 
+given their current `state`. 
+If the `state` changes, 
+the `Widget` rebuilds 
+and checks the diff
+to determine the minimal changes 
+to transition from `state` `t0` to `t1`.
 
 
-In the following `.gif` the sample application contains a total of 6 widgets:
+In the following `GIF` 
+the sample counter app 
+contains a total of **6 `Widgets`**:
 
 ![widget-gif](https://user-images.githubusercontent.com/194400/74101695-87fb5700-4b34-11ea-9fbd-09cc6bf3ed41.gif)
 
@@ -811,12 +896,12 @@ final jsonResult = jsonDecode(data); //latest Dart
 
 ## Navigation and routing
 
-Most web and mobile apps aren't just a single page.
-The person using the app 
-needs to navigate between screens to do 
-whatever action needs to be done, 
+Most web and mobile apps aren't just a single page/screen.
+The person using the App 
+needs to navigate between screens to
+perform several distinct actions, 
 be it checking the details of a product 
-or just wanting to see the shopping cart. 
+or shopping cart.
 
 `Flutter` provides a `Navigator` widget 
 to display screens as a stack,
@@ -904,36 +989,53 @@ Here's how it should look!
 ![navigating_gif](https://user-images.githubusercontent.com/17494745/200613079-f65baeee-a822-4a58-b075-ce169d751325.gif)
 
 
-If your application necessitates advanced navigation and routing requirements
-(which is often the case with web apps that use direct links to each screen,
-or an app with multiple `Navigator` widgets), you should consider using a
-routing package like [`go_router`](https://pub.dev/packages/go_router). 
-This package allows one to parse the route path and configure the `Navigator`
-whenever an app receives, for example, a deep link.
+If your application has 
+advanced navigation and routing requirements
+(which is often the case with web apps 
+that use direct links to each screen,
+or an app with multiple `Navigator` widgets), 
+consider using a routing package like 
+[`go_router`](https://pub.dev/packages/go_router). 
+This package allows parsing the route path 
+and configure the `Navigator`
+whenever an app receives, a deep link.
 
 
 ## Networking
-For most apps, fetching data from the internet is a must. 
-Luckily, fetching data from the internet is a breeze. Let's do it!
 
-Firstly, we need to add the [`http`](https://pub.dev/packages/http)
-package to the dependencies section in the `pubspec.yaml` file. 
-This file can be found at the route of your project.
+For most apps, fetching data from the Internet is a _must_. 
+Luckily, fetching data from the Internet is a breeze. 
+Let's do it!
 
-Let's add the package to the dependency list and import it.
+Firstly, we need to add the 
+[`http`](https://pub.dev/packages/http)
+package to the dependencies section 
+in the `pubspec.yaml` file. 
+This file can be found at the root of your project.
+
+Add the package to the dependency list and import it:
 
 ```yaml
 dependencies:
   http: 0.13.5
 ```
 
+Then in your project file 
+add the following `import` statement
+to _use_ the package:
+
+
 ```dart
 import 'package:http/http.dart' as http;
 ```
 
-We also need to change the `AndroidManifest.xml` file to 
-add Internet permission on Android devices. This file can be found in the 
-`android/app/src/main` on newly created projects. Add the following line.
+We also need to change the 
+`AndroidManifest.xml` file 
+to add Internet permission on Android devices.
+ This file can be found in the 
+`/android/app/src/main` 
+on newly created projects. 
+Add the following line:
 
 ```xml
 <!-- Required to fetch data from the internet. -->
@@ -941,8 +1043,8 @@ add Internet permission on Android devices. This file can be found in the
 ```
 
 
-Now, to make a network request is as easy
-as apple pie. Check the following code.
+Now, to make a network request,
+use code similar to the following:
 
 ```dart
 Future<http.Response> fetchAlbum() {
@@ -950,13 +1052,20 @@ Future<http.Response> fetchAlbum() {
 }
 ```
 
-By calling `http.get()`, it returns a [`Future`](https://github.com/dwyl/learn-dart#asynchronous-events)
-that contains a `Response`. `Future` is a class to work with async operations.
+Calling `http.get()` returns a 
+[`Future`](https://github.com/dwyl/learn-dart#asynchronous-events)
+that contains a `Response`. 
+`Future` is a class to work with asynchronous operations.
 It represents a potential value that will occur in the future.
 
-While `http.Response` has our data, it's much more useful to translate it
-to a logical class. We can convert `http.Response` to a `Todo` class, 
-representing a "todo item". Let's create that class!
+While `http.Response` has our data, 
+it's much more useful to translate it
+to a logical class
+that has all the **fields** of the data 
+we expect to receive from the **REST API**. 
+We can convert `http.Response` to a `Todo` class, 
+representing a "todo item". 
+Let's create that class!
 
 ```dart
 class Todo {
@@ -980,10 +1089,14 @@ class Todo {
 }
 ```
 
-We can create a function that makes the http request and,
-if it is successful, tries to parse the data and create a
-`Todo` object or raise an an error if the http request is 
-unsuccessful.
+We can create a function 
+that makes the `http request` 
+and, if it is ***successful***, 
+tries to parse the data 
+and create a `Todo` object 
+or raise an an error 
+if the `http request` is 
+***unsuccessful***.
 
 ```dart
 Future<Todo> fetchTodos() async {
@@ -1023,9 +1136,10 @@ class _MyAppState extends State<MyApp> {
 }
 ```
 
-Finally, to display the data, we would want to use the
-`FutureBuilder` widget. As the name implies, it's a 
-widget made to handle async data operations. 
+Finally, to display the data, 
+we use the `FutureBuilder` widget. 
+As the name implies, 
+it's a widget that handles async data operations. 
 
 ```dart
 FutureBuilder<Todo>(
@@ -1043,26 +1157,30 @@ FutureBuilder<Todo>(
 )
 ```
 
-The `future` paramter relates to object we want to work with.
+The `future` parameter 
+relates to object we want to work with.
 In this case, it is a parsed `Todo` object. 
 
-The `builder` function tells Flutter what needs to be rendered, 
-depending on the current state of `Future`, which can 
-be *loading*, *success* or *error*. 
+The `builder` function tells `Flutter` 
+what needs to be rendered, 
+depending on the current state of `Future`, 
+which can be *loading*, *success* or *error*. 
 Depending on the result of the operation, we
 either show the error, the data or a loading animation
 while we wait for the http request to fulfill.
 
-Isn't it easy? =)
+Isn't it easy? 🤓
 
 ## Local databases
-Sometimes, when writing an app, we need to persist
-and query large amounts of data on the local device. 
-In these cases, it is beneficial considering 
-using a database instead of a local file or a key-value store. 
 
-In this walkthrough, we are going to present
-two alternatives: SQLite and ObjectBox.
+Sometimes, we need to persist and query 
+large amounts of data on the local device. 
+In these cases we use database 
+instead of a local file or key-value store. 
+
+In this walkthrough, 
+we present two alternatives: 
+`SQLite` and `ObjectBox`.
 
 ### SQLite 
 
@@ -1074,11 +1192,14 @@ Sqflite is one of the most used and updated packages
 to connect to SQLite databases in Flutter.
 
 #### 1. Add the dependencies
+
 To work with SQLite databases, we need
 to import two dependencies. 
-We'll use `sqflite` to interact with the SQLite database,
-and `path` to define the location for storing the database
-on disk.
+We'll use `sqflite` to interact with the `SQLite` database,
+and 
+[`path`](https://pub.dev/packages/path)
+to define the location 
+for storing the database on disk.
 
 
 ```dart
@@ -1099,7 +1220,8 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 ```
 
-#### 2. Define a model
+#### 2. Define a Model
+
 Let's take a look at the data we are going to store.
 Let's define a class  for the table we are going to create
 in SQLite.
@@ -1234,8 +1356,10 @@ this database to hold large amounts of data locally
 on common files.
 
 
-### ObjectBox
-There are alternatives to SQLite, such as Hive and `ObjectBox`.
+### `ObjectBox`
+
+There are alternatives to `SQLite`, 
+such as Hive and `ObjectBox`.
 In this section, we are going to just reference 
 `ObjectBox` so the user knows there isn't one single
 database option.  
@@ -1283,6 +1407,7 @@ box.remove(person.id);
 ```
 
 ## State management
+
 We have previously mentioned state within a widget.
 In stateful widgets, the state and how/when it changes
 determines how many times the widget is rendered. 
@@ -1331,6 +1456,7 @@ to learn and is often very opinionated. As long
 as you understood *what it is*, it's awesome! :tada:
 
 ### Dependency injection
+
 You might be wondering what dependency injection
 has to do with the aforementioned state management libraries.
 You'll see why this effects how the code is structure and
@@ -1836,9 +1962,12 @@ lists them and allows the user to choose his favourites.
 Let's get cracking!
 
 ## 0. Setting up a new project
-In this walkthrough we are going to use Visual Studio Code.
-We will assume you have this IDE installed, as well as the 
-`Flutter` and `Dart` extensions installed. If not, do so.
+
+In this walkthrough we are going to use `Visual Studio Code`.
+We will assume you have this IDE installed, 
+as well as the 
+`Flutter` and `Dart` extensions installed. 
+If not, do so.
 
 <img width="252" alt="extensions" src="https://user-images.githubusercontent.com/17494745/200812248-0c9336da-74aa-49ff-9aba-758501f4dce2.png">
 
@@ -2505,7 +2634,7 @@ Inside this `body`, we are rendering a `ListView` with each todo item
 inside the `_doneList` set.
 
 Since we are using `MaterialPageRoute` and `Scaffold`, the back button is automatically added
-to the appbar, making it possible to *pop* the screen and go back to the
+to the `appbar`, making it possible to *pop* the screen and go back to the
 screen showing the todo list.
 
 If we rerun our app, we can now navigate between pages. Hurray! :tada:
