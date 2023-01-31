@@ -1,5 +1,5 @@
 import 'package:demo_app/models/todo.dart';
-import 'package:demo_app/services/todoService.dart';
+import 'package:demo_app/services/todo_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -83,7 +83,8 @@ void main() {
     expect(find.text('todo item list'), findsNothing);
   });
 
-  testWidgets('Navigating to the todo list directly and find empty widget array',
+  testWidgets(
+      'Navigating to the todo list directly and find empty widget array',
       (WidgetTester tester) async {
     final TodoService mockService = MockTodoService();
 
@@ -134,8 +135,7 @@ void main() {
     expect(find.text('mocktitle'), findsOneWidget);
   });
 
-  testWidgets('Testing main mount',
-      (WidgetTester tester) async {
+  testWidgets('Testing main mount', (WidgetTester tester) async {
     final TodoService mockService = MockTodoService();
 
     when(mockService.getTodos()).thenAnswer((_) async => [

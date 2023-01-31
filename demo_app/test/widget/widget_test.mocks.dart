@@ -6,8 +6,8 @@
 import 'dart:async' as _i4;
 
 import 'package:demo_app/models/todo.dart' as _i5;
-import 'package:demo_app/repository/todoRepository.dart' as _i2;
-import 'package:demo_app/services/todoService.dart' as _i3;
+import 'package:demo_app/repository/todo_repository.dart' as _i2;
+import 'package:demo_app/services/todo_service.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
