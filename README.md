@@ -736,7 +736,7 @@ void main() {
 Let's unpack the code above. 
 The `StatefulWidget` and `State` are separate objects.
 The former (being the first one) 
-declares its' state by using the `State` object.
+declares its state by using the `State` object.
 The `State` object is declared right after, initializing an `int _counter` at `0`.
 It declares an `_increment()` function that calls `setState()` 
 (indicating the state is going to be changed) and increments the `_counter` variable.
