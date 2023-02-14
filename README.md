@@ -479,7 +479,7 @@ cd learn-flutter/demo_app
 Install the necessary dependencies:
 
 ```sh
-
+flutter pub get
 ```
 
 
