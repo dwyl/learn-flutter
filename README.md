@@ -289,7 +289,7 @@ and press `Install`. It's that easy.
 
 ### Install Android Studio
 
-Now targetting for Android devices, we need to install Android SDK and toolkits.
+Now targeting for Android devices, we need to install Android SDK and toolkits.
 For this, we are going to install Android Studio and work from there.
 Head over to https://developer.android.com/studio and download.
 
