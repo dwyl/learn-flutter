@@ -2,15 +2,16 @@
 
 # Deploying your Flutter app as a `PWA` 👩‍💻 
 
-This is a small guide
+This is a small document
 that will guide you 
-to deploy your `Flutter` app
+to deploying your `Flutter` app
 into the web.
 We are going to be deploying the app 
 to [fly.io](https://fly.io/).
 
 </div>
 
+---
 
 This guide will work upon the foundation
 of the work done in 
@@ -85,6 +86,7 @@ Lastly, *clone* the
 [`flutter-phoenix-channels-demo`](https://github.com/dwyl/flutter-phoenix-channels-demo)
 repo to any desired destination in your computer,
 and *navigate into the `app` folder*.
+This is where the `Flutter` app is located.
 
 ```sh
 git clone https://github.com/dwyl/flutter-phoenix-channels-demo
@@ -93,15 +95,20 @@ cd app
 
 If you want to run the app to check if it works,
 you can follow its guide in https://github.com/dwyl/flutter-phoenix-channels-demo/tree/main/app.
+
 This app connects to a `Phoenix` server
 running on `localhost`, 
 so you'll have to follow the instructions 
-that were just linked.
-
+that we've just linked,
+*if you want to run both `Flutter` and `Phoenix` locally*.
 **However**,
-you don't *need* to do this.
+you don't *need* to run locally.
+because we already have the `Phoenix` server already deployed
+in https://flutter-phoenix-channels-backend.fly.dev/.
+
 We are going to *focus on deploying this application to the web*,
-so you'll get to see it working after it's deployed!
+so you'll get to see it working after it's deployed
+without having to run a `Phoenix` server on your computer!
 
 Now that we have all we need,
 it's time to create our bundle and deploy it. 
@@ -119,11 +126,11 @@ let's create the release bundle.
 
 The app uses
 [**environment variables**](https://github.com/dwyl/learn-environment-variables)
-to know which URL it should connect to.
+to know which URL the `Flutter` app should connect to.
 
 The app uses the 
 [`String.fromEnvironment()`](https://api.flutter.dev/flutter/dart-core/String/String.fromEnvironment.html)
-to fetch these variables.
+function to fetch these variables.
 Therefore,
 we need to
 **specify the values of these environment variables when creating the release bundle**.
@@ -180,7 +187,6 @@ by following their guide.
 https://fly.io/docs/languages-and-frameworks/static/
 
 Assuming you have `flyctl` CLI installed,
-inside this folder,
 you can now run the following command.
 
 ```sh
@@ -302,7 +308,8 @@ and want to redeploy the application,
 just run `fly deploy`.
 Since we've already done the initial configuration needed,
 `fly deploy` will just re-build the app
-and deploy it to the app that's already deployed.
+and deploy it to the app that's already deployed,
+using the `fly.toml` configuration file you've just created.
 
 
 # And you're done! 🎉

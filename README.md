@@ -3353,12 +3353,6 @@ to create a *release bundle for the web*
 and deploy it,
 so everyone can see!
 
-This web version of the application
-will also be a 
-[**PWA**](https://web.dev/progressive-web-apps/).
-Customizing this PWA will be detailed in the guide,
-so make sure to check it out!
-
 
 # Final remarks 👋
 In this document (if you actually read it all the way through 😉),
