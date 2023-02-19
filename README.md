@@ -58,6 +58,7 @@ and build **awesome cross-platform applications**!
     - [6.1 Unit testing](#61-unit-testing)
     - [6.2 Widget testing](#62-widget-testing)
     - [6.3 Test coverage](#63-test-coverage)
+- [Deployment 📦](#deployment-)
 - [Final remarks 👋](#final-remarks-)
 
 
@@ -3302,6 +3303,55 @@ like so.
 
 Congratulations, you now have a fully tested
 application! Awesome job! :tada:
+
+
+# Deployment 📦
+
+We've now created an app 
+and have it fully tested.
+
+You might have tested the app
+in an emulator or on your own device.
+However, this is a *development version* of the app,
+that is meant to be used for *debugging*.
+If we want to create a **production release**,
+we ought to run the following command:
+
+```sh
+flutter build
+```
+
+If you run `flutter build`,
+you will be prompted with 
+*options to choose from*, 
+namely the **target platform**.
+
+```sh
+Available subcommands:
+  aar               Build a repository containing an AAR and a POM file.
+  apk               Build an Android APK file from your app.
+  appbundle         Build an Android App Bundle file from your app.
+  bundle            Build the Flutter assets directory from your app.
+  ios               Build an iOS application bundle (macOS host only).
+  ios-framework     Produces .xcframeworks for a Flutter project and its plugins for integration into existing, plain iOS Xcode projects.
+  ipa               Build an iOS archive bundle and IPA for distribution (macOS host only).
+  macos             Build a macOS desktop application.
+  macos-framework   Produces .xcframeworks for a Flutter project and its plugins for integration into existing, plain macOS Xcode projects.
+  web               Build a web application bundle.
+
+Run "flutter help" to see global options.
+```
+
+By running this command,
+a **release bundle** is created,
+which can later be deployed to the preferred platform.
+
+We've created a guide 
+in [`guides/deployment.md`](./guides/deployment.md)
+that you can check
+to create a *release bundle for the web*
+and deploy it,
+so everyone can see!
 
 
 # Final remarks 👋
