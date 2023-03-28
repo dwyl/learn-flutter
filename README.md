@@ -49,6 +49,7 @@ and build **awesome cross-platform applications**!
   - [Integration testing](#integration-testing)
 - [A few remarks on `Flutter Web`](#a-few-remarks-on-flutter-web)
   - [Adding a splash screen](#adding-a-splash-screen)
+  - [Speeding loading times](#speeding-loading-times)
 - [App demo 📱](#app-demo-)
   - [0. Setting up a new project](#0-setting-up-a-new-project)
   - [1. Project structure](#1-project-structure)
@@ -1989,6 +1990,24 @@ To know more about this subject,
 please visit
 https://github.com/dwyl/flutter-phoenix-channels-demo#6-bonus-points-adding-splash-screen.
 
+
+## Speeding loading times
+
+Depending on the size of your `Flutter` project,
+when building the final bundle for release,
+the size of the `Javascript` and asset files
+can definitely be a factor to consider
+regarding the time to load the site.
+This, of course, has repercussions
+regarding SEO placement
+and metrics yielded by tools that measure website quality
+like [`Lighthouse`](https://chrome.google.com/webstore/detail/lighthouse/blipmdconlkpinefehnmjammfjpmpbjk?hl=en). 
+
+Although it is generally not recommended to tinker with output files
+if you're beginner,
+we have created a small document that will you guide you through
+speeding up your load times on `Flutter` web,
+even if it's a tiny bit. 😊
 
 
 
