@@ -49,7 +49,7 @@ and build **awesome cross-platform applications**!
   - [Integration testing](#integration-testing)
 - [A few remarks on `Flutter Web`](#a-few-remarks-on-flutter-web)
   - [Adding a splash screen](#adding-a-splash-screen)
-  - [Speeding loading times](#speeding-loading-times)
+  - [Decreasing loading time](#decreasing-loading-time)
 - [App demo 📱](#app-demo-)
   - [0. Setting up a new project](#0-setting-up-a-new-project)
   - [1. Project structure](#1-project-structure)
@@ -1991,7 +1991,7 @@ please visit
 https://github.com/dwyl/flutter-phoenix-channels-demo#6-bonus-points-adding-splash-screen.
 
 
-## Speeding loading times
+## Decreasing loading time
 
 Depending on the size of your `Flutter` project,
 when building the final bundle for release,
@@ -2006,7 +2006,9 @@ like [`Lighthouse`](https://chrome.google.com/webstore/detail/lighthouse/blipmdc
 Although it is generally not recommended to tinker with output files
 if you're beginner,
 we have created a small document that will you guide you through
-speeding up your load times on `Flutter` web,
+speeding up your load times on `Flutter` web 
+by downloading asset resources in parallel.
+This will decrease your loading time,
 even if it's a tiny bit. 😊
 
 

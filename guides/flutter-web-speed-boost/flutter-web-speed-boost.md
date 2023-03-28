@@ -55,8 +55,8 @@ flutter build web --release --web-renderer html
 > between using an `html` or `canvaskit` web renderer,
 > visit https://github.com/dwyl/flutter-phoenix-channels-demo#61-switching-between-the-html-and-canvaskit-web-renderers.
 >
-> By using `canvaskit` instead of `html`,
-> we will need to make a small change for our "hack" to work correctly.
+> If you are using `canvaskit` instead of `html`,
+> you will need to make a small change for our "hack" to work correctly.
 > Don't worry, we'll tell you when 🙂.
 
 After running this command,
@@ -111,7 +111,7 @@ This will save us some valuable milliseconds!
 
 Your changes should look like the following.
 
-https://github.com/dwyl/learn-flutter/pull/84/commits/69347403f53594b041064e805dcbffe023952361
+[`flutter.js`](https://github.com/dwyl/learn-flutter/pull/84/commits/69347403f53594b041064e805dcbffe023952361)
 
 Now let's create our patch files.
 If you create two different files,
@@ -150,7 +150,7 @@ You can check
 the needed changes to the file
 in the following commit.
 
-https://github.com/dwyl/learn-flutter/pull/84/commits/b1edc58de99014f7423fdc9c08f207ec611b6439
+[`flutter_service_worker.js`](https://github.com/dwyl/learn-flutter/pull/84/commits/b1edc58de99014f7423fdc9c08f207ec611b6439)
 
 You can create the patch file in the same fashion as before.
 It should look like the following.
@@ -230,5 +230,5 @@ If you just want the code,
 please check the PR we made to our `app`
 at https://github.com/dwyl/app/pull/330/files.
 
-All of the changed code lives there.
+All the code you need to change lives there.
 You can re-use it to your heart's content! 
