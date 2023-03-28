@@ -28,21 +28,9 @@ const RESOURCES = {
 
 // The application shell files that are downloaded before a service worker can
 // start.
-const CORE = [
-  "main.dart.js",
-"index.html",
-"assets/AssetManifest.json",
-"assets/FontManifest.json"];
-// During install, the TEMP cache is populated with the application shell files.
-self.addEventListener("install", (event) => {
-  self.skipWaiting();
-  return event.waitUntil(
-    caches.open(TEMP).then((cache) => {
-      return cache.addAll(
-        CORE.map((value) => new Request(value, {'cache': 'reload'})));
-    })
-  );
-});
+
+// Removed this section because the files are downloaded concurrently, so we don't check
+
 
 // During activate, the cache is populated with the temp files downloaded in
 // install. If this service worker is upgrading from one with a saved
@@ -130,10 +118,22 @@ self.addEventListener("fetch", (event) => {
       return cache.match(event.request).then((response) => {
         // Either respond with the cached resource, or perform a fetch and
         // lazily populate the cache only if the resource was successfully fetched.
-        return response || fetch(event.request).then((response) => {
+
+        if (response) {
+          return response;
+        }
+
+        if (IN_PROCESSING_REQUESTS[key]) {
+          return IN_PROCESSING_REQUESTS[key].clone();
+        }
+
+        return fetch(event.request).then((response) => {
           if (response && Boolean(response.ok)) {
-            cache.put(event.request, response.clone());
+            cache.put(event.request, response.clone())
+                 .then(() => delete IN_PROCESSING_REQUESTS[key]);
           }
+
+          IN_PROCESSING_REQUESTS[key] = response.clone();
           return response;
         });
       })
