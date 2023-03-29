@@ -1,6 +1,6 @@
 <div align="center">
 
-# Making your `Flutter Web` loading times faster ⚡️
+# Speeding Up `Flutter Web` Load Time 🏎️
 
 This doc will guide you 
 to speeding up your release bundle loading times
@@ -13,7 +13,7 @@ and shared in
 
 </div>
 
-- [Making your `Flutter Web` loading times faster ⚡️](#making-your-flutter-web-loading-times-faster-️)
+- [Speeding Up `Flutter Web` Load Time 🏎️](#speeding-up-flutter-web-load-time-️)
 - [Pre-requisites 📝](#pre-requisites-)
 - [Creating the release bundle 🧱](#creating-the-release-bundle-)
 - [Inspecting the `build` folder and patching `flutter.js` 🔍](#inspecting-the-build-folder-and-patching-flutterjs-)
@@ -67,8 +67,9 @@ you will see a newly created `build` folder.
 
 If you inspect the `build` folder,
 you will see that a `flutter.js` file was created.
-This `Javascript` file is downloaded to the browser
-and tells it how to download the `Flutter` engine to run the `Flutter Web App`
+This `JavaScript` file is downloaded by the browser
+and tells it how to load the `Flutter` engine 
+to run the `Flutter Web App`
 and the necessary resources to do so.
 
 We will focus on the **`flutter.js`** file 
@@ -76,7 +77,9 @@ and make changes to it.
 Since we want to change this build file
 before being deployed,
 we are making changes to it
-by [**patching**](https://www.tutorialspoint.com/unix_commands/patch.htm) it.
+by **patching** it. 
+If this term is new to you, 
+read: https://en.wikipedia.org/wiki/Patch_(computing)
 
 Locate the `async loadEntrypoint(options)` function
 at the end of the file.
@@ -109,8 +112,7 @@ This will save us some valuable milliseconds!
 > fetch("canvaskit/canvaskit.wasm");
 > ```
 
-Your changes should look like the following.
-
+Your changes should look like the following:
 [`flutter.js`](https://github.com/dwyl/learn-flutter/pull/84/commits/69347403f53594b041064e805dcbffe023952361)
 
 Now let's create our patch files.
@@ -129,8 +131,7 @@ diff -u old.js new.js > file.js.patch
 This will create our `patch` file with the changes!
 We will need it later on!
 
-Your `flutter.js` patch file should look something like this!
-
+Your `flutter.js` patch file should look something like this:
 [`flutter.js.patch`](https://github.com/dwyl/learn-flutter/blob/de89d83bea972dbe5a13cd9ae8f0a6e34840e5a8/guides/flutter-web-speed-boost/flutter.js.patch)
 
 
