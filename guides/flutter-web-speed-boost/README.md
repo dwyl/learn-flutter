@@ -2,14 +2,14 @@
 
 # Making your `Flutter Web` loading times faster ⚡️
 
-This is a small document
-that will guide you 
+This doc will guide you 
 to speeding up your release bundle loading times
 for deployment. 
 
 This "hack" was discovered by 
-[**harryfei**](https://github.com/harryfei).
-Do check him out, he needs all the props he can get!
+[**`@harryfei`**](https://github.com/harryfei)
+and shared in 
+[dwyl/app/issues/326](https://github.com/dwyl/app/issues/326#issuecomment-1478314967)
 
 </div>
 
