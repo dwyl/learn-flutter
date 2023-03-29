@@ -1,8 +1,8 @@
 version: 2
 updates:
-- package-ecosystem: mix
-  directory: "/"
+- package-ecosystem: pub
+  directory: "/demo_app"
   schedule:
-    interval: daily
-    time: "12:00"
+    interval: weekly
+    time: "17:00"
     timezone: Europe/London
