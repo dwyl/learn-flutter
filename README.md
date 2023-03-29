@@ -47,6 +47,9 @@ and build **awesome cross-platform applications**!
   - [Unit testing](#unit-testing)
     - [Mock testing](#mock-testing)
   - [Integration testing](#integration-testing)
+- [A few remarks on `Flutter Web`](#a-few-remarks-on-flutter-web)
+  - [Adding a splash screen](#adding-a-splash-screen)
+  - [Decreasing loading time](#decreasing-loading-time)
 - [App demo 📱](#app-demo-)
   - [0. Setting up a new project](#0-setting-up-a-new-project)
   - [1. Project structure](#1-project-structure)
@@ -1951,6 +1954,64 @@ flutter drive \
 And you're done! Congratulations, you just 
 unit *and* integration tested your application.
 Awesome work! :tada:
+
+
+# A few remarks on `Flutter Web`
+
+`Flutter` is **awesome** for mobile applications
+and can be used to create *web apps*.
+However, if you need a website where 
+[SEO](https://developers.google.com/search/docs/fundamentals/seo-starter-guide#:~:text=SEO%20%2D%20Search%20engine%20optimization%3A%20the,our%20presence%20on%20the%20web.) 
+is critical, `Flutter` is probably not the best option.
+
+It is quite known that 
+`Flutter` load times are worse
+when compared with websites that were developed with 
+the good ol' `HTML` + `CSS` + `JS` combo.
+See https://github.com/flutter/flutter/issues/76009.
+
+If you were to run `Lighthouse`
+or [`PageSpeed`](https://pagespeed.web.dev/)
+on your deployed `Flutter` website,
+you'd find that the metrics are not all that great. 😕
+
+However, 
+you can certaintly make them 
+**much better** by following a few strategies.
+
+## Adding a splash screen
+
+Adding a splash screen will make it so
+there's less time until there's *something* on the screen.
+This metric can affect SEO and performance scores
+when running `Lighthouse` or `PageSpeed`.
+
+To know more about this subject,
+please visit
+https://github.com/dwyl/flutter-phoenix-channels-demo#6-bonus-points-adding-splash-screen.
+
+
+## Decreasing loading time
+
+Depending on the size of your `Flutter` project,
+when building the final bundle for release,
+the size of the `Javascript` and asset files
+can definitely be a factor to consider
+regarding the time to load the site.
+This, of course, has repercussions
+regarding SEO placement
+and metrics yielded by tools that measure website quality
+like [`Lighthouse`](https://chrome.google.com/webstore/detail/lighthouse/blipmdconlkpinefehnmjammfjpmpbjk?hl=en). 
+
+Although it is generally not recommended to tinker with output files
+if you're beginner,
+we have created a small document that will you guide you through
+speeding up your load times on `Flutter` web 
+by downloading asset resources in parallel.
+This will decrease your loading time,
+even if it's a tiny bit. 😊
+
+
 
 # App demo 📱
 
