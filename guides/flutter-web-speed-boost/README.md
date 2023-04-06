@@ -132,7 +132,7 @@ This will create our `patch` file with the changes!
 We will need it later on!
 
 Your `flutter.js` patch file should look something like this:
-[`flutter.js.patch`](https://github.com/dwyl/learn-flutter/blob/de89d83bea972dbe5a13cd9ae8f0a6e34840e5a8/guides/flutter-web-speed-boost/flutter.js.patch)
+[`flutter.js.patch`](https://github.com/dwyl/learn-flutter/blob/b0f8f15676e52c8f705e8b3d18877f87b1127cd7/guides/flutter-web-speed-boost/flutter.js.patch)
 
 
 # Patching `flutter_service_worker.js` 🔍
@@ -156,7 +156,7 @@ in the following commit.
 You can create the patch file in the same fashion as before.
 It should look like the following.
 
-[`flutter_service_worker.js.patch`](https://github.com/dwyl/learn-flutter/blob/de89d83bea972dbe5a13cd9ae8f0a6e34840e5a8/guides/flutter-web-speed-boost/flutter_service_worker.js.patch)
+[`flutter_service_worker.js.patch`](https://github.com/dwyl/learn-flutter/blob/b0f8f15676e52c8f705e8b3d18877f87b1127cd7/guides/flutter-web-speed-boost/flutter_service_worker.js.patch)
 
 
 # Changing the `index.html` file to register service worker earlier 🏃‍♂️
@@ -229,7 +229,7 @@ We've registered a `200ms` increase!
 
 If you just want the code,
 please check the PR we made to our `app`
-at https://github.com/dwyl/app/pull/330/files.
+at https://github.com/dwyl/app/pull/330/files/6e6888fb744db4a82a9dbe39b1faca430d2529a8.
 
 All the code you need to change lives there.
 You can re-use it to your heart's content! 
