@@ -31,6 +31,7 @@ const RESOURCES = {
 
 // Removed this section because the files are downloaded concurrently, so we don't check
 
+var IN_PROCESSING_REQUESTS = {};
 
 // During activate, the cache is populated with the temp files downloaded in
 // install. If this service worker is upgrading from one with a saved
