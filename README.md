@@ -62,6 +62,7 @@ and build **awesome cross-platform applications**!
     - [6.2 Widget testing](#62-widget-testing)
     - [6.3 Test coverage](#63-test-coverage)
 - [Deployment 📦](#deployment-)
+- [i18n 🌍](#i18n-)
 - [Final remarks 👋](#final-remarks-)
 
 
@@ -3414,6 +3415,16 @@ to create a *release bundle for the web*
 and deploy it,
 so everyone can see!
 
+# i18n 🌍
+
+It's fine if you build your `Flutter` apps in English
+and for the [1.5 billion](https://www.statista.com/statistics/266808/the-most-spoken-languages-worldwide/) 
+people who speak it.
+However, you'd be leaving out the other `6.2 billion` who don't i.e. **85%** of the world.
+
+So how would you go about supporting more languages into your app?
+We've tackled this issue in https://github.com/dwyl/flutter-navigation-menu-demo#6-adding-i18n-to-our-app.
+We *highly recommend* you giving it a read!
 
 # Final remarks 👋
 In this document (if you actually read it all the way through 😉),
