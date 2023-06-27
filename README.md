@@ -3420,11 +3420,13 @@ so everyone can see!
 It's fine if you build your `Flutter` apps in English
 and for the [1.5 billion](https://www.statista.com/statistics/266808/the-most-spoken-languages-worldwide/) 
 people who speak it.
-However, you'd be leaving out the other `6.2 billion` who don't i.e. **85%** of the world.
+However, you'd be leaving out the other `6.2 billion` who don't, i.e. **85%** of the world.
 
 So how would you go about supporting more languages into your app?
 We've tackled this issue in https://github.com/dwyl/flutter-navigation-menu-demo#6-adding-i18n-to-our-app.
-We *highly recommend* you giving it a read!
+We *highly recommend* you giving it a read
+if you want to learn more about how to 
+["internationalize"](https://en.wikipedia.org/wiki/Internationalization_and_localization) your app!
 
 # Final remarks 👋
 In this document (if you actually read it all the way through 😉),
