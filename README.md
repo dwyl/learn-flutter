@@ -25,6 +25,14 @@ and build **awesome cross-platform applications**!
   - [Checking everything](#checking-everything)
   - [Windows?](#windows)
 - [_Before_ You Start: Run The `Demo App`!](#before-you-start-run-the-demo-app)
+  - [Running on an emulator](#running-on-an-emulator)
+  - [Running on a real device](#running-on-a-real-device)
+    - [Android](#android)
+    - [iOS](#ios)
+      - [Troubleshooting possible errors](#troubleshooting-possible-errors)
+        - [`"No valid code signing certificates were found"`](#no-valid-code-signing-certificates-were-found)
+        - [`"Unable to verify app. An internet connection is required to verify the trust of the developer ... This app will not be available until verified."`](#unable-to-verify-app-an-internet-connection-is-required-to-verify-the-trust-of-the-developer--this-app-will-not-be-available-until-verified)
+        - [`"“iproxy” cannot be opened because the developer cannot be verified"`](#iproxy-cannot-be-opened-because-the-developer-cannot-be-verified)
 - [Core Principles 🐣](#core-principles-)
   - [Widgets](#widgets)
     - [Stateless widgets](#stateless-widgets)
@@ -487,6 +495,215 @@ Install the necessary dependencies:
 flutter pub get
 ```
 
+## Running on an emulator
+
+If you are interested in running the app
+on an emulator through VSCode,
+you can find more details in the 
+[0. Setting up a new project](#0-setting-up-a-new-project)
+section.
+
+
+## Running on a real device
+If you are interested in running the app 
+on your Android or iOS device,
+you should follow these instructions.
+
+### Android
+Running the app on an Android device is quite easy.
+You first need to [enable developer options](https://developer.android.com/studio/debug/dev-options) 
+and USB debugging on your device.
+You can tap your `device build number` several times
+and the "Developer Options" option will come up.
+Now it's just a matter of enabling `USB debugging` as well, 
+and you should be sorted.
+
+After this, you just plug your phone
+to your computer with a USB cable. 
+You can check if the device is properly connected 
+by running:
+
+```sh
+flutter devices
+```
+
+And you should be able to see the connected phone.
+
+![connected_device](https://user-images.githubusercontent.com/17494745/201946732-a45299e6-66b4-4ef2-9499-f62a2190ec2c.png)
+
+If you are using Visual Studio, 
+you can choose the device
+in the bottom bar 
+and pick your phone. 
+To run, 
+simply press `F5` or `Run > Start debugging`
+and the build process will commence,
+and the app will be running on your phone!
+
+> If this is your first time running on an Android device/emulator, 
+> it might take some time so Gradle downloads all the needed dependencies,
+> binaries and respective SDKs to build the app to be run on the app. 
+> Just make sure you have a solid internet connection. 
+
+> **Do not** interrupt the the building process on the first setup.
+> This will result in a corrupted `.gradle` file 
+> and you need to clean up to get the app working again.
+> If this happens to you, 
+> check the [`learn-flutter`](https://github.com/dwyl/flutter-counter-example/tree/update-info#running-on-a-real-device-) repo
+> in the `Running on a real device` section to fix this issue.
+
+### iOS
+
+The process is a wee more complicated
+because you need an **Apple ID**
+to sign up for a [`Developer Account`](https://developer.apple.com/programs/enroll/)
+(you also can only build and run the app if you have a Mac computer).
+
+After this having your Developer Account, 
+open `XCode` and sign in with your ID 
+(inside `Preferences > Accounts`).
+
+![preferences](https://user-images.githubusercontent.com/17494745/202515691-d4d3832b-8b6e-4e3b-953f-9c01b4a87228.png)
+
+Inside `Manager Certificates`, 
+click on the "+" sign and
+select `iOS Development`.
+
+![certificates](https://user-images.githubusercontent.com/17494745/202516745-ba05bfac-20db-492f-9580-3aa7cc09803a.png)
+
+After this, 
+plug the device to your computer.
+Find the device in the dropdown (`Window > Organizer`).
+Below the team pop-up menu, 
+click on `Fix Issue`
+and then on `XCode` click the `Run` button.
+
+In subsequent runs, 
+you can deploy with VSCode
+or any other IDE. 
+This certificate setup is only needed on the first time with XCode.
+
+#### Troubleshooting possible errors
+
+If you try to run the app through VSCode
+with the real iOS device connected,
+you might run into errors before you get it working.
+
+Even if you run `flutter clean` and run `flutter build ios`,
+you may *still* get some errors.
+Let's go through possible scenarios and how to solve them 😊.
+
+##### `"No valid code signing certificates were found"`
+
+You may get the following output on your terminal:
+
+```
+No valid code signing certificates were found
+You can connect to your Apple Developer account by signing in with your Apple ID
+in Xcode and create an iOS Development Certificate as well as a Provisioning 
+Profile for your project by:
+  1- Open the Flutter project's Xcode target with
+       open ios/Runner.xcworkspace
+  2- Select the 'Runner' project in the navigator then the 'Runner' target
+     in the project settings
+  3- Make sure a 'Development Team' is selected. 
+     - For Xcode 10, look under General > Signing > Team.
+     - For Xcode 11 and newer, look under Signing & Capabilities > Team.
+     You may need to:
+         - Log in with your Apple ID in Xcode first
+         - Ensure you have a valid unique Bundle ID
+         - Register your device with your Apple Developer Account
+         - Let Xcode automatically provision a profile for your app
+  4- Build or run your project again
+  5- Trust your newly created Development Certificate on your iOS device
+     via Settings > General > Device Management > [your new certificate] > Trust
+
+For more information, please visit:
+  https://developer.apple.com/library/content/documentation/IDEs/Conceptual/
+  AppDistributionGuide/MaintainingCertificates/MaintainingCertificates.html
+
+Or run on an iOS simulator without code signing
+════════════════════════════════════════════════════════════════════════════════
+No development certificates available to code sign app for device deployment
+```
+
+To resolve this, we just need to follow the instructions!
+
+- open `/{ProjectName}/ios/Runner.xcworkspace` with XCode.
+- click on the `Runner` project on the left side pane.
+- go to `Signing & Capabilities`.
+- set the `Team` to your personal Apple ID account.
+- change the `Bundle Identifier` to something valid.
+- press `Try Again` button so XCode creates a valid signing.
+
+
+<img width="800"  src="https://github.com/dwyl/dart_cid/assets/17494745/5a208469-0cfd-4b0c-a970-8eda739341b0">
+
+> [!NOTE]
+>
+> `Flutter` apps usually have an ID of `com.example.app`, 
+> which is not valid by default when running on iOS devices.
+> Simply change it to something else and it should work! 
+> (`com.iamanawesometurtle.app` works, for example)
+
+
+##### `"Unable to verify app. An internet connection is required to verify the trust of the developer ... This app will not be available until verified."`
+
+Even if XCode properly signs your app,
+you might not be able to get it to run on your iPhone.
+This is because **the device doesn't trust you as a developer**.
+
+To debug iOS `Flutter` apps,
+you need to turn on `Developer Mode` on your iPhone.
+You can do that under `Settings > Privacy & Security > Developer Mode`.
+
+<img width="800"  src="https://github.com/dwyl/dart_cid/assets/17494745/6f9006bf-493d-4b24-97a6-671bfdf321b8">
+
+Now you need your iPhone to *trust you*.
+To do this,
+go to `Settings > General > Device Management`
+and click on your developer profile.
+After that, click on `Trust YOUR_NAME`.
+All of your apps will be trusted by your iPhone 🥳.
+
+<img width="800"  src="https://github.com/dwyl/dart_cid/assets/17494745/3e212482-94af-4d0a-964c-b0ac3f4df63b">
+
+<img width="800"  src="https://github.com/dwyl/dart_cid/assets/17494745/577a91b1-223b-44ed-8d47-075f095965df">
+
+
+##### `"“iproxy” cannot be opened because the developer cannot be verified"`
+
+Even after all of the above steps,
+you may *still* get the following error pop up on your computer.
+
+<img width="400"  src="https://github.com/dwyl/dart_cid/assets/17494745/0b44e6fd-1cae-4470-80c5-1948df4a1624">
+
+Luckily, this has a rather simple solution!
+As per https://stackoverflow.com/questions/71359062/iproxy-cannot-be-opened-because-the-developer-cannot-be-verified,
+you really only need to open your terminal,
+navigate to the location of the `Flutter SDK`
+(which is usually in `~/flutter`),
+and run a command!
+
+```sh
+cd FLUTTER SDK DIRECTORY/flutter/bin/cache/artifacts/usbmuxd
+
+sudo xattr -d com.apple.quarantine iproxy
+```
+
+And you're done!
+You can optionally go to your Mac's
+`Settings > Privacy & Security`,
+scroll down to the `Secutiry` section
+and click on the `Open Anyway` button
+that appears by a text stating
+`"iproxy" was blocked from opening because it is not from an identified developer`.
+
+<img width="800"  src="https://github.com/dwyl/dart_cid/assets/17494745/66ffb210-e093-476f-8292-d2f95e82fc2f">
+
+And you're done! 
+You should be able to run your application on a real iOS device now! 
+🥳
 
 
 
