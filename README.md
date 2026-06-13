@@ -3215,6 +3215,18 @@ class TodoList extends StatefulWidget {
 }
 ```
 
+In `_TodoListState`, use the injected service when loading the todos.
+This lets widget tests pass a mock `TodoService` instead of making the widget
+create its own real service.
+
+```dart
+@override
+void initState() {
+  super.initState();
+  futureTodosList = widget.todoService.getTodos();
+}
+```
+
 Now, we need to change the `MyApp` class to pass
 a `TodoService` instance to `TodoList`. 
 It should look like this, now.
